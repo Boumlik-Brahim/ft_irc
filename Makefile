@@ -6,7 +6,7 @@
 #    By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 11:27:59 by bbrahim           #+#    #+#              #
-#    Updated: 2023/01/27 18:28:00 by bbrahim          ###   ########.fr        #
+#    Updated: 2023/01/28 16:33:37 by bbrahim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,10 +41,5 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
-norm:
-	@norminette $(MAIN)
-	@norminette $(SRC)
-	@norminette $(MANDATORY_HEADERS)
 
 .PHONY:		all clean fclean re
