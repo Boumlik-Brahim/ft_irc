@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/27 17:37:23 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/01/29 17:43:33 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,50 @@
 
 # include <iostream>
 # include <string>
-
-class server
+# include <unistd.h>
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <poll.h>
+class Server
 {
+	private:
+		std::string	password;
+		int			port_number;
+		int			socket_fd;
+		int			new_socket_fd;
+		int			client_lenght;
+		struct sockaddr_in serv_addr, cli_addr;
+
 	public:
 		// Constructors
-		server();
-		server(const server &copy);
+		Server();
+		Server(int port_number, std::string password);
+		Server(const Server &copy);
+
+		// Operators
+		Server &operator=(const Server &assign);
+
+		// Getters and setters
+		int			getPort_number(void) const;
+		void		setPort_number(int port_number);
+		std::string	getPassword(void) const;
+		void		setPassword(std::string password);
+		int			getSocket_fd( void ) const;
+		void		setSocket_fd( int socket_fd );
+		int			getNew_socket_fd( void ) const;
+		void		setNew_socket_fd( int new_socket_fd );
+
+		// Functions
+		void create_socket();
+		void bind_socket();
+		void listen_socket();
+		void accept_socket();
+		void read_write_socket(int new_socket_fd);
+		void close_socket(int socket_fd);
 		
 		// Destructor
-		~server();
-		
-		// Operators
-		server & operator=(const server &assign);
-		
-	private:
-		
+		~Server();
 };
 
 #endif

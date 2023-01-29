@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:37:11 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/27 17:37:13 by bbrahim          ###   ########.fr       */
+/*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/01/29 18:21:15 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,20 @@
 # include <iostream>
 # include <string>
 
-class channel
+class Channel
 {
+	private:
+
 	public:
 		// Constructors
-		channel();
-		channel(const channel &copy);
-		
-		// Destructor
-		~channel();
-		
+		Channel();
+		Channel(const Channel &copy);
+
 		// Operators
-		channel & operator=(const channel &assign);
-		
-	private:
-		
+		Channel & operator=(const Channel &assign);
+
+		// Destructor
+		~Channel();
 };
 
 #endif

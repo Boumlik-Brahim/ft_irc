@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:37:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/27 17:37:18 by bbrahim          ###   ########.fr       */
+/*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/01/29 18:21:37 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,20 @@
 # include <iostream>
 # include <string>
 
-class client
+class Client
 {
+	private:
+
 	public:
 		// Constructors
-		client();
-		client(const client &copy);
-		
-		// Destructor
-		~client();
+		Client();
+		Client(const Client &copy);
 		
 		// Operators
-		client & operator=(const client &assign);
-		
-	private:
-		
+		Client & operator=(const Client &assign);
+
+		// Destructor
+		~Client();
 };
 
 #endif

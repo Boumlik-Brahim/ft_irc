@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:37:04 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/27 17:37:06 by bbrahim          ###   ########.fr       */
+/*   Created: 2023/01/29 18:20:12 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/01/29 18:20:37 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,20 @@
 # include <iostream>
 # include <string>
 
-class bot
+class Bot
 {
+	private:
+
 	public:
 		// Constructors
-		bot();
-		bot(const bot &copy);
-		
-		// Destructor
-		~bot();
+		Bot();
+		Bot(const Bot &copy);
 		
 		// Operators
-		bot & operator=(const bot &assign);
-		
-	private:
-		
+		Bot & operator=(const Bot &assign);
+
+		// Destructor
+		~Bot();
 };
 
 #endif

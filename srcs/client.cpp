@@ -5,34 +5,34 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:36:39 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/27 17:39:31 by bbrahim          ###   ########.fr       */
+/*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/01/29 18:25:01 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/client.hpp"
+#include "../headers/Client.hpp"
 
 // Constructors
-client::client()
+Client::Client()
 {
-	std::cout << "\e[0;33mDefault Constructor called of client\e[0m" << std::endl;
+	std::cout << "\e[0;33mDefault Constructor called of Client\e[0m" << std::endl;
 }
 
-client::client(const client &copy)
+Client::Client(const Client &copy)
 {
 	(void) copy;
-	std::cout << "\e[0;33mCopy Constructor called of client\e[0m" << std::endl;
+	std::cout << "\e[0;33mCopy Constructor called of Client\e[0m" << std::endl;
 }
 
 // Operators
-client & client::operator=(const client &assign)
+Client & Client::operator=(const Client &assign)
 {
 	(void) assign;
 	return *this;
 }
 
 // Destructor
-client::~client()
+Client::~Client()
 {
-	std::cout << "\e[0;31mDestructor called of client\e[0m" << std::endl;
+	std::cout << "\e[0;31mDestructor called of Client\e[0m" << std::endl;
 }

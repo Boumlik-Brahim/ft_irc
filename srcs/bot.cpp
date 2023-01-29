@@ -5,34 +5,34 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:36:54 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/27 17:40:03 by bbrahim          ###   ########.fr       */
+/*   Created: 2023/01/29 18:22:09 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/01/29 18:23:15 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/bot.hpp"
+#include "../headers/Bot.hpp"
 
 // Constructors
-bot::bot()
+Bot::Bot()
 {
-	std::cout << "\e[0;33mDefault Constructor called of bot\e[0m" << std::endl;
+	std::cout << "\e[0;33mDefault Constructor called of Bot\e[0m" << std::endl;
 }
 
-bot::bot(const bot &copy)
+Bot::Bot(const Bot &copy)
 {
 	(void) copy;
-	std::cout << "\e[0;33mCopy Constructor called of bot\e[0m" << std::endl;
+	std::cout << "\e[0;33mCopy Constructor called of Bot\e[0m" << std::endl;
 }
 
 // Operators
-bot & bot::operator=(const bot &assign)
+Bot & Bot::operator=(const Bot &assign)
 {
 	(void) assign;
 	return *this;
 }
 
 // Destructor
-bot::~bot()
+Bot::~Bot()
 {
-	std::cout << "\e[0;31mDestructor called of bot\e[0m" << std::endl;
+	std::cout << "\e[0;31mDestructor called of Bot\e[0m" << std::endl;
 }
