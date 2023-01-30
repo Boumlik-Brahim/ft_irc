@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.cpp                                         :+:      :+:    :+:   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/29 18:22:33 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/01/30 11:54:14 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,11 @@
 
 // Constructors
 Server::Server()
-{
-	std::cout << "\e[0;33mDefault Constructor called of Server\e[0m" << std::endl;
-}
+{}
 Server::Server(int port_number, std::string	password): password(password), port_number(port_number)
-{
-	std::cout << "\e[0;33mParametrized Constructor called of Server\e[0m" << std::endl;
-}
+{}
 Server::Server(const Server &copy): password(copy.password), port_number(copy.port_number)
-{
-	std::cout << "\e[0;33mCopy Constructor called of Server\e[0m" << std::endl;	
-}
+{}
 
 // Operators
 Server & Server::operator=(const Server &assign)
@@ -74,14 +68,20 @@ void Server::setNew_socket_fd( int new_socket_fd )
 // Functions
 void Server::create_socket()
 {
+	int	opt;
+
+	opt = 1;
 	this->socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->socket_fd < 0)
 	{
 		std::cout << "ERROR OPENING SOCKET" << std::endl;
 		exit (EXIT_FAILURE);
 	}
-	int opt = 1;
-	setsockopt(this->socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt));
+	if (setsockopt(this->socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt)) < 0)
+	{
+		std::cout << "ERROR OPENING SETSOCKETOPT" << std::endl;
+		exit (EXIT_FAILURE);
+	}
 	memset((char *)&this->serv_addr, 0, sizeof(this->serv_addr));
 	this->serv_addr.sin_family = AF_INET;
 	this->serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -102,17 +102,22 @@ void Server::listen_socket()
 		std::cout << "ERROR ON LISTEN" << std::endl;
 		exit (EXIT_FAILURE);
 	}
-	this->client_lenght = sizeof(this->cli_addr);
 }
 void Server::accept_socket()
 {
-	struct pollfd fds[10];
-	int numfds = 1;
+	struct pollfd	fds[MAX_CONNECTIONS];
+	int				numfds;
+	int				ret;
+	int				sock;
+	int				i;
+
+	this->client_lenght = sizeof(this->cli_addr);
+	numfds = 1;
 	fds[0].fd = this->socket_fd;
 	fds[0].events = POLLIN;
 	while (1)
 	{
-		int ret = poll(fds, numfds, -1);
+		ret = poll(fds, numfds, -1);
 		if (ret < 0)
 		{
 			std::cout << "ERROR ON POLL" << std::endl;
@@ -130,11 +135,11 @@ void Server::accept_socket()
 			fds[numfds].events = POLLIN;
 			numfds++;
 		}
-		for (int i = 1; i < numfds; i++)
+		for (i = 1; i < numfds; i++)
 		{
 			if (fds[i].revents & POLLIN)
 			{
-				int sock = fds[i].fd;
+				sock = fds[i].fd;
 				read_write_socket(sock);
 			}
 		}
@@ -152,15 +157,13 @@ void Server::read_write_socket(int new_socket_fd)
 		std::cout << "ERROR READING FROM SOCKET" << std::endl;
 		exit (EXIT_FAILURE);
 	}
-	// if (n == 0)
-	// 	;// client is desconected
-	// if (n > 0)
-	// {
-		
-	// }
-	std::cout << "here is the measage: " << buffer << std::endl;
-
-	n = write(new_socket_fd, "Igot your meassage\n", 20);
+	if (n == 0)
+	{
+		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
+		exit (EXIT_SUCCESS);
+	}
+	std::cout << "HERE IS THE MESSAGE: " << buffer << std::endl;
+	n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);
 	if (n < 0)
 	{
 		std::cout << "ERROR WRITNG ON SOCKET" << std::endl;
@@ -174,6 +177,4 @@ void Server::close_socket(int socket_fd)
 
 // Destructor
 Server::~Server()
-{
-	std::cout << "\e[0;31mDestructor called of Server\e[0m" << std::endl;
-}
+{}
