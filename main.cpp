@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:23 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/29 18:25:29 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/01/31 18:23:33 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int main(int argc, char const *argv[])
 	server1.bind_socket();
 	server1.listen_socket();
 	server1.accept_socket();
-	server1.read_write_socket(server1.getNew_socket_fd());
 	server1.close_socket(server1.getSocket_fd());
 
 	return (0);

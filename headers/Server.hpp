@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/30 11:21:11 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/01/31 18:31:26 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,20 @@
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <poll.h>
+# include <map>
+# include "../headers/Client.hpp"
 
 # define MAX_CONNECTIONS 10
 class Server
 {
 	private:
-		std::string	password;
-		int			port_number;
-		int			socket_fd;
-		int			new_socket_fd;
-		int			client_lenght;
-		struct sockaddr_in serv_addr, cli_addr;
+		std::string				password;
+		int						port_number;
+		int						socket_fd;
+		int						new_socket_fd;
+		struct sockaddr_in 		serv_addr, cli_addr;
+		struct pollfd			fds[MAX_CONNECTIONS];
+		std::map<int, Client*>	mapClients;
 
 	public:
 		// Constructors
@@ -56,9 +59,9 @@ class Server
 		void bind_socket();
 		void listen_socket();
 		void accept_socket();
-		void read_write_socket(int new_socket_fd);
+		void read_write_socket(int new_socket_fd, int *count);
 		void close_socket(int socket_fd);
-		
+
 		// Destructor
 		~Server();
 };
