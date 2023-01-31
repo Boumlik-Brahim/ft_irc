@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.hpp                                         :+:      :+:    :+:   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/29 18:21:37 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/01/31 17:43:35 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 class Client
 {
 	private:
+		std::string	nickName;
+		std::string	userName;
+		int			clientFd;
 
 	public:
 		// Constructors
