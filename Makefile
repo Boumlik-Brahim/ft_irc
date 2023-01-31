@@ -6,7 +6,7 @@
 #    By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 11:27:59 by bbrahim           #+#    #+#              #
-#    Updated: 2023/01/29 18:24:37 by bbrahim          ###   ########.fr        #
+#    Updated: 2023/01/31 17:27:34 by bbrahim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))
 
 MAIN := main.cpp
 
-CLASSES = Bot Channel Client Server
+CLASSES = Bot Channel Server Client Message
 SRC := $(addprefix srcs/, $(addsuffix .cpp, $(CLASSES)))
 
 OBJ = $(SRC:.cpp=.o)
