@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/01 11:28:27 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/01 16:23:30 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ class Server
 		void bind_socket();
 		void listen_socket();
 		void accept_socket();
+		void backBone(char *buffer, int new_socket_fd);
 		void read_write_socket(int new_socket_fd, int *count);
 		void close_socket(int socket_fd);
 

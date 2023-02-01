@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/01 13:31:53 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/01 16:28:54 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void setAttributeMsg(Message &msg, char **data)
     msg.setIsValidCommand(false);
 }
 
-void backBone(char *buffer, int new_socket_fd)
+void Server::backBone(char *buffer, int new_socket_fd)
 {
     (void)new_socket_fd;
     Message msg;
