@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/31 18:31:26 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/01 11:28:27 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <poll.h>
 # include <map>
 # include "../headers/Client.hpp"
+# include "../headers/Utils.hpp"
+# include "../headers/Message.hpp"
 
 # define MAX_CONNECTIONS 10
 class Server

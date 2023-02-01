@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.cpp                                         :+:      :+:    :+:   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/01 09:29:57 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/01 13:33:16 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,11 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 			exit(EXIT_SUCCESS);
 		return ;
 	}
-	std::cout << "HERE IS THE MESSAGE: " << buffer << std::endl;
+	if (n > 1)
+	{
+		std::cout << "HERE IS THE MESSAGE: " << buffer << std::endl;
+		backBone(buffer, new_socket_fd);
+	}
 	n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);
 	if (n < 0)
 	{

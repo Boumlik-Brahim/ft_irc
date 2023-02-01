@@ -6,7 +6,7 @@
 #    By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 11:27:59 by bbrahim           #+#    #+#              #
-#    Updated: 2023/01/31 17:27:34 by bbrahim          ###   ########.fr        #
+#    Updated: 2023/02/01 11:24:18 by bbrahim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,12 @@ CXX = c++
 
 FLAGS =  -Wall -Wextra -Werror -std=c++98
 
-HEADERS = server client channel bot
+HEADERS = server client channel bot Utils
 MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))
 
 MAIN := main.cpp
 
-CLASSES = Bot Channel Server Client Message
+CLASSES = Bot Channel Server Client Message Split Command
 SRC := $(addprefix srcs/, $(addsuffix .cpp, $(CLASSES)))
 
 OBJ = $(SRC:.cpp=.o)

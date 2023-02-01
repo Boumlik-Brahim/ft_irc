@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:14 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/31 17:43:04 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/01 13:34:48 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Constructors
 Message::Message()
 {}
-Message::Message(const Message &copy) : arguments(copy.arguments), command(copy.command), isValidCommad(copy.isValidCommad)
+Message::Message(const Message &copy) : _arguments(copy._arguments), _command(copy._command), _isValidCommad(copy._isValidCommad)
 {}
 
 // Operators
@@ -23,15 +23,46 @@ Message & Message::operator=(const Message &assign)
 {
 	if (this != &assign)
 	{
-		this->arguments = assign.arguments;
-		this->command = assign.command;
-		this->isValidCommad = assign.isValidCommad;
+		this->_arguments = assign._arguments;
+		this->_command = assign._command;
+		this->_isValidCommad = assign._isValidCommad;
 	}
 	return *this;
 }
 
-// Destructor
 Message::~Message()
+{}
+
+void Message::setArguments(char **data)
 {
-	std::cout << "\e[0;31mDestructor called of Message\e[0m" << std::endl;
+	std::string tmp;
+    for (int i = 1; data[i]; i++)
+    {
+        tmp = data[i];
+        _arguments.push_back(tmp);
+    }
+}
+
+void Message::setCommand(char *cmd)
+{
+	this->_command = cmd;
+	std::cout << "here : " << this->_command << std::endl;
+}
+
+void Message::setIsValidCommand(bool isValid)
+{
+	this->_isValidCommad = isValid;
+}
+
+std::string Message::getCommand(void) const
+{
+	return this->_command;
+}
+bool Message::getIsValidCommand(void) const
+{
+	return this->_isValidCommad;
+}
+std::vector<std::string> Message::getArgument(void) const
+{	
+	return this->_arguments;
 }
