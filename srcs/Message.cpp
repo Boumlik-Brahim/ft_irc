@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:14 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/01 13:34:48 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/02 15:11:29 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@ void Message::setIsValidCommand(bool isValid)
 {
 	this->_isValidCommad = isValid;
 }
+
+void Message::setAppendMsg(std::string toAppend)
+{
+	this->_appendMsg = toAppend;
+}
+
+std::string Message::getAppendMsg() const
+{
+	return this->_appendMsg;
+}
+
 
 std::string Message::getCommand(void) const
 {

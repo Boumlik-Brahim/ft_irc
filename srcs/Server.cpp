@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/01 16:23:26 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/02 18:35:26 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,8 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	char	buffer[256];
 
 	bzero(buffer, 256);
-	n = read(new_socket_fd, buffer, 255);
+	Client *client = mapClients[new_socket_fd];
+	n = recv(new_socket_fd, buffer, 255, 0);
 	if (n < 0)
 	{
 		std::cout << "ERROR READING FROM SOCKET" << std::endl;
@@ -175,15 +176,24 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	}
 	if (n > 1)
 	{
-		std::cout << "HERE IS THE MESSAGE: " << buffer << std::endl;
-		backBone(buffer, new_socket_fd);
+		// buffer[n] = 0;
+		client->buf += buffer;
+		size_t size = client->buf.size();
+		if(size > 2 && client->buf[size -1] == '\n' && client->buf[size - 2] == '\r')
+		{
+			std::string tmp = client->buf;
+			client->buf.erase();
+			std::cout << "HERE IS THE MESSAGE: " << tmp << std::endl;
+			backBone(tmp, new_socket_fd);
+			
+		}
 	}
-	n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);
-	if (n < 0)
-	{
-		std::cout << "ERROR WRITNG ON SOCKET" << std::endl;
-		exit(EXIT_FAILURE);
-	}	
+	// n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);
+	// if (n < 0)
+	// {
+	// 	std::cout << "ERROR WRITNG ON SOCKET" << std::endl;
+	// 	exit(EXIT_FAILURE);
+	// }	
 }
 void Server::close_socket(int socket_fd)
 {
