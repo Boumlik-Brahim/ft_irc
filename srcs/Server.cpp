@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/02 18:35:26 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/03 10:13:55 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	}
 	if (n > 1)
 	{
-		// buffer[n] = 0;
+		buffer[n] = 0;
 		client->buf += buffer;
 		size_t size = client->buf.size();
 		if(size > 2 && client->buf[size -1] == '\n' && client->buf[size - 2] == '\r')
@@ -184,8 +184,7 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 			std::string tmp = client->buf;
 			client->buf.erase();
 			std::cout << "HERE IS THE MESSAGE: " << tmp << std::endl;
-			backBone(tmp, new_socket_fd);
-			
+			backBone(tmp, new_socket_fd);	
 		}
 	}
 	// n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);
