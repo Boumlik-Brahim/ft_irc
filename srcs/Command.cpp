@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/03 10:09:01 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/03 10:13:02 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ void Server::backBone(std::string buffer, int new_socket_fd)
 
 	data = ft_split(buffer.c_str(), ' ');
 	parseMessageFormat(msg, data);
-	// if (!msg.getCommand().compare("PASS"))
-	// {
-	//     std::cout << "i got the pass" << std::endl;
-	// }
+	if (!msg.getCommand().compare("PASS"))
+	{
+	    std::cout << "i got the pass" << std::endl;
+	}
 	// if (!msg.getCommand().compare("NICK"))
 	// {
 	//     std::cout << "i got the nick" << std::endl;

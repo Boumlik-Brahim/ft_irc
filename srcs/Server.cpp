@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/02 18:35:26 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/03 11:09:04 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,8 @@ void Server::accept_socket()
 					this->fds[numfds].events = POLLIN;
 					numfds++;
 					count = numfds;
-					mapClients.insert(std::pair<int, Client*>(this->new_socket_fd, new Client()));
+					// mapClients.insert(std::pair<int, Client*>(this->new_socket_fd, new Client()));
+					mapGuest.insert(std::pair<int, Guest*>(this->new_socket_fd, new Guest()));
 				}
 				else
 				{
@@ -176,10 +177,10 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	}
 	if (n > 1)
 	{
-		// buffer[n] = 0;
+		buffer[n] = 0;
 		client->buf += buffer;
 		size_t size = client->buf.size();
-		if(size > 2 && client->buf[size -1] == '\n' && client->buf[size - 2] == '\r')
+		if(size > 2 && client->buf[size - 1] == '\n' && client->buf[size - 2] == '\r')
 		{
 			std::string tmp = client->buf;
 			client->buf.erase();
