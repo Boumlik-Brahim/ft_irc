@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/03 10:45:55 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 17:31:56 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,55 +19,46 @@ void sendMessage(int fd, std::string message)
 		i += send(fd, message.c_str(), message.length() - i, 0);
 }
 
-// void checkPrivateMsg(int senderFd, Message &msg)
-// {
-// 	// (void)senderFd;
+int Server::findFdClientByNick(std::string receiver)
+{
+    for(std::map<int, Client *>::iterator it = mapClients.begin(); it != mapClients.end(); it++)
+    {
+        if (it->second->getNickName() == receiver)
+            return (it->first);
+    }
+    return -1;
+}
 
-// 	std::string receiver = msg.getArgument()[0];
-// 	// std::cout << "Receiver == " << receiver << std::endl;
-// 	/* check if receiver is a client */
-// 	// std::cout << "size --" << msg.getArgument().size() << std::endl;
-// 	/* reply sender with ERR_NOTEXTTOSEND message */
-// 	if (msg.getArgument().size() < 2)
-// 		sendMessage(senderFd, ERR_NOTEXTTOSEND);
+std::string     Server::findNickClientByFd(int sender)
+{
+    std::map<int, Client *>::iterator it = mapClients.find(sender);
+    if (it != mapClients.end())
+        return it->second->getNickName();
+    else
+        return "Client not found";
+}
 
-// 	for (unsigned long i = 1; i < msg.getArgument().size(); i++)
-// 		std::cout << "-- " << msg.getArgument()[i] << std::endl;
+void  Server::checkNotice(Message &msg, int senderFd)
+{
+    std::string receiver;
+    std::string sender;
+    std::string cmd;
+    std::string message;
 
-// 	std::string newMessage;
-// 	// char **newMessage;
-// 	std::cout << "--------" << msg.getArgument()[1][0] << std::endl;
-// 	// if (msg.getArgument()[1].c_str() == ":")
-// 	// {
-// 	//     int n = 0;
-
-// 	// }
-// }
-
-// void checkNotice(Message &msg, int sender_fd)
-// {
-// 	(void)sender_fd;
-// 	std::vector<std::string> clients;
-// 	std::string msgtarget;
-
-// 	msgtarget = msg.getArgument()[0];
-// 	std::cout << "msgtarget is ====>" << msgtarget << std::endl;
-// 	for (std::map<int, Client *>::iterator it = mapClients.begin(); it != mapClients.end(); ++it)
-// 	{
-// 		std::cout << "msgargument is ====>" << it->second << std::endl;
-// 		if (msgtarget != it->second->getNickName())
-// 		{
-// 			std::cout << "makaynch";
-// 			sendMessage(sender_fd, ERR_NORECIPIENT);
-// 			break;
-// 		}
-// 	}
-// 	if (msg.getArgument().size() < 2)
-// 	{
-// 		sendMessage(sender_fd, ERR_NOTEXTTOSEND);
-// 		return;
-// 	}
-// }
+    cmd = msg.getCommand();
+    receiver = msg.getArgument()[0];
+    sender = findNickClientByFd(senderFd);
+    int receiverFd = findFdClientByNick(receiver);
+    std::cout << "receiver fd -- " << receiverFd << std::endl;
+	// check auth
+    if (msg.getArgument().size() < 2)
+		errorHandler(senderFd , 412);
+    else if (receiverFd == -1)
+		errorHandler(senderFd , 411, cmd);
+    // :<sender> NOTICE <recipient> :<message>\r\n
+    message = ":"+ sender+ " " +cmd + " " + receiver + " " + msg.getArgument()[1];
+    sendMessage(receiverFd, message);
+}
 
 void parseMessageFormat(Message &msg, char **data)
 {
@@ -91,6 +82,8 @@ void parseMessageFormat(Message &msg, char **data)
 		else
 			args.push_back(data[i]);
 	}
+	if (args[1].back() - 1 != '\r' && args[1].back() != '\n')
+        args[1] += "\r\n";
 	msg.setArguments(args);
 }
 
@@ -102,25 +95,40 @@ void Server::backBone(std::string buffer, int new_socket_fd)
 
 	data = ft_split(buffer.c_str(), ' ');
 	parseMessageFormat(msg, data);
-	// if (!msg.getCommand().compare("PASS"))
-	// {
-	//     std::cout << "i got the pass" << std::endl;
-	// }
-	// if (!msg.getCommand().compare("NICK"))
-	// {
-	//     std::cout << "i got the nick" << std::endl;
-	// }
-	// if (!msg.getCommand().compare("USER"))
-	// {
-	//     std::cout << "i got the user" << std::endl;
-	// }
-	// if (!msg.getCommand().compare("NOTICE"))
-	// {
-	// }
-	// if (!msg.getCommand().compare("PRIVMSG"))
-	// {
-	// }
-	// else
-	// {
-	// }
+	if (!msg.getCommand().compare("PASS"))
+	    std::cout << "i got the pass" << std::endl;
+	else if (!msg.getCommand().compare("NICK"))
+	    std::cout << "i got the nick" << std::endl;
+	else if (!msg.getCommand().compare("USER"))
+	    std::cout << "i got the user" << std::endl;
+	else if (!msg.getCommand().compare("OPER"))
+	    std::cout << "i got the oper" << std::endl;
+	else if (!msg.getCommand().compare("SERVICE"))
+	    std::cout << "i got the service" << std::endl;
+	else if (!msg.getCommand().compare("QUIT"))
+	    std::cout << "i got the quit" << std::endl;
+	else if (!msg.getCommand().compare("SQUIT"))
+	    std::cout << "i got the squit" << std::endl;
+	else if (!msg.getCommand().compare("JOIN"))
+	    std::cout << "i got the join" << std::endl;
+	else if (!msg.getCommand().compare("PART"))
+	    std::cout << "i got the part" << std::endl;
+	else if (!msg.getCommand().compare("MODE"))
+	    std::cout << "i got the mode" << std::endl;
+	else if (!msg.getCommand().compare("TOPIC"))
+	    std::cout << "i got the topic" << std::endl;
+	else if (!msg.getCommand().compare("NAMES"))
+	    std::cout << "i got the names" << std::endl;
+	else if (!msg.getCommand().compare("LIST"))
+	    std::cout << "i got the names" << std::endl;
+	else if (!msg.getCommand().compare("INVITE"))
+	    std::cout << "i got the names" << std::endl;
+	else if (!msg.getCommand().compare("KICK"))
+	    std::cout << "i got the kick" << std::endl;
+	else if (!msg.getCommand().compare("PRIVMSG"))
+	    std::cout << "i got the privmsg" << std::endl;
+	else if (!msg.getCommand().compare("NOTICE"))
+		checkNotice(msg, new_socket_fd);
+	else
+	    std::cout << "invalid command" << std::endl;
 }
