@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 18:09:32 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/04 18:26:27 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ void  Server::checkNotice(Message &msg, int senderFd)
     receiverFd = findFdClientByNick(receiver);
 	
     if (msg.getArgument().size() < 2)
-	{
-        errorHandler(senderFd , 412);
-		return ;
-	}
+        return (errorHandler(senderFd , 412));
     if (message.at(0) != ':')
         message.insert(0,1,':');
                 
