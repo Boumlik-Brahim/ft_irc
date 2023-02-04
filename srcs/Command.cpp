@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 17:31:56 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 18:09:32 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,29 @@ void  Server::checkNotice(Message &msg, int senderFd)
     std::string sender;
     std::string cmd;
     std::string message;
+    std::string messageFormat;
+    int receiverFd;
 
+    // check auth
     cmd = msg.getCommand();
     receiver = msg.getArgument()[0];
+    message = msg.getArgument()[1];
     sender = findNickClientByFd(senderFd);
-    int receiverFd = findFdClientByNick(receiver);
-    std::cout << "receiver fd -- " << receiverFd << std::endl;
-	// check auth
+    receiverFd = findFdClientByNick(receiver);
+	
     if (msg.getArgument().size() < 2)
-		errorHandler(senderFd , 412);
-    else if (receiverFd == -1)
-		errorHandler(senderFd , 411, cmd);
+	{
+        errorHandler(senderFd , 412);
+		return ;
+	}
+    if (message.at(0) != ':')
+        message.insert(0,1,':');
+                
     // :<sender> NOTICE <recipient> :<message>\r\n
-    message = ":"+ sender+ " " +cmd + " " + receiver + " " + msg.getArgument()[1];
-    sendMessage(receiverFd, message);
+    messageFormat = ":"+ sender+ " " +cmd + " " + receiver + " " + message;
+    sendMessage(receiverFd, messageFormat);
 }
+
 
 void parseMessageFormat(Message &msg, char **data)
 {
