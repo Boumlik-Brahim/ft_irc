@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 10:42:01 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 16:18:32 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,14 @@ class Message
 		~Message();
 };
 
-void errorHandler(int err_code, std::string err_arg, char err_arg2);
-void errorHandler(int err_code, std::string err_arg, std::string err_arg2);
-void errorHandler(int err_code, std::string err_arg);
-void errorHandler(int err_code);
+void sendMessage(int sender_fd, std::string message);
+void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string err_arg2);
+void errorHandler(int sender_fd, int err_code, std::string err_arg);
+void errorHandler(int sender_fd, int err_code);
+
+void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2, std::string cmd_resp_arg3);
+void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2);
+void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg);
+void cmd_Resp_Handler(int sender_fd, int cmd_resp_code);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/02 18:00:51 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 17:32:17 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,19 @@ class Client
 		std::string buf;
 		// Constructors
 		Client();
+		Client(int clientFd);
 		Client(const Client &copy);
+
+		std::string	getNickName();
+		void		setNickName(std::string nickname);
+		std::string	getUserName();
+		void		setUserName(std::string nickname);
+		int			getClientFd();
+		void		setClientFd(int clientFd);
 		
 		// Operators
 		Client & operator=(const Client &assign);
+
 		// Destructor
 		~Client();
 };
