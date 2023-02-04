@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/02 18:00:51 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 16:14:06 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,26 @@
 class Client
 {
 	private:
-		Message 	msg;
-		std::string	nickName;
-		std::string	userName;
-		int			clientFd;
+		Message 	_msg;
+		std::string	_nickName;
+		std::string	_userName;
+		std::string	_realName;
+		int			_clientFd;
 
 	public:
 		std::string buf;
-		// Constructors
+
 		Client();
 		Client(const Client &copy);
-		
-		// Operators
 		Client & operator=(const Client &assign);
-		// Destructor
 		~Client();
+
+		void setNickName(std::string nickName);
+		void setUserName(std::string userName);
+		void setRealName(std::string realName);
+		std::string getNickName(void) const;
+		std::string getUserName(void) const;
+		std::string getRealName(void) const;
 };
 
 #endif

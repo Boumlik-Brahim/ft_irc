@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:14 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/02 15:11:29 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 09:34:10 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,50 +30,30 @@ Message & Message::operator=(const Message &assign)
 	return *this;
 }
 
-Message::~Message()
-{}
-
-void Message::setArguments(char **data)
+std::string Message::getCommand(void) const
 {
-	std::string tmp;
-    for (int i = 1; data[i]; i++)
-    {
-        tmp = data[i];
-        _arguments.push_back(tmp);
-    }
+	return (this->_command);
 }
-
-void Message::setCommand(char *cmd)
+void Message::setCommand(std::string command)
 {
-	this->_command = cmd;
-	std::cout << "here : " << this->_command << std::endl;
+	this->_command = command;
 }
-
+std::vector<std::string> Message::getArgument(void) const
+{	
+	return (this->_arguments);
+}
+void Message::setArguments(std::vector<std::string> arguments)
+{
+	this->_arguments = arguments;	
+}
+bool Message::getIsValidCommand(void) const
+{
+	return (this->_isValidCommad);
+}
 void Message::setIsValidCommand(bool isValid)
 {
 	this->_isValidCommad = isValid;
 }
 
-void Message::setAppendMsg(std::string toAppend)
-{
-	this->_appendMsg = toAppend;
-}
-
-std::string Message::getAppendMsg() const
-{
-	return this->_appendMsg;
-}
-
-
-std::string Message::getCommand(void) const
-{
-	return this->_command;
-}
-bool Message::getIsValidCommand(void) const
-{
-	return this->_isValidCommad;
-}
-std::vector<std::string> Message::getArgument(void) const
-{	
-	return this->_arguments;
-}
+Message::~Message()
+{}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/02 18:00:11 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 16:21:45 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Constructors
 Client::Client(): buf("")
 {}
-Client::Client(const Client &copy) : nickName(copy.nickName), userName(copy.userName), clientFd(copy.clientFd), buf("")
+Client::Client(const Client &copy) : _nickName(copy._nickName), _userName(copy._userName), _clientFd(copy._clientFd), buf("")
 {}
 
 // Operators
@@ -23,9 +23,9 @@ Client & Client::operator=(const Client &assign)
 {
 	if (this != &assign)
 	{
-		this->nickName = assign.nickName;
-		this->userName = assign.userName;
-		this->clientFd = assign.clientFd;
+		this->_nickName = assign._nickName;
+		this->_userName = assign._userName;
+		this->_clientFd = assign._clientFd;
 	}
 	return *this;
 }
@@ -34,4 +34,29 @@ Client & Client::operator=(const Client &assign)
 Client::~Client()
 {
 	std::cout << "\e[0;31mDestructor called of Client\e[0m" << std::endl;
+}
+
+void Client::setNickName(std::string nickName)
+{
+	_nickName = nickName;
+}
+void Client::setUserName(std::string userName)
+{
+	_userName = userName;
+}
+void Client::setRealName(std::string realName)
+{
+	_realName = realName;
+}
+std::string Client::getNickName(void) const
+{
+	return _nickName;
+}
+std::string Client::getUserName(void) const
+{
+	return _userName;
+}
+std::string Client::getRealName(void) const
+{
+	return _realName;
 }

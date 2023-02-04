@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+         #
+#    By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 11:27:59 by bbrahim           #+#    #+#              #
-#    Updated: 2023/02/01 11:24:18 by bbrahim          ###   ########.fr        #
+#    Updated: 2023/02/04 09:36:16 by iomayr           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,12 @@ CXX = c++
 
 FLAGS =  -Wall -Wextra -Werror -std=c++98
 
-HEADERS = server client channel bot Utils
+HEADERS = server client channel bot Utils Guest
 MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))
 
 MAIN := main.cpp
 
-CLASSES = Bot Channel Server Client Message Split Command
+CLASSES = Bot Channel Server Client Message Split Command Guest
 SRC := $(addprefix srcs/, $(addsuffix .cpp, $(CLASSES)))
 
 OBJ = $(SRC:.cpp=.o)
