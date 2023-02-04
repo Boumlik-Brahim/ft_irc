@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 16:43:16 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 17:54:07 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 		{
 			std::string tmp = client->buf;
 			client->buf.erase();
-			std::cout << "HERE IS THE MESSAGE: " << tmp << std::endl;
+			// std::cout << "HERE IS THE MESSAGE: " << tmp << std::endl;
 			backBone(tmp, new_socket_fd);	
 		}
 	}
