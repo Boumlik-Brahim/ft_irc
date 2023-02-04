@@ -6,7 +6,7 @@
 #    By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 11:27:59 by bbrahim           #+#    #+#              #
-#    Updated: 2023/02/04 10:43:17 by bbrahim          ###   ########.fr        #
+#    Updated: 2023/02/04 14:25:10 by bbrahim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))
 
 MAIN := main.cpp
 
-CLASSES = Bot Channel Server Client Message Command errors Split
+CLASSES = Bot Channel Server Client Message Command Errors_replies Command_responses Split
 SRC := $(addprefix srcs/, $(addsuffix .cpp, $(CLASSES)))
 
 OBJ = $(SRC:.cpp=.o)
