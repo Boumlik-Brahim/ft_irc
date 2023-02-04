@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/03 10:13:55 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/04 16:43:16 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void Server::accept_socket()
 					this->fds[numfds].events = POLLIN;
 					numfds++;
 					count = numfds;
-					mapClients.insert(std::pair<int, Client*>(this->new_socket_fd, new Client()));
+					mapClients.insert(std::pair<int, Client*>(this->new_socket_fd, new Client(this->new_socket_fd)));
 				}
 				else
 				{
