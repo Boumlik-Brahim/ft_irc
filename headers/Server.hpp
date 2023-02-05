@@ -6,7 +6,6 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 10:56:17 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +64,13 @@ class Server
 		void backBone(std::string buffer, int new_socket_fd);
 		void read_write_socket(int new_socket_fd, int *count);
 		void close_socket(int socket_fd);
+
+		std::string	findNickClientByFd(int sender);
+		int			findFdClientByNick(std::string receiver);
+		void		checkNotice(Message &msg, int senderFd);
+
+		// Destructor
+		~Server();
 		void guestToClient(Guest *tmpGuest, int newSocketFd);
 		void handlePassCmd(Message &msg, int newSocketFd);
 		void handleNickCmd(Message &msg, int newSocketFd);
