@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors_replies.cpp                                 :+:      :+:    :+:   */
+/*   Errors_replies.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 16:17:33 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 11:59:18 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,25 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 	switch (err_code)
 	{
 		case 436:
-			message = "436 ERR_NICKCOLLISION <nick>" + err_arg + " :Nickname collision KILL from <user>" + err_arg2 + "@<host>\r\n";
+			message = "436 ERR_NICKCOLLISION " + err_arg + " :Nickname collision KILL from " + err_arg2 + "@<host>\r\n";
 			break;
 		case 437:
-			message = "437 ERR_UNAVAILRESOURCE <nick" + err_arg + "/channel" + err_arg2 + "> :Nick/channel is temporarily unavailable\r\n";
+			message = "437 ERR_UNAVAILRESOURCE <" + err_arg + "/" + err_arg2 + "> :Nick/channel is temporarily unavailable\r\n";
 			break;
 		case 441:
-			message = "441 ERR_USERNOTINCHANNEL <nick>" + err_arg + " <channel>" + err_arg2 + " :They aren't on that channel\r\n";
+			message = "441 ERR_USERNOTINCHANNEL " + err_arg + err_arg2 + " :They aren't on that channel\r\n";
 			break;
 		case 443:
-			message = "443 ERR_USERONCHANNEL <user>" + err_arg2 + " <channel>" + err_arg + " :is already on channel\r\n";
+			message = "443 ERR_USERONCHANNEL " + err_arg2 + err_arg + " :is already on channel\r\n";
 			break;
 		case 424:
-			message = "424 ERR_FILEERROR:File error doing <file op>" + err_arg2 + " on <file>" + err_arg+"\r\n";
+			message = "424 ERR_FILEERROR:File error doing " + err_arg2 + " on " + err_arg+"\r\n";
 			break;
 		case 472:
-			message = "472 ERR_UNKNOWNMODE <char>" + err_arg + " :is unknown mode char to me for <channel>" + err_arg2+"\r\n";
+			message = "472 ERR_UNKNOWNMODE " + err_arg + " :is unknown mode char to me for " + err_arg2+"\r\n";
 			break;
 		case 478:
-			message = "478 ERR_BANLISTFULL <channel>" + err_arg + " <char>" + err_arg2 + " :Channel list is full\r\n";
+			message = "478 ERR_BANLISTFULL " + err_arg + err_arg2 + " :Channel list is full\r\n";
 			break;
 		default:
 			std::cout << "Invalid error code" << std::endl;
@@ -52,85 +52,85 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 	switch (err_code)
 	{
 		case 401:
-			message = "401 ERR_NOSUCHNICK <nickname>"+err_arg+":No such nick/channel\r\n";
+			message = "401 ERR_NOSUCHNICK "+err_arg+":No such nick/channel\r\n";
 			break;
 		case 406:
-			message = "406 ERR_WASNOSUCHNICK <nickname>"+err_arg+" :There was no such nickname\r\n";
+			message = "406 ERR_WASNOSUCHNICK "+err_arg+" :There was no such nickname\r\n";
 			break;
 		case 432:
-			message = "432 ERR_ERRONEUSNICKNAME <nick>"+err_arg+" :Erroneous nickname\r\n";
+			message = "432 ERR_ERRONEUSNICKNAME "+err_arg+" :Erroneous nickname\r\n";
 			break;
 		case 433:
-			message = "433 ERR_NICKNAMEINUSE <nick>"+err_arg+" :Nickname is already in use\r\n";
+			message = "433 ERR_NICKNAMEINUSE "+err_arg+" :Nickname is already in use\r\n";
 			break;
 		case 407:
-			message = "407 ERR_TOOMANYTARGETS <target>"+err_arg+" :Duplicate recipients. No message delivered\r\n";
+			message = "407 ERR_TOOMANYTARGETS "+err_arg+" :Duplicate recipients. No message delivered\r\n";
 			break;
 		case 444:
-			message = "444 ERR_NOLOGIN <user>"+err_arg+" :User not logged in\r\n";
+			message = "444 ERR_NOLOGIN "+err_arg+" :User not logged in\r\n";
 			break;
 		case 411:
-			message = "411 ERR_NORECIPIENT :No recipient given (<command>"+err_arg+")\r\n";
+			message = "411 ERR_NORECIPIENT :No recipient given ("+err_arg+")\r\n";
 			break;
 		case 421:
-			message = "421 ERR_UNKNOWNCOMMAND <command>"+err_arg+" :Unknown command\r\n";
+			message = "421 ERR_UNKNOWNCOMMAND "+err_arg+" :Unknown command\r\n";
 			break;
 		case 461:
-			message = "461 ERR_NEEDMOREPARAMS<command>"+err_arg+" :Not enough parameters\r\n";
+			message = "461 ERR_NEEDMOREPARAMS "+err_arg+" :Not enough parameters\r\n";
 			break;
 		case 402:
-			message = "402 ERR_NOSUCHSERVER <server name>"+err_arg+" :No such server\r\n";
+			message = "402 ERR_NOSUCHSERVER "+err_arg+" :No such server\r\n";
 			break;
 		case 423:
-			message = "423 ERR_NOADMININFO <server>"+err_arg+" :No administrative info available\r\n";
+			message = "423 ERR_NOADMININFO "+err_arg+" :No administrative info available\r\n";
 			break;
 		case 408:
-			message = "408 ERR_NOSUCHSERVICE <service name>"+err_arg+" :No such service\r\n";
+			message = "408 ERR_NOSUCHSERVICE "+err_arg+" :No such service\r\n";
 			break;
 		case 403:
-			message = "403 ERR_NOSUCHCHANNEL <channel name>"+err_arg+" :No such channel\r\n";
+			message = "403 ERR_NOSUCHCHANNEL "+err_arg+" :No such channel\r\n";
 			break;
 		case 404:
-			message = "404 ERR_CANNOTSENDTOCHAN <channel name>"+err_arg+" :Cannot send to channel\r\n";
+			message = "404 ERR_CANNOTSENDTOCHAN "+err_arg+" :Cannot send to channel\r\n";
 			break;
 		case 405:
-			message = "405 ERR_TOOMANYCHANNELS <channel name>"+err_arg+" :You have joined too many channels\r\n";
+			message = "405 ERR_TOOMANYCHANNELS "+err_arg+" :You have joined too many channels\r\n";
 			break;
 		case 442:
-			message = "442 ERR_NOTONCHANNEL <channel>"+err_arg+" :You're not on that channel\r\n";
+			message = "442 ERR_NOTONCHANNEL "+err_arg+" :You're not on that channel\r\n";
 			break;
 		case 467:
-			message = "467 ERR_KEYSET <channel>"+err_arg+" :Channel key already set\r\n";
+			message = "467 ERR_KEYSET "+err_arg+" :Channel key already set\r\n";
 			break;
 		case 471:
-			message = "471 ERR_CHANNELISFULL <channel>"+err_arg+" :Cannot join channel (+l)\r\n";
+			message = "471 ERR_CHANNELISFULL "+err_arg+" :Cannot join channel (+l)\r\n";
 			break;
 		case 473:
-			message = "473 ERR_INVITEONLYCHAN <channel>"+err_arg+" :Cannot join channel (+i)\r\n";
+			message = "473 ERR_INVITEONLYCHAN "+err_arg+" :Cannot join channel (+i)\r\n";
 			break;
 		case 474:
-			message = "474 ERR_BANNEDFROMCHAN <channel>"+err_arg+" :Cannot join channel (+b)\r\n";
+			message = "474 ERR_BANNEDFROMCHAN "+err_arg+" :Cannot join channel (+b)\r\n";
 			break;
 		case 475:
-			message = "475 ERR_BADCHANNELKEY <channel>"+err_arg+" :Cannot join channel (+k)\r\n";
+			message = "475 ERR_BADCHANNELKEY "+err_arg+" :Cannot join channel (+k)\r\n";
 			break;
 		case 476:
-			message = "476 ERR_BADCHANMASK <channel>"+err_arg+" :Bad Channel Mask\r\n";
+			message = "476 ERR_BADCHANMASK "+err_arg+" :Bad Channel Mask\r\n";
 			break;
 		case 477:
-			message = "477 ERR_NOCHANMODES <channel>"+err_arg+" :Channel doesn't support modes\r\n";
+			message = "477 ERR_NOCHANMODES "+err_arg+" :Channel doesn't support modes\r\n";
 			break;
 		case 482:
-			message = "482 ERR_CHANOPRIVSNEEDED <channel>"+err_arg+" :You're not channel operator\r\n";
+			message = "482 ERR_CHANOPRIVSNEEDED "+err_arg+" :You're not channel operator\r\n";
 			break;
 		case 413:
-			message = "413 ERR_NOTOPLEVEL <mask>"+err_arg+" :No toplevel domain specified\r\n";
+			message = "413 ERR_NOTOPLEVEL "+err_arg+" :No toplevel domain specified\r\n";
 			break;
 		case 414:
-			message = "414 ERR_WILDTOPLEVEL <mask>"+err_arg+" :Wildcard in toplevel domain\r\n";
+			message = "414 ERR_WILDTOPLEVEL "+err_arg+" :Wildcard in toplevel domain\r\n";
 			break;
 		case 415:
-			message = "415 ERR_BADMASK <mask>"+err_arg+" :Bad Server/host mask\r\n";
+			message = "415 ERR_BADMASK "+err_arg+" :Bad Server/host mask\r\n";
 			break;
 		default:
 			std::cout << "Invalid error code" << std::endl;

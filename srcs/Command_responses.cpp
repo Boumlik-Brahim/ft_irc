@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 14:24:53 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 16:17:27 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 14:42:06 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code)
             message = "381 RPL_YOUREOPER :You are now an IRC operator\r\n";
             break;
         case 392 :
-            message = "392 RPL_USERSSTART :UserID   Terminal  Host\r\n";
+            message = "392 RPL_USERSSTART :UserID Terminal  Host\r\n";
             break;
         case 394 :
             message = "394 RPL_ENDOFUSERS :End of users\r\n";

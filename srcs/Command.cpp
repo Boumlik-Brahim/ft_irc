@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 18:26:27 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/05 14:40:06 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int Server::findFdClientByNick(std::string receiver)
         if (it->second->getNickName() == receiver)
             return (it->first);
     }
-    return -1;
+    return (EXIT_FAILURE);
 }
 
 std::string     Server::findNickClientByFd(int sender)
@@ -47,15 +47,26 @@ void  Server::checkNotice(Message &msg, int senderFd)
     std::string messageFormat;
     int receiverFd;
 
-    // check auth
     cmd = msg.getCommand();
     receiver = msg.getArgument()[0];
     message = msg.getArgument()[1];
     sender = findNickClientByFd(senderFd);
     receiverFd = findFdClientByNick(receiver);
 	
-    if (msg.getArgument().size() < 2)
-        return (errorHandler(senderFd , 412));
+	if(findFdClientByNick(receiver) && msg.getArgument().size() == 1)
+        return (errorHandler(senderFd , 411, cmd));
+	else if(findFdClientByNick(receiver))
+		return (errorHandler(senderFd , 401, receiver));
+    else if (msg.getArgument().size() < 2)
+		return (errorHandler(senderFd , 412));
+	// else if(ERR_TOOMANYTARGETS)
+    //     return (errorHandler(senderFd , 407, "target"));
+	// else if(ERR_CANNOTSENDTOCHAN)
+    //     return (errorHandler(senderFd , 404, "channel name"));
+	// else if(ERR_WILDTOPLEVEL)
+    //     return (errorHandler(senderFd , 414, "mask"));
+	// else if(ERR_NOTOPLEVEL)
+    //     return (errorHandler(senderFd , 413, "mask"));
     if (message.at(0) != ':')
         message.insert(0,1,':');
                 
@@ -63,7 +74,6 @@ void  Server::checkNotice(Message &msg, int senderFd)
     messageFormat = ":"+ sender+ " " +cmd + " " + receiver + " " + message;
     sendMessage(receiverFd, messageFormat);
 }
-
 
 void parseMessageFormat(Message &msg, char **data)
 {
