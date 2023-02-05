@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command_responses.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 14:24:53 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 14:42:06 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 18:27:58 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,11 +261,11 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 324 :
             message = "324 RPL_CHANNELMODEIS <channel>" + cmd_resp_arg + " <mode>" + cmd_resp_arg2 + " <mode params>" + cmd_resp_arg3 + "\r\n";
             break;
+        case 311 :
+            message = "311 RPL_WHOISUSER " + cmd_resp_arg + " " + cmd_resp_arg2 + " @<host> * :" + cmd_resp_arg3 + "\r\n";
+            break;
         // case 004 :
         //     message = "004 RPL_MYINFO <servername> <version> <available user modes><available channel modes>\r\n";
-        //     break;
-        // case 311 :
-        //     message = "311 RPL_WHOISUSER <nick> <user> <host> * :<real name>\r\n";
         //     break;
         // case 314 :
         //     message = "314 RPL_WHOWASUSER <nick> <user> <host> * :<real name>\r\n";

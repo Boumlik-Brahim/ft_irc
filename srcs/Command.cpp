@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:51:06 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 18:30:39 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void  Server::checkNotice(Message &msg, int senderFd)
 void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 {
 	if (!msg.getArgument().size())
-		std::cout << "NO Nick Name Given" << std::endl;
+		errorHandler(newSocketFd, 431);
 	else
 	{
 		if (_mapClients[newSocketFd]->getIsAuthValid())
@@ -86,12 +86,10 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 			for (std::map<int, Client*>::iterator it = _mapClients.begin(); it != _mapClients.end(); ++it)
 			{
 				if (!msg.getArgument().at(0).compare(it->second->getNickName()))
-				{
-					std::cout << "User     : " << it->second->getUserName() << std::endl;
-					std::cout << "realName : " << it->second->getRealName() << std::endl;
-				}
+					cmd_Resp_Handler(newSocketFd, 311, it->second->getNickName(),\
+						it->second->getUserName(), it->second->getRealName());
 				else
-					std::cout << "NO Nick Name found" << std::endl;
+					errorHandler(newSocketFd, 401, msg.getArgument().at(0));
 			}
 		}	
 		else

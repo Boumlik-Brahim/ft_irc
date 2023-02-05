@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:49:55 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 18:44:32 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void Server::read_write_socket(int newSocketFd, int *count)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
-		delete _mapGuest[newSocketFd];
+		// delete _mapGuest[newSocketFd];
 		close(newSocketFd);
 		if ((*count) == 1)
 			exit(EXIT_SUCCESS);
