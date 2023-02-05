@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:00:01 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 16:51:06 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void sendMessage(int fd, std::string message)
 
 int Server::findFdClientByNick(std::string receiver)
 {
-    for(std::map<int, Client *>::iterator it = mapClients.begin(); it != mapClients.end(); it++)
+    for(std::map<int, Client *>::iterator it = _mapClients.begin(); it != _mapClients.end(); it++)
     {
         if (it->second->getNickName() == receiver)
             return (it->first);
@@ -31,8 +31,8 @@ int Server::findFdClientByNick(std::string receiver)
 
 std::string     Server::findNickClientByFd(int sender)
 {
-    std::map<int, Client *>::iterator it = mapClients.find(sender);
-    if (it != mapClients.end())
+    std::map<int, Client *>::iterator it = _mapClients.find(sender);
+    if (it != _mapClients.end())
         return it->second->getNickName();
     else
         return "Client not found";
@@ -81,9 +81,9 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 		std::cout << "NO Nick Name Given" << std::endl;
 	else
 	{
-		if (mapClients[newSocketFd]->getIsAuthValid())
+		if (_mapClients[newSocketFd]->getIsAuthValid())
 		{
-			for (std::map<int, Client*>::iterator it = mapClients.begin(); it != mapClients.end(); ++it)
+			for (std::map<int, Client*>::iterator it = _mapClients.begin(); it != _mapClients.end(); ++it)
 			{
 				if (!msg.getArgument().at(0).compare(it->second->getNickName()))
 				{

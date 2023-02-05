@@ -3,90 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   Guest.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 11:09:44 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/05 11:46:24 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/05 16:54:32 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/Server.hpp"
+#include "../headers/Guest.hpp"
 
 Guest::Guest()
 {}
-
 Guest::Guest(int newSocketFd) : _guestFd(newSocketFd)
 {}
-
 Guest::Guest(const Guest &copy)
 {
-    *this = copy;
+	*this = copy;
 }
-
 Guest &Guest::operator=(const Guest &assign)
 {
-    if (this != &assign)
+	if (this != &assign)
 	{
-		this->_nick = assign._nick ;
-		this->_user = assign._user ;
-		this->_realName = assign._realName ;
-        this->_passValid = assign._passValid ;
-        this->_nickValid = assign._nickValid ;
+		_nick = assign._nick;
+		_user = assign._user;
+		_realName = assign._realName;
+		_passValid = assign._passValid;
+		_nickValid = assign._nickValid;
 	}
 	return *this;
 }
 
-Guest::~Guest()
-{}
-
 bool Guest::getPassValid() const
 {
-    return _passValid;
+	return (_passValid);
 }
-
 void Guest::setPassValid(bool isValid)
 {
-    this->_passValid = isValid;
+	_passValid = isValid;
 }
-
-bool Guest::getNickValid( void ) const
+bool Guest::getNickValid(void) const
 {
-    return _nickValid;
+	return (_nickValid);
 }
 void Guest::setNickValid(bool isValid)
 {
-    _nickValid = isValid;
+	_nickValid = isValid;
 }
-
-std::string Guest::getGuestNick( void ) const
+std::string Guest::getGuestNick(void) const
 {
-    return _nick;
+	return (_nick);
 }
-
 void Guest::setGuestNick(std::string nick)
 {
-    _nick = nick;
+	_nick = nick;
 }
-
+std::string Guest::getGuestUser(void) const
+{
+	return (_user);
+}
 void Guest::setGuestUser(std::string user)
 {
-    _user = user;
+	_user = user;
+}
+std::string Guest::getGuestRealName(void) const
+{
+	return (_realName);
 }
 void Guest::setGuestRealName(std::string realName)
 {
-    _realName = realName;
+	_realName = realName;
+}
+int Guest::getGuestFd(void) const
+{
+	return (_guestFd);
+}
+void Guest::setGuestFd(int guestFd)
+{
+	_guestFd = guestFd;
 }
 
-int Guest::getGuestFd( void ) const
-{
-    return _guestFd;
-} 
-
-std::string Guest::getGuestUser( void ) const
-{
-    return _user;
-}
-std::string Guest::getGuestRealName( void ) const
-{
-    return _realName;
-}
+Guest::~Guest()
+{}

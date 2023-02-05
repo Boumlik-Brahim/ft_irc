@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bot.hpp                                            :+:      :+:    :+:   */
+/*   Bot.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:12 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/29 18:20:37 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 16:22:15 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,11 @@ class Bot
 	private:
 
 	public:
-		// Constructors
 		Bot();
 		Bot(const Bot &copy);
-		
-		// Operators
+
 		Bot & operator=(const Bot &assign);
 
-		// Destructor
 		~Bot();
 };
 

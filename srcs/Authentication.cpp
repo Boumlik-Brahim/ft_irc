@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 09:22:10 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/05 15:51:00 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 16:51:51 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 			
 	if (tmpGuest->getPassValid())
 	{
-		for (std::map<int, Client*>::iterator it = mapClients.begin(); it != mapClients.end(); ++it)
+		for (std::map<int, Client*>::iterator it = _mapClients.begin(); it != _mapClients.end(); ++it)
 		{
 			if (!it->second->getNickName().compare(msg.getArgument().at(0)))
 			{
@@ -59,7 +59,7 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 
 void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
 {
-	Client *tmpClient = mapClients[newSocketFd];
+	Client *tmpClient = _mapClients[newSocketFd];
 	
 	tmpClient->setNickName(tmpGuest->getGuestNick()); 
 	tmpClient->setUserName(tmpGuest->getGuestUser()); 

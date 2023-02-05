@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   channel.hpp                                        :+:      :+:    :+:   */
+/*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/01/29 18:21:15 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 16:22:56 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,11 @@ class Channel
 	private:
 
 	public:
-		// Constructors
 		Channel();
 		Channel(const Channel &copy);
 
-		// Operators
 		Channel & operator=(const Channel &assign);
 
-		// Destructor
 		~Channel();
 };
 

@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 15:37:48 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 16:36:03 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,29 +29,24 @@ class Client
 		bool		_isAuthValid;
 
 	public:
-		std::string buf;
+		std::string	buf;
 
 		Client();
-		Client(int clientFd);
 		Client(const Client &copy);
-   
-		int			getClientFd();
-		void		setClientFd(int clientFd);
-		
-		// Operators
 		Client & operator=(const Client &assign);
 
-		// Destructor
-		~Client();
+		int			getClientFd();
+		void		setClientFd(int clientFd);
+		std::string	getNickName(void) const;
+		void		setNickName(std::string nickName);
+		std::string	getUserName(void) const;
+		void		setUserName(std::string userName);
+		std::string	getRealName(void) const;
+		void		setRealName(std::string realName);
+		bool		getIsAuthValid(void) const;
+		void		setAuthValid(bool isValid);
 
-		void setNickName(std::string nickName);
-		void setUserName(std::string userName);
-		void setRealName(std::string realName);
-		void setAuthValid(bool isValid);
-		std::string getNickName(void) const;
-		std::string getUserName(void) const;
-		std::string getRealName(void) const;
-		bool 		getIsAuthValid(void) const;
+		~Client();
 };
 
 #endif

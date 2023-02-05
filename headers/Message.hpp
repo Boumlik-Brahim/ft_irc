@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 16:18:32 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/05 16:39:42 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ class Message
 		Message(const Message &copy);
 		Message &operator=(const Message &assign);
 
-		std::vector<std::string>	getArgument(void) const;
-		void						setArguments(std::vector<std::string> arguments);
 		std::string					getCommand(void) const;
 		void						setCommand(std::string command);
+		std::vector<std::string>	getArgument(void) const;
+		void						setArguments(std::vector<std::string> arguments);
 		bool						getIsValidCommand(void) const;
 		void						setIsValidCommand(bool isValid);
 
