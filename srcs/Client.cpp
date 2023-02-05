@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 16:21:45 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/05 11:46:06 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ void Client::setRealName(std::string realName)
 {
 	_realName = realName;
 }
+
+void Client::setAuthValid(bool isValid)
+{
+	_isAuthValid = isValid;
+}
+
 std::string Client::getNickName(void) const
 {
 	return _nickName;
@@ -59,4 +65,9 @@ std::string Client::getUserName(void) const
 std::string Client::getRealName(void) const
 {
 	return _realName;
+}
+
+bool Client::getIsAuthValid(void) const
+{
+	return _isAuthValid;
 }

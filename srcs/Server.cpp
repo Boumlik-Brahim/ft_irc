@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 17:13:20 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/05 10:30:35 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
+		delete _mapGuest[new_socket_fd];
 		close(new_socket_fd);
 		if ((*count) == 1)
 			exit(EXIT_SUCCESS);
@@ -177,7 +178,6 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	}
 	if (n > 1)
 	{
-		buffer[n] = 0;
 		client->buf += buffer;
 		size_t size = client->buf.size();
 		if(size > 2 && client->buf[size - 1] == '\n' && client->buf[size - 2] == '\r')

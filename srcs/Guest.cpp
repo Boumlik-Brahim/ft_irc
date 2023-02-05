@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 11:09:44 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/04 16:01:32 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/05 11:46:24 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,23 @@ Guest::Guest()
 Guest::Guest(int newSocketFd) : _guestFd(newSocketFd)
 {}
 
-// Guest::Guest(const Guest &copy)
-// {}
+Guest::Guest(const Guest &copy)
+{
+    *this = copy;
+}
 
-// Guest &Guest::operator=(const Guest &assign)
-// {}
+Guest &Guest::operator=(const Guest &assign)
+{
+    if (this != &assign)
+	{
+		this->_nick = assign._nick ;
+		this->_user = assign._user ;
+		this->_realName = assign._realName ;
+        this->_passValid = assign._passValid ;
+        this->_nickValid = assign._nickValid ;
+	}
+	return *this;
+}
 
 Guest::~Guest()
 {}
@@ -44,14 +56,6 @@ bool Guest::getNickValid( void ) const
 void Guest::setNickValid(bool isValid)
 {
     _nickValid = isValid;
-}
-bool Guest::getAuthValid( void ) const
-{
-    return _authValid;
-}
-void Guest::setAuthValid(bool isValid)
-{
-    _authValid = isValid;
 }
 
 std::string Guest::getGuestNick( void ) const
