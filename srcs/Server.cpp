@@ -149,14 +149,14 @@ void Server::accept_socket()
 		}
 	}
 }
-void Server::read_write_socket(int new_socket_fd, int *count)
+void Server::read_write_socket(int newSocketFd, int *count)
 {
 	int		n;
 	char	buffer[256];
 
 	bzero(buffer, 256);
-	Client *client = mapClients[new_socket_fd];
-	n = recv(new_socket_fd, buffer, 255, 0);
+	Client *client = mapClients[newSocketFd];
+	n = recv(newSocketFd, buffer, 255, 0);
 	if (n < 0)
 	{
 		std::cout << "ERROR READING FROM SOCKET" << std::endl;
@@ -166,8 +166,8 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
-		delete _mapGuest[new_socket_fd];
-		close(new_socket_fd);
+		delete _mapGuest[newSocketFd];
+		close(newSocketFd);
 		if ((*count) == 1)
 			exit(EXIT_SUCCESS);
 		return ;
@@ -181,7 +181,7 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 			std::string tmp = client->buf;
 			client->buf.erase();
 			tmp.erase(size - 2, 2);
-			backBone(tmp, new_socket_fd);
+			backBone(tmp, newSocketFd);
 		}
 	}
 	// n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);

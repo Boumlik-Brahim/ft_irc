@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/05 16:00:01 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +77,6 @@ void  Server::checkNotice(Message &msg, int senderFd)
 
 void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 {
-	(void)newSocketFd;
 	if (!msg.getArgument().size())
 		std::cout << "NO Nick Name Given" << std::endl;
 	else
@@ -127,8 +127,8 @@ void parseMessageFormat(Message &msg, char **data)
 			free(data[i]);
 		}
 	}
-	if (args[1].back() - 1 != '\r' && args[1].back() != '\n')
-        args[1] += "\r\n";
+	// if (args[1].back() - 1 != '\r' && args[1].back() != '\n')
+    //     args[1] += "\r\n";
 	free(data);
 	msg.setArguments(args);
 }
@@ -173,8 +173,8 @@ void Server::backBone(std::string buffer, int newSocketFd)
 	else if (!msg.getCommand().compare("PRIVMSG"))
 	    std::cout << "i got the privmsg" << std::endl;
 	else if (!msg.getCommand().compare("NOTICE"))
-		checkNotice(msg, new_socket_fd);
-  else if (!msg.getCommand().compare("WHOIS"))
+		checkNotice(msg, newSocketFd);
+  	else if (!msg.getCommand().compare("WHOIS"))
 		handleWhoIsCmd(msg, newSocketFd);
 	else
 	    std::cout << "invalid command" << std::endl;

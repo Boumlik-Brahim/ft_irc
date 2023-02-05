@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 09:22:10 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/05 11:45:06 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/05 15:51:00 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 	{
 		for (std::map<int, Client*>::iterator it = mapClients.begin(); it != mapClients.end(); ++it)
 		{
-			std::cout << "--------> " << it->second->getNickName() << std::endl;
 			if (!it->second->getNickName().compare(msg.getArgument().at(0)))
 			{
 				std::cout << "This Nick Already Used" << std::endl;

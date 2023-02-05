@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/05 15:37:29 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +40,12 @@ class Server
 		std::map<int, Guest*>	_mapGuest;
 
 	public:
-		// Constructors
 		Server();
 		Server(int port_number, std::string password);
 		Server &operator=(const Server &assign);
 		Server(const Server &copy);
 		~Server();
 
-		// Getters and setters
 		int			getPort_number(void) const;
 		void		setPort_number(int port_number);
 		std::string	getPassword(void) const;
@@ -55,8 +54,7 @@ class Server
 		void		setSocket_fd( int socket_fd );
 		int			getNew_socket_fd( void ) const;
 		void		setNew_socket_fd( int new_socket_fd );
-
-		// Functions
+		
 		void create_socket();
 		void bind_socket();
 		void listen_socket();
@@ -69,8 +67,6 @@ class Server
 		int			findFdClientByNick(std::string receiver);
 		void		checkNotice(Message &msg, int senderFd);
 
-		// Destructor
-		~Server();
 		void guestToClient(Guest *tmpGuest, int newSocketFd);
 		void handlePassCmd(Message &msg, int newSocketFd);
 		void handleNickCmd(Message &msg, int newSocketFd);

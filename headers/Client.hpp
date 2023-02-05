@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/05 15:37:48 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +35,6 @@ class Client
 		Client(int clientFd);
 		Client(const Client &copy);
    
-		std::string	getNickName();
-		void		setNickName(std::string nickname);
-		std::string	getUserName();
-		void		setUserName(std::string nickname);
 		int			getClientFd();
 		void		setClientFd(int clientFd);
 		
