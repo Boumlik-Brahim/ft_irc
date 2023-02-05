@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 11:24:07 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +23,7 @@
 # include "../headers/Client.hpp"
 # include "../headers/Utils.hpp"
 # include "../headers/Message.hpp"
+# include "../headers/Guest.hpp"
 
 # define MAX_CONNECTIONS 10
 class Server
@@ -36,15 +36,15 @@ class Server
 		struct sockaddr_in 		serv_addr, cli_addr;
 		struct pollfd			fds[MAX_CONNECTIONS];
 		std::map<int, Client*>	mapClients;
+		std::map<int, Guest*>	_mapGuest;
 
 	public:
 		// Constructors
 		Server();
 		Server(int port_number, std::string password);
-		Server(const Server &copy);
-
-		// Operators
 		Server &operator=(const Server &assign);
+		Server(const Server &copy);
+		~Server();
 
 		// Getters and setters
 		int			getPort_number(void) const;
@@ -65,13 +65,17 @@ class Server
 		void read_write_socket(int new_socket_fd, int *count);
 		void close_socket(int socket_fd);
 
-
 		std::string	findNickClientByFd(int sender);
 		int			findFdClientByNick(std::string receiver);
 		void		checkNotice(Message &msg, int senderFd);
 
 		// Destructor
 		~Server();
+		void guestToClient(Guest *tmpGuest, int newSocketFd);
+		void handlePassCmd(Message &msg, int newSocketFd);
+		void handleNickCmd(Message &msg, int newSocketFd);
+		void handleUserCmd(Message &msg, int newSocketFd);
+		void handleWhoIsCmd(Message &msg, int newSocketFd);
 };
 
 #endif

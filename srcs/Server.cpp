@@ -1,12 +1,8 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/04 17:54:07 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +137,8 @@ void Server::accept_socket()
 					this->fds[numfds].events = POLLIN;
 					numfds++;
 					count = numfds;
-					mapClients.insert(std::pair<int, Client*>(this->new_socket_fd, new Client(this->new_socket_fd)));
+					_mapGuest.insert(std::pair<int, Guest*>(this->new_socket_fd, new Guest()));
+					mapClients.insert(std::pair<int, Client*>(this->new_socket_fd, new Client()));
 				}
 				else
 				{
@@ -169,6 +166,7 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
+		delete _mapGuest[new_socket_fd];
 		close(new_socket_fd);
 		if ((*count) == 1)
 			exit(EXIT_SUCCESS);
@@ -176,15 +174,14 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 	}
 	if (n > 1)
 	{
-		buffer[n] = 0;
 		client->buf += buffer;
 		size_t size = client->buf.size();
-		if(size > 2 && client->buf[size -1] == '\n' && client->buf[size - 2] == '\r')
+		if(size > 2 && client->buf[size - 1] == '\n' && client->buf[size - 2] == '\r')
 		{
 			std::string tmp = client->buf;
 			client->buf.erase();
-			// std::cout << "HERE IS THE MESSAGE: " << tmp << std::endl;
-			backBone(tmp, new_socket_fd);	
+			tmp.erase(size - 2, 2);
+			backBone(tmp, new_socket_fd);
 		}
 	}
 	// n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);
