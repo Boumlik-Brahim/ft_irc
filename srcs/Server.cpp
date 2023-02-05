@@ -6,7 +6,6 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 10:30:35 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +185,7 @@ void Server::read_write_socket(int new_socket_fd, int *count)
 			client->buf.erase();
 			tmp.erase(size - 2, 2);
 			backBone(tmp, new_socket_fd);
+
 		}
 	}
 	// n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);
