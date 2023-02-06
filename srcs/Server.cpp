@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 18:44:32 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/06 13:14:43 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void Server::read_write_socket(int newSocketFd, int *count)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
-		// delete _mapGuest[newSocketFd];
+		_mapClients.erase(newSocketFd);
 		close(newSocketFd);
 		if ((*count) == 1)
 			exit(EXIT_SUCCESS);

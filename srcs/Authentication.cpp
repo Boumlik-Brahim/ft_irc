@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 09:22:10 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/05 18:15:01 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/06 14:20:53 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void Server::handlePassCmd(Message &msg, int newSocketFd)
 	else
 	{
 		if (msg.getArgument().at(0).compare(getPassword()))
-			std::cout << "Invalid password" << std::endl;
+			errorHandler(newSocketFd, 464);
 		else
 			tmpGuest->setPassValid(true);
 	}
@@ -39,22 +39,23 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 		{
 			if (!it->second->getNickName().compare(msg.getArgument().at(0)))
 			{
-				errorHandler(newSocketFd,436,it->second->getNickName());
+				errorHandler(newSocketFd, 436 ,it->second->getNickName());
 				return ;
 			}
 		}
-		if (msg.getArgument().at(0).size() > 8 || msg.getArgument().at(0).size() < 1)
-			std::cout << "check the Lenght of the Nickname" << std::endl;
-		else if (!isalpha(msg.getArgument().at(0).at(0)))
-				errorHandler(newSocketFd,432,msg.getArgument().at(0));
+		if (!isalpha(msg.getArgument().at(0).at(0)) || msg.getArgument().at(0).size() > 8)
+			errorHandler(newSocketFd, 432, msg.getArgument().at(0));
 		else
 		{
-			tmpGuest->setGuestNick(msg.getArgument().at(0));
+			if (!_mapClients[newSocketFd]->getNickName().compare(""))
+				tmpGuest->setGuestNick(msg.getArgument().at(0));
+			else
+				_mapClients[newSocketFd]->setNickName(msg.getArgument().at(0));
 			tmpGuest->setNickValid(true);
 		}		
 	}
 	else
-		std::cout << "You Need To Enter Pass First" << std::endl;
+		errorHandler(newSocketFd, 464);
 }
 
 void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
@@ -74,11 +75,11 @@ void Server::handleUserCmd(Message &msg, int newSocketFd)
 	if (msg.getArgument().size() < 4)
 		errorHandler(newSocketFd, 461, "USER");
 	else if (!tmpGuest->getPassValid() || !tmpGuest->getNickValid())
-		std::cout << "You Need to enter Pass and Nick First" << std::endl;
+		errorHandler(newSocketFd, 464);
 	else
 	{
 		if (!isalpha(msg.getArgument().at(0).at(0)) && !isnumber(msg.getArgument().at(0).at(0)))
-			std::cout << "First character in UserName Invalid " << std::endl;
+			errorHandler(newSocketFd, 432, msg.getArgument().at(0));
 		else{
 			tmpGuest->setGuestUser(msg.getArgument().at(0));
 			tmpGuest->setGuestRealName(msg.getArgument().at(3));
