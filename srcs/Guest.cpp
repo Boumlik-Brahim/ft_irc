@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Guest.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 11:09:44 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/05 16:54:32 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 15:26:14 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,15 @@ int Guest::getGuestFd(void) const
 void Guest::setGuestFd(int guestFd)
 {
 	_guestFd = guestFd;
+}
+
+bool Guest::getUserValid(void) const
+{
+	return	_userValid;
+}
+void Guest::setUserValid(bool isValid)
+{
+	_userValid = isValid;	
 }
 
 Guest::~Guest()

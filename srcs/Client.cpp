@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:54:13 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 15:25:08 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Client.hpp"
 
-
-Client::Client(): buf("")
+Client::Client():  buf("")
 {}
 Client::Client(const Client &copy) : _nickName(copy._nickName), _userName(copy._userName), _clientFd(copy._clientFd), buf("")
 {}

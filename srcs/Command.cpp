@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 15:29:04 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +165,6 @@ void parseMessageFormat(Message &msg, char **data)
 			free(data[i]);
 		}
 	}
-	// if (args[1].back() - 1 != '\r' && args[1].back() != '\n')
-    //     args[1] += "\r\n";
 	free(data);
 	msg.setArguments(args);
 }
@@ -180,6 +177,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 
 	data = ft_split(buffer.c_str(), ' ');
 	parseMessageFormat(msg, data);
+	std::cout << "this is the buffer --> " << buffer << std::endl;
 	if (!msg.getCommand().compare("PASS"))
 	    handlePassCmd(msg, newSocketFd);
 	else if (!msg.getCommand().compare("NICK"))

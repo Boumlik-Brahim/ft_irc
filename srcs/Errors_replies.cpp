@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Errors_replies.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 11:59:18 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 10:54:10 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 
 	switch (err_code)
 	{
-		case 436:
-			message = "436 ERR_NICKCOLLISION " + err_arg + " :Nickname collision KILL from " + err_arg2 + "@<host>\r\n";
-			break;
 		case 437:
 			message = "437 ERR_UNAVAILRESOURCE <" + err_arg + "/" + err_arg2 + "> :Nick/channel is temporarily unavailable\r\n";
 			break;
@@ -95,6 +92,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			break;
 		case 405:
 			message = "405 ERR_TOOMANYCHANNELS "+err_arg+" :You have joined too many channels\r\n";
+			break;
+		case 436:
+			message = "436 ERR_NICKCOLLISION " + err_arg + " :Nickname collision KILL\r\n";
 			break;
 		case 442:
 			message = "442 ERR_NOTONCHANNEL "+err_arg+" :You're not on that channel\r\n";
