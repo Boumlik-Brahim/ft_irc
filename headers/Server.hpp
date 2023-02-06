@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:49:41 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 11:25:00 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ class Server
 
 		std::string	findNickClientByFd(int sender);
 		int			findFdClientByNick(std::string receiver);
-		void		checkNotice(Message &msg, int senderFd);
+		void		handleNoticeCmd(Message &msg, int senderFd);
+		void		handlePrivmsgCmd(Message &msg, int senderFd);
 
 		void guestToClient(Guest *tmpGuest, int newSocketFd);
 		void handlePassCmd(Message &msg, int newSocketFd);
