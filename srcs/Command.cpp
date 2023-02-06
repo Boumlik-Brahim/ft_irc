@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 11:25:00 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/06 11:38:44 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 		return (errorHandler(senderFd, 451));
     else if (msg.getArgument().size() < 2)
 		return (errorHandler(senderFd , 412));
-	// else if(receiverFd == -1)
-	// 	return (errorHandler(senderFd , 401, receiver));
-	// else if(ERR_TOOMANYTARGETS)
-    //     return (errorHandler(senderFd , 407, "target"));
+	else if(receiverFd == -1)
+		return (errorHandler(senderFd , 401, receiver));
 	// else if(ERR_CANNOTSENDTOCHAN)
     //     return (errorHandler(senderFd , 404, "channel name"));
+	// else if(ERR_TOOMANYTARGETS)
+    //     return (errorHandler(senderFd , 407, "target"));
 	// else if(ERR_WILDTOPLEVEL)
     //     return (errorHandler(senderFd , 414, "mask"));
 	// else if(ERR_NOTOPLEVEL)
