@@ -98,7 +98,7 @@ void Server::handleUserCmd(Message &msg, int newSocketFd)
 void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 {
 	if (!msg.getArgument().size())
-		std::cout << "NO Nick Name Given" << std::endl;
+		errorHandler(newSocketFd, 431);
 	else
 	{
 		if (_mapClients[newSocketFd]->getIsAuthValid())
@@ -107,15 +107,16 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 			{
 				if (!msg.getArgument().at(0).compare(it->second->getNickName()))
 				{
-					std::cout << "User     : " << it->second->getUserName() << std::endl;
-					std::cout << "realName : " << it->second->getRealName() << std::endl;
+					cmd_Resp_Handler(newSocketFd, 311, it->second->getNickName(),\
+						it->second->getUserName(), it->second->getRealName());
+					break;
 				}
-				else
-					std::cout << "NO Nick Name found" << std::endl;
+				if (it == --_mapClients.end() && msg.getArgument().at(0).compare(it->second->getNickName())) 
+					errorHandler(newSocketFd, 401, msg.getArgument().at(0));
 			}
 		}	
 		else
-			std::cout << "You Need To register First" << std::endl;
+        	errorHandler(newSocketFd , 451);
 	}
 
 }
