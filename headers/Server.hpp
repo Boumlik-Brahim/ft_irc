@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 11:25:00 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/06 15:28:25 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "../headers/Utils.hpp"
 # include "../headers/Message.hpp"
 # include "../headers/Guest.hpp"
+# include "../headers/Channel.hpp"
 
 # define MAX_CONNECTIONS 10
 class Server
@@ -72,6 +73,8 @@ class Server
 		void handleNickCmd(Message &msg, int newSocketFd);
 		void handleUserCmd(Message &msg, int newSocketFd);
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
+
+		void handleJoinCmd(Message &msg, Channel &chnl, int senderFd);
 
 		~Server();
 };
