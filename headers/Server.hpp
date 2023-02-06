@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 15:28:25 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 17:29:45 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Server
 		struct pollfd			_fds[MAX_CONNECTIONS];
 		std::map<int, Client*>	_mapClients;
 		std::map<int, Guest*>	_mapGuest;
+		std::vector<Channel>	_channels;
 
 	public:
 		Server();
