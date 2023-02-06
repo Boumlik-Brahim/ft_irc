@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 13:43:22 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 15:19:39 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,16 @@ class Channel
 	public:
 		Channel();
 		Channel(const Channel &copy);
-
 		Channel & operator=(const Channel &assign);
+
+		std::string	getChannelName(void) const;
+		void		setChannelName(std::string channelName);
+		std::string	getChannelProperties(void) const;
+		void		setChannelProperties(std::string channelProperties);
+		std::string	getChannelCreator(void) const;
+		void		setChannelCreator(std::string channelCreator);
+		std::string	getChannellifetime(void) const;
+		void		setChannellifetime(std::string channellifetime);
 
 		~Channel();
 };
