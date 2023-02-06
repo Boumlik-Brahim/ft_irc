@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:49:41 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 15:28:25 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "../headers/Utils.hpp"
 # include "../headers/Message.hpp"
 # include "../headers/Guest.hpp"
+# include "../headers/Channel.hpp"
 
 # define MAX_CONNECTIONS 10
 class Server
@@ -64,13 +65,16 @@ class Server
 
 		std::string	findNickClientByFd(int sender);
 		int			findFdClientByNick(std::string receiver);
-		void		checkNotice(Message &msg, int senderFd);
+		void		handleNoticeCmd(Message &msg, int senderFd);
+		void		handlePrivmsgCmd(Message &msg, int senderFd);
 
 		void guestToClient(Guest *tmpGuest, int newSocketFd);
 		void handlePassCmd(Message &msg, int newSocketFd);
 		void handleNickCmd(Message &msg, int newSocketFd);
 		void handleUserCmd(Message &msg, int newSocketFd);
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
+
+		void handleJoinCmd(Message &msg, Channel &chnl, int senderFd);
 
 		~Server();
 };

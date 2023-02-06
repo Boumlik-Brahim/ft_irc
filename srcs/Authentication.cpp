@@ -3,10 +3,6 @@
 /*                                                        :::      ::::::::   */
 /*   Authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/05 09:22:10 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/06 15:32:13 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +93,29 @@ void Server::handleUserCmd(Message &msg, int newSocketFd)
 			tmpGuest->setUserValid(true);
 		}
 	}
+}
+
+void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
+{
+	if (!msg.getArgument().size())
+		std::cout << "NO Nick Name Given" << std::endl;
+	else
+	{
+		if (_mapClients[newSocketFd]->getIsAuthValid())
+		{
+			for (std::map<int, Client*>::iterator it = _mapClients.begin(); it != _mapClients.end(); ++it)
+			{
+				if (!msg.getArgument().at(0).compare(it->second->getNickName()))
+				{
+					std::cout << "User     : " << it->second->getUserName() << std::endl;
+					std::cout << "realName : " << it->second->getRealName() << std::endl;
+				}
+				else
+					std::cout << "NO Nick Name found" << std::endl;
+			}
+		}	
+		else
+			std::cout << "You Need To register First" << std::endl;
+	}
+
 }
