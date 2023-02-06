@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:51:06 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 13:21:53 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void  Server::checkNotice(Message &msg, int senderFd)
 void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 {
 	if (!msg.getArgument().size())
-		std::cout << "NO Nick Name Given" << std::endl;
+		errorHandler(newSocketFd, 431);
 	else
 	{
 		if (_mapClients[newSocketFd]->getIsAuthValid())
@@ -87,15 +87,16 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 			{
 				if (!msg.getArgument().at(0).compare(it->second->getNickName()))
 				{
-					std::cout << "User     : " << it->second->getUserName() << std::endl;
-					std::cout << "realName : " << it->second->getRealName() << std::endl;
+					cmd_Resp_Handler(newSocketFd, 311, it->second->getNickName(),\
+						it->second->getUserName(), it->second->getRealName());
+					break;
 				}
-				else
-					std::cout << "NO Nick Name found" << std::endl;
+				if (it == --_mapClients.end() && msg.getArgument().at(0).compare(it->second->getNickName())) 
+					errorHandler(newSocketFd, 401, msg.getArgument().at(0));
 			}
 		}	
 		else
-			std::cout << "You Need To register First" << std::endl;
+        	errorHandler(newSocketFd , 451);
 	}
 
 }
@@ -127,8 +128,6 @@ void parseMessageFormat(Message &msg, char **data)
 			free(data[i]);
 		}
 	}
-	// if (args[1].back() - 1 != '\r' && args[1].back() != '\n')
-    //     args[1] += "\r\n";
 	free(data);
 	msg.setArguments(args);
 }
@@ -140,6 +139,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 
 	data = ft_split(buffer.c_str(), ' ');
 	parseMessageFormat(msg, data);
+	std::cout << "this is the buffer --> " << buffer << std::endl;
 	if (!msg.getCommand().compare("PASS"))
 	    handlePassCmd(msg, newSocketFd);
 	else if (!msg.getCommand().compare("NICK"))
@@ -173,7 +173,10 @@ void Server::backBone(std::string buffer, int newSocketFd)
 	else if (!msg.getCommand().compare("PRIVMSG"))
 	    std::cout << "i got the privmsg" << std::endl;
 	else if (!msg.getCommand().compare("NOTICE"))
-		checkNotice(msg, newSocketFd);
+	{
+		std::cout << "HERE is a NOTICE " << std::endl;
+		// checkNotice(msg, newSocketFd);
+	}
   	else if (!msg.getCommand().compare("WHOIS"))
 		handleWhoIsCmd(msg, newSocketFd);
 	else

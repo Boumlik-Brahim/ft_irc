@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Split.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 09:11:00 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/02 18:37:36 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 13:00:15 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	find(const char *s, char c)
 		if (s[j] == c)
 		{
 			if (s[j + 1] == c)
-				return (0);
+				j++;
 			else if (s[j + 1] == '\0')
 				p -= 1;
 			p++;
