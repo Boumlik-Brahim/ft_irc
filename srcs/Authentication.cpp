@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 09:22:10 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/06 14:20:53 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/06 15:32:13 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,13 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 		}
 		if (!isalpha(msg.getArgument().at(0).at(0)) || msg.getArgument().at(0).size() > 8)
 			errorHandler(newSocketFd, 432, msg.getArgument().at(0));
-		else
-		{
+		else{
 			if (!_mapClients[newSocketFd]->getNickName().compare(""))
+			{
 				tmpGuest->setGuestNick(msg.getArgument().at(0));
+				if (_mapGuest[newSocketFd]->getUserValid())
+					guestToClient(tmpGuest, newSocketFd);
+			}
 			else
 				_mapClients[newSocketFd]->setNickName(msg.getArgument().at(0));
 			tmpGuest->setNickValid(true);
@@ -74,16 +77,24 @@ void Server::handleUserCmd(Message &msg, int newSocketFd)
 	
 	if (msg.getArgument().size() < 4)
 		errorHandler(newSocketFd, 461, "USER");
-	else if (!tmpGuest->getPassValid() || !tmpGuest->getNickValid())
+	else if (!tmpGuest->getPassValid())
 		errorHandler(newSocketFd, 464);
 	else
 	{
 		if (!isalpha(msg.getArgument().at(0).at(0)) && !isnumber(msg.getArgument().at(0).at(0)))
 			errorHandler(newSocketFd, 432, msg.getArgument().at(0));
 		else{
-			tmpGuest->setGuestUser(msg.getArgument().at(0));
-			tmpGuest->setGuestRealName(msg.getArgument().at(3));
-			guestToClient(tmpGuest, newSocketFd);
+			if (!_mapClients[newSocketFd]->getUserName().compare("")){
+				tmpGuest->setGuestUser(msg.getArgument().at(0));
+				tmpGuest->setGuestRealName(msg.getArgument().at(3));
+				if (_mapGuest[newSocketFd]->getNickValid())
+					guestToClient(tmpGuest, newSocketFd);
+			}
+			else{
+				_mapClients[newSocketFd]->setUserName(msg.getArgument().at(0));
+				_mapClients[newSocketFd]->setRealName(msg.getArgument().at(3));
+			}
+			tmpGuest->setUserValid(true);
 		}
 	}
 }

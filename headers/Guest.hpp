@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Guest.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 10:59:00 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/05 16:31:07 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 15:25:34 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class Guest
 		std::string	_realName;
 		bool		_passValid;
 		bool		_nickValid;
+		bool		_userValid;
 
 	public:
 		Guest();
@@ -43,6 +44,8 @@ class Guest
 		void		setGuestUser(std::string nick);
 		std::string	getGuestRealName(void) const;
 		void		setGuestRealName(std::string nick);
+		bool 		getUserValid(void) const;
+		void 		setUserValid(bool isValid);
 
 		~Guest();
 };
