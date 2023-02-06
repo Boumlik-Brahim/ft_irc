@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:22:56 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/06 13:43:22 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,18 @@
 # include <iostream>
 # include <string>
 
+# include <iostream>
+# include <string>
+# include <map>
+# include "../headers/Client.hpp"
 class Channel
 {
 	private:
+		std::string				_channelName;
+		std::string				_channelProperties;
+		std::string				_channelCreator;
+		std::string				_channellifetime;
+		std::map<int, Client>	_currentMembers;
 
 	public:
 		Channel();
