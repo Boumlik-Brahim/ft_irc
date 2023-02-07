@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 10:04:43 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/07 18:48:19 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,48 @@ void  Server::handleNoticeCmd(Message &msg, int senderFd)
     sendMessage(receiverFd, messageFormat);
 }
 
+std::vector<std::string> splitBySeparator(std::string args, std::string sep)
+{
+    std::vector<std::string> newArgs;
+    size_t pos = 0;
+    while ((pos = args.find(sep)) != std::string::npos)
+    {
+        newArgs.push_back(args.substr(0, pos));
+        args.erase(0, pos + 1);
+    }
+    newArgs.push_back(args.substr(0, pos));
+    return newArgs;
+}
+
+void checkChnlNames(std::vector<std::string> &tmpArgs, int newSocketFd)
+{
+	for (size_t i = 0; i < tmpArgs.size(); i++)
+	{
+		if (tmpArgs.at(i).at(0) != '#')
+			errorHandler(newSocketFd, 403, tmpArgs.at(i));				
+	}
+}
+
+void checkMultiArgs(Message &msg, int newSocketFd)
+{
+	std::vector<std::string> 			tmpArgs;
+	
+	if (msg.getArguments().at(0).find(',') != std::string::npos)
+	{
+		tmpArgs = splitBySeparator(msg.getArguments().at(0), ",");
+		checkChnlNames(tmpArgs, newSocketFd);
+		msg.setMultiArgs(tmpArgs);
+		msg.erase(msg.getArguments().begin());
+		if (msg.getArguments().size())
+		{
+			if (msg.getArguments().at(0).find(',') != std::string::npos)
+			{
+				tmpArgs = splitBySeparator(msg.getArguments().at(0), ",");
+				msg.setArguments(tmpArgs);
+			}
+		}
+	}
+}
 void parseMessageFormat(Message &msg, char **data)
 {
 	std::vector<std::string> args;
@@ -143,43 +185,54 @@ void Server::backBone(std::string buffer, int newSocketFd)
 	char 	**data;
 
 	data = ft_split(buffer.c_str(), ' ');
-	parseMessageFormat(msg, data);
-	if (!msg.getCommand().compare("PASS"))
-	    handlePassCmd(msg, newSocketFd);
-	else if (!msg.getCommand().compare("NICK"))
-	    handleNickCmd(msg, newSocketFd);
-	else if (!msg.getCommand().compare("USER"))
-	    handleUserCmd(msg, newSocketFd);
-	else if (!msg.getCommand().compare("OPER"))
-	    std::cout << "i got the oper" << std::endl;
-	else if (!msg.getCommand().compare("SERVICE"))
-	    std::cout << "i got the service" << std::endl;
-	else if (!msg.getCommand().compare("QUIT"))
-	    std::cout << "i got the quit" << std::endl;
-	else if (!msg.getCommand().compare("SQUIT"))
-	    std::cout << "i got the squit" << std::endl;
-	else if (!msg.getCommand().compare("JOIN"))
-		handleJoinCmd(msg, chnl, newSocketFd);
-	else if (!msg.getCommand().compare("PART"))
-	    std::cout << "i got the part" << std::endl;
-	else if (!msg.getCommand().compare("MODE"))
-	    std::cout << "i got the mode" << std::endl;
-	else if (!msg.getCommand().compare("TOPIC"))
-	    std::cout << "i got the topic" << std::endl;
-	else if (!msg.getCommand().compare("NAMES"))
-	    std::cout << "i got the names" << std::endl;
-	else if (!msg.getCommand().compare("LIST"))
-	    std::cout << "i got the names" << std::endl;
-	else if (!msg.getCommand().compare("INVITE"))
-	    std::cout << "i got the names" << std::endl;
-	else if (!msg.getCommand().compare("KICK"))
-	    std::cout << "i got the kick" << std::endl;
-	else if (!msg.getCommand().compare("PRIVMSG"))
-	    handlePrivmsgCmd(msg, newSocketFd);
-	else if (!msg.getCommand().compare("NOTICE"))
-		handleNoticeCmd(msg, newSocketFd);
-  	else if (!msg.getCommand().compare("WHOIS"))
-		handleWhoIsCmd(msg, newSocketFd);
-	else
-	    std::cout << "invalid command" << std::endl;
+	try{
+		parseMessageFormat(msg, data);
+		if (!msg.getCommand().compare("PASS"))
+			handlePassCmd(msg, newSocketFd);
+		else if (!msg.getCommand().compare("NICK"))
+			handleNickCmd(msg, newSocketFd);
+		else if (!msg.getCommand().compare("USER"))
+			handleUserCmd(msg, newSocketFd);
+		else if (!msg.getCommand().compare("OPER"))
+			std::cout << "i got the oper" << std::endl;
+		else if (!msg.getCommand().compare("SERVICE"))
+			std::cout << "i got the service" << std::endl;
+		else if (!msg.getCommand().compare("QUIT"))
+			std::cout << "i got the quit" << std::endl;
+		else if (!msg.getCommand().compare("SQUIT"))
+			std::cout << "i got the squit" << std::endl;
+		else if (!msg.getCommand().compare("JOIN"))
+		{
+			checkMultiArgs(msg, newSocketFd);
+			// handleJoinCmd(msg, chnl, newSocketFd);
+		}
+		else if (!msg.getCommand().compare("PART"))
+			std::cout << "i got the part" << std::endl;
+		else if (!msg.getCommand().compare("MODE"))
+			std::cout << "i got the mode" << std::endl;
+		else if (!msg.getCommand().compare("TOPIC"))
+			std::cout << "i got the topic" << std::endl;
+		else if (!msg.getCommand().compare("NAMES"))
+			std::cout << "i got the names" << std::endl;
+		else if (!msg.getCommand().compare("LIST"))
+			std::cout << "i got the names" << std::endl;
+		else if (!msg.getCommand().compare("INVITE"))
+			std::cout << "i got the names" << std::endl;
+		else if (!msg.getCommand().compare("KICK"))
+			std::cout << "i got the kick" << std::endl;
+		else if (!msg.getCommand().compare("PRIVMSG"))
+			handlePrivmsgCmd(msg, newSocketFd);
+		else if (!msg.getCommand().compare("NOTICE"))
+			handleNoticeCmd(msg, newSocketFd);
+		else if (!msg.getCommand().compare("WHOIS"))
+			handleWhoIsCmd(msg, newSocketFd);
+		else
+			std::cout << "invalid command" << std::endl;		
+	}
+	catch(std::string message){
+		size_t i = 0;
+		message += "\r\n";
+		while (i != message.length())
+			i += send(newSocketFd, message.c_str(), message.length() - i, 0);
+	}
 }

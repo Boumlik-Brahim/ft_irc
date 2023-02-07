@@ -3,6 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 10:30:17 by iomayr            #+#    #+#             */
+/*   Updated: 2023/02/07 17:42:42 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +38,7 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 		for (std::map<int, Client*>::iterator it = _mapClients.begin(); it != _mapClients.end(); ++it)
 		{
 			if (!it->second->getNickName().compare(msg.getArguments().at(0)))
-			{
 				errorHandler(newSocketFd, 436 ,it->second->getNickName());
-				return ;
-			}
 		}
 		if (!isalpha(msg.getArguments().at(0).at(0)) || msg.getArguments().at(0).size() > 8)
 			errorHandler(newSocketFd, 432, msg.getArguments().at(0));
@@ -118,5 +119,5 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 		else
         	errorHandler(newSocketFd , 451);
 	}
-
+                                                                                              
 }
