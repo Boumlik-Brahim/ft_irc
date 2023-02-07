@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 15:24:50 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/07 18:59:55 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Client
 		std::string	_realName;
 		int			_clientFd;
 		bool		_isAuthValid;
+		std::vector<std::string> 	_joinedChannels;
 
 	public:
 		std::string	buf;
@@ -37,7 +38,7 @@ class Client
 
 		int			getClientFd();
 		void		setClientFd(int clientFd);
-		std::string	getNickName(void) const;
+		std::string	getNickName(void);
 		void		setNickName(std::string nickName);
 		std::string	getUserName(void) const;
 		void		setUserName(std::string userName);

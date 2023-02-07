@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 15:25:08 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/07 18:59:15 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void Client::setNickName(std::string nickName)
 {
 	_nickName = nickName;
 }
-std::string Client::getNickName(void) const
+std::string Client::getNickName(void)
 {
 	return (_nickName);
 }
