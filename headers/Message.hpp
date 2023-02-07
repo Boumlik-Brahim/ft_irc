@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:39:42 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/07 09:48:10 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ class Message
 		std::vector<std::string>	_arguments;
 		std::string					_command;
 		bool						_isValidCommad;
+		std::vector<std::string>	_multiArgs;
+		
 
 	public:
 		Message();
