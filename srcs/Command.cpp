@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 18:48:19 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/07 19:00:46 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,26 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 
 void  Server::handleNoticeCmd(Message &msg, int senderFd)
 {
-    std::string receiver;
-    std::string sender;
-    std::string cmd;
-    std::string message;
-    std::string messageFormat;
-    int receiverFd;
+    std::vector<std::string> 	receivers;
+    std::string 				sender;
+    std::string 				cmd;
+    std::string 				message;
+    std::string 				messageFormat;
+    std::vector<int>			receiversFd;
 
     cmd = msg.getCommand();
+	// receivers = _splitBySeparator(msg.getArguments()[0]);
 	if (msg.getArguments().empty())
-        return (errorHandler(senderFd , 411, cmd));	
-	receiver = msg.getArguments()[0];
+        return (errorHandler(senderFd , 411, cmd));
+	// loop multiArgs vector and store it into receveirsFds by findFd
+	for (size_t i = 0; i < receivers.size(); i++)
+	{
+		receiversFd.push_back(findFdClientByNick(receivers.at(i)));
+	}
 	message = msg.getArguments()[1];
     sender = findNickClientByFd(senderFd);
-    receiverFd = findFdClientByNick(receiver);
+	
+    // receiversFd = findFdClientByNick(receivers);
 	
 	if (!_mapClients[senderFd]->getIsAuthValid())
 		return (errorHandler(senderFd, 451));
@@ -101,8 +107,12 @@ void  Server::handleNoticeCmd(Message &msg, int senderFd)
     if (message.at(0) != ':')
         message.insert(0,1,':');
 
-    messageFormat = ":"+ sender+ " " +cmd + " " + receiver + " " + message;
-    sendMessage(receiverFd, messageFormat);
+	// loop over msgFmt and sendMsg to send message to all membres
+	for (size_t i = 0; i < receiversFd.size(); i++)
+	{
+    	messageFormat = ":"+ sender+ " " +cmd + " " + receivers.at(i) + " " + message;
+    	sendMessage(receiversFd.at(i), messageFormat);
+	}
 }
 
 std::vector<std::string> splitBySeparator(std::string args, std::string sep)
