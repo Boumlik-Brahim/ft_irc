@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 09:50:36 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/07 10:04:43 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
     int receiverFd;
 
     cmd = msg.getCommand();
-	if (msg.getArgument().empty())
+	if (msg.getArguments().empty())
         return (errorHandler(senderFd , 411, cmd));
-	receiver = msg.getArgument()[0];
-	message = msg.getArgument()[1];
+	receiver = msg.getArguments()[0];
+	message = msg.getArguments()[1];
     sender = findNickClientByFd(senderFd);
     receiverFd = findFdClientByNick(receiver);
 	
 	if (!_mapClients[senderFd]->getIsAuthValid())
 		return (errorHandler(senderFd, 451));
-    else if (msg.getArgument().size() < 2)
+    else if (msg.getArguments().size() < 2)
 		return (errorHandler(senderFd , 412));
 	else if(receiverFd == -1)
 		return (errorHandler(senderFd , 401, receiver));
@@ -87,16 +87,16 @@ void  Server::handleNoticeCmd(Message &msg, int senderFd)
     int receiverFd;
 
     cmd = msg.getCommand();
-	if (msg.getArgument().empty())
+	if (msg.getArguments().empty())
         return (errorHandler(senderFd , 411, cmd));	
-	receiver = msg.getArgument()[0];
-	message = msg.getArgument()[1];
+	receiver = msg.getArguments()[0];
+	message = msg.getArguments()[1];
     sender = findNickClientByFd(senderFd);
     receiverFd = findFdClientByNick(receiver);
 	
 	if (!_mapClients[senderFd]->getIsAuthValid())
 		return (errorHandler(senderFd, 451));
-    else if (msg.getArgument().size() < 2)
+    else if (msg.getArguments().size() < 2)
 		return (errorHandler(senderFd , 412));
     if (message.at(0) != ':')
         message.insert(0,1,':');

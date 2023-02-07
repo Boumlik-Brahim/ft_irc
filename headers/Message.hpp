@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 09:48:10 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/07 10:04:43 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ class Message
 {
 	private:
 		std::vector<std::string>	_arguments;
+		std::vector<std::string>	_multiArgs;
 		std::string					_command;
 		bool						_isValidCommad;
-		std::vector<std::string>	_multiArgs;
 		
 
 	public:
@@ -33,8 +33,10 @@ class Message
 
 		std::string					getCommand(void) const;
 		void						setCommand(std::string command);
-		std::vector<std::string>	getArgument(void) const;
+		std::vector<std::string>	getArguments(void) const;
 		void						setArguments(std::vector<std::string> arguments);
+		std::vector<std::string>	getmultiArgs(void) const;
+		void						setmultiArgs(std::vector<std::string> multiArgs);
 		bool						getIsValidCommand(void) const;
 		void						setIsValidCommand(bool isValid);
 

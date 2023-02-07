@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 09:55:35 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/07 10:09:17 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ void  Server::handleJoinCmd(Message &msg, Channel &chnl, int senderFd)
 	std::string	cmd;
 
 	(void)senderFd;
-	receiver = msg.getArgument()[0];
+	receiver = msg.getArguments()[0];
 	channelName = chnl.getChannelName();
 	cmd = msg.getCommand();
+
 	// if ()/*ERR_NEEDMOREPARAMS*/
 	// 	return (errorHandler(senderFd, 461, cmd));
 	// else if ()/*ERR_INVITEONLYCHAN*/
