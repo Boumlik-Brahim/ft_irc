@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 10:12:42 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/08 11:41:16 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,37 @@ int	Server::findChannelByName(std::string channelName)
 	}
 	return (0);
 }
-
+Channel Server::findChannel(std::string channelName)
+{
+	for(size_t i = 0; i < _channels.size(); i++)
+	{
+		if (_channels.at(i).getChannelName() == channelName)
+			return (_channels.at(i));
+	}
+	throw "there is no channel";
+}
 void	Server::createChannel(Channel &chnl, int senderFd, std::string channelName)
 {
-    std::map<int, Client *>::iterator it = _mapClients.find(senderFd);
-	std::string creator = findNickClientByFd(senderFd);
+    std::map<int, Client *>::iterator	it;
+	std::string							creator;
+
+	it = _mapClients.find(senderFd);
+	creator = findNickClientByFd(senderFd);
 	chnl.setChannelCreator(creator);
 	chnl.setChannelName(channelName);
-
 	chnl.setChannelMembers(it->second->getNickName());
 	chnl.setChannelOperators(it->second->getNickName());
 	chnl.setChannelModes("n");
 	_channels.push_back(chnl);
 }
-
 void  Server::handleJoinCmd(Message &msg, int senderFd)
 {
     std::string	receiver;
-	Channel 	tmpChannel;
+    std::string	channelName;
 	std::string	cmd;
-	int	channelExist;
+	Channel		tmpChannel;
+	Channel		tmp;
+	int			channelExist;
 
 	// check if JOIN command have multiple channels
 	checkMultiArgs(msg);
@@ -49,17 +60,37 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 	{
 		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
 		{
-			channelExist = findChannelByName(msg.getMultiArgs().at(i));
+			channelName = msg.getMultiArgs().at(i);
+			channelExist = findChannelByName(channelName);
 			if (channelExist)
 			{
 				// check mode;
+				tmp = findChannel(channelName);
+				for(size_t i = 0; i < tmp.getChannelModes().size() ; i++)
+				{
+					if (tmp.getChannelModes().at(i) == "a")
+					{}
+					else if (tmp.getChannelModes().at(i) == "i")
+					{}
+					else if (tmp.getChannelModes().at(i) == "m")
+					{}
+					else if (tmp.getChannelModes().at(i) == "n")
+					{}
+					else if (tmp.getChannelModes().at(i) == "q")
+					{}
+					else if (tmp.getChannelModes().at(i) == "p")
+					{}
+					else if (tmp.getChannelModes().at(i) == "s")
+					{}
+					else if (tmp.getChannelModes().at(i) == "r")
+					{}
+					else if (tmp.getChannelModes().at(i) == "t")
+					{}
+				}
 				// Join user to channel
 			}
 			else
-			{
-				// create new Channel
-				// set user as the operator of this channel
-			}
+				createChannel(tmpChannel, senderFd, msg.getArguments().at(i));
 		}
 	}
 	else
@@ -71,18 +102,7 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 			// join user to channel
 		}
 		else
-		{
 			createChannel(tmpChannel, senderFd, msg.getArguments().at(0));
-			// create new channel
-			/* 
-				createChannel(chnl, senderFd, msg.getArguments()[0]);
-				string user = getUserByFd(senderFd);
-				user.getJoinedChannel().push_back("channelName");
-				setMode();
-				
-			*/
-			// set user as the operator of this channel
-		}
 	}
 	// if ()/*ERR_NEEDMOREPARAMS*/
 	// 	return (errorHandler(senderFd, 461, cmd));
