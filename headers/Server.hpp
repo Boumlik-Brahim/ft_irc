@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 18:57:22 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/08 10:58:13 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class Server
 		void close_socket(int socket_fd);
 
 		std::string	findNickClientByFd(int sender);
+		int			findFdClientByNick(std::string receiver, int senderFd);
 		int			findFdClientByNick(std::string receiver);
 		void		handleNoticeCmd(Message &msg, int senderFd);
 		void		handlePrivmsgCmd(Message &msg, int senderFd);
