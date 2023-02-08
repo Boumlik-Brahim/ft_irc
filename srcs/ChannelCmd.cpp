@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 18:58:08 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/08 10:12:42 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 	int	channelExist;
 
 	// check if JOIN command have multiple channels
+	checkMultiArgs(msg);
+	checkChnlNames(msg.getMultiArgs(), senderFd);
 	if (!msg.getMultiArgs().empty())
 	{
 		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
