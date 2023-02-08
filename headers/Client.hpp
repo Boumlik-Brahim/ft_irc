@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 11:37:05 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/08 13:37:35 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@
 class Client
 {
 	private:
-		Message 	_msg;
-		std::string	_nickName;
-		std::string	_userName;
-		std::string	_realName;
-		int			_clientFd;
-		bool		_isAuthValid;
+		Message 					_msg;
+		std::string					_nickName;
+		std::string					_userName;
+		std::string					_realName;
+		int							_clientFd;
+		bool						_isAuthValid;
+		std::vector<std::string>	_joinedChannels;
 
 	public:
 		std::string	buf;

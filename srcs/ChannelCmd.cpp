@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 11:41:16 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/08 15:04:12 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,36 +58,40 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 	checkChnlNames(msg.getMultiArgs(), senderFd);
 	if (!msg.getMultiArgs().empty())
 	{
+		if (msg.getMultiArgs().size() > 2)/*ERR_TOOMANYTARGETS*/
+			return (errorHandler(senderFd, 407, msg.getMultiArgs().at(0), "reduce the number of targets and try the request again"));
 		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
 		{
 			channelName = msg.getMultiArgs().at(i);
+			// if (!findChannelByName(channelName))/*ERR_NOSUCHCHANNEL*/
+			// 	return (errorHandler(senderFd, 403, channelName));
 			channelExist = findChannelByName(channelName);
 			if (channelExist)
 			{
-				// check mode;
 				tmp = findChannel(channelName);
-				for(size_t i = 0; i < tmp.getChannelModes().size() ; i++)
-				{
-					if (tmp.getChannelModes().at(i) == "a")
-					{}
-					else if (tmp.getChannelModes().at(i) == "i")
-					{}
-					else if (tmp.getChannelModes().at(i) == "m")
-					{}
-					else if (tmp.getChannelModes().at(i) == "n")
-					{}
-					else if (tmp.getChannelModes().at(i) == "q")
-					{}
-					else if (tmp.getChannelModes().at(i) == "p")
-					{}
-					else if (tmp.getChannelModes().at(i) == "s")
-					{}
-					else if (tmp.getChannelModes().at(i) == "r")
-					{}
-					else if (tmp.getChannelModes().at(i) == "t")
-					{}
-				}
-				// Join user to channel
+				if (tmp.getChannelMembers().size() > 9)/*ERR_CHANNELISFULL*/
+					return (errorHandler(senderFd, 471, tmp.getChannelName()));
+				// for(size_t i = 0; i < tmp.getChannelModes().size() ; i++)
+				// {
+				// 	if (tmp.getChannelModes().at(i) == "a")
+				// 		void checkAnonymousChanFlag();
+				// 	else if (tmp.getChannelModes().at(i) == "i")
+				// 		void checkInviteOnlyChanFlag();
+				// 	else if (tmp.getChannelModes().at(i) == "m")
+				// 		void checkModeratedChan();
+				// 	else if (tmp.getChannelModes().at(i) == "n")
+				// 		void checkNoMsgToChannel();
+				// 	else if (tmp.getChannelModes().at(i) == "q")
+				// 		void checkQuietChanFlag();
+				// 	else if (tmp.getChannelModes().at(i) == "p")
+				// 		void PrivateChanFlag();
+				// 	else if (tmp.getChannelModes().at(i) == "s")
+				// 		void checkSecretChanFlag();
+				// 	else if (tmp.getChannelModes().at(i) == "r")
+				// 		void checkServerReopChanFlag();
+				// 	else if (tmp.getChannelModes().at(i) == "t")
+				// 		void checkTopic();
+				// }
 			}
 			else
 				createChannel(tmpChannel, senderFd, msg.getArguments().at(i));
@@ -104,16 +108,10 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 		else
 			createChannel(tmpChannel, senderFd, msg.getArguments().at(0));
 	}
-	// if ()/*ERR_NEEDMOREPARAMS*/
-	// 	return (errorHandler(senderFd, 461, cmd));
+	if (msg.getMultiArgs().empty() && msg.getArguments().at(0).empty()) /*ERR_NEEDMOREPARAMS*/
+		return (errorHandler(senderFd, 461, cmd));
 	// else if ()/*ERR_INVITEONLYCHAN*/
 	// 	return (errorHandler(senderFd, 473, channelName));
-	// else if ()/*ERR_CHANNELISFULL*/
-	// 	return (errorHandler(senderFd, 471, channelName));
-	// else if ()/*ERR_NOSUCHCHANNEL*/
-	// 	return (errorHandler(senderFd, 403, channelName));
-	// else if ()/*ERR_TOOMANYTARGETS*/
-	// 	return (errorHandler(senderFd, 407, receiver, "abort message"));
 	// else if ()/*ERR_BANNEDFROMCHAN*/
 	// 	return (errorHandler(senderFd, 474, channelName));
 	// else if ()/*ERR_BADCHANNELKEY*/
