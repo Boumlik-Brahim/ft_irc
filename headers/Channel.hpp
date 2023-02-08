@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 11:36:46 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/08 18:39:32 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ class Channel
 		std::vector<std::string>				_channelOperators;
 		std::vector<std::string>				_channelBannedMembers;
 		std::vector<std::string>				_channelModes;
+		std::vector<std::string>				_invitedMembers;
 
 	public:
 		Channel();
@@ -48,8 +49,12 @@ class Channel
         void        				setChannelBannedMembers(std::string channelBannedMember);
         std::vector<std::string>& 	getChannelModes(void);
         void        				setChannelModes(std::string channelModes);
+		std::vector<std::string>& 	getInvitedMembers(void);
+        void 						setInvitedMembers(std::string channelMember);
 		
 		~Channel();
 };
+
+void checkInviteOnlyChanFlag(Channel chnl, std::string nickname, int senderFd);
 
 #endif
