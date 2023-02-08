@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 18:53:55 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/08 11:38:15 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,21 @@
 
 Channel::Channel()
 {}
-Channel::Channel(const Channel &copy)
+Channel::Channel(const Channel &copy): _channelName(copy._channelName), _channelCreator(copy._channelCreator), _channelMembers(copy._channelMembers), _channelOperators(copy._channelOperators), _channelBannedMembers(copy._channelBannedMembers), _channelModes(copy._channelModes)
+{}
+Channel & Channel::operator=(const Channel &assign)
 {
-	*this = copy;
+	if (this != &assign)
+	{
+		_channelName = assign._channelName;
+		_channelCreator = assign._channelCreator;
+		_channelMembers = assign._channelMembers;
+		_channelOperators = assign._channelOperators;
+		_channelBannedMembers = assign._channelBannedMembers;
+		_channelModes = assign._channelModes;
+	}
+	return *this;
 }
-// Channel & Channel::operator=(const Channel &assign)
-// {
-// 	(void) assign;
-// 	return *this;
-// }
 
 std::string&	Channel::getChannelName(void)
 {
@@ -40,7 +46,6 @@ void	Channel::setChannelCreator(std::string channelCreator)
 {
 	_channelCreator = channelCreator;
 }
-
 std::vector<std::string>& Channel::getChannelMembers(void)
 {
     return (_channelMembers);
