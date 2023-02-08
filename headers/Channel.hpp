@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 18:54:27 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/08 11:36:46 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class Channel
 	public:
 		Channel();
 		Channel(const Channel &copy);
-		// Channel & operator=(const Channel &assign);
+		Channel & operator=(const Channel &assign);
 
 		std::string&				getChannelName(void) ;
 		void						setChannelName(std::string channelName);
