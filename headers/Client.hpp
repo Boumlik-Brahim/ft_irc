@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 13:37:35 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/08 16:26:37 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,18 @@ class Client
 		Client(const Client &copy);
 		Client & operator=(const Client &assign);
 
-		int			getClientFd();
-		void		setClientFd(int clientFd);
-		std::string	getNickName(void);
-		void		setNickName(std::string nickName);
-		std::string	getUserName(void) const;
-		void		setUserName(std::string userName);
-		std::string	getRealName(void) const;
-		void		setRealName(std::string realName);
-		bool		getIsAuthValid(void) const;
-		void		setAuthValid(bool isValid);
+		std::string					getNickName(void);
+		void						setNickName(std::string nickName);
+		std::string					getUserName(void) const;
+		void						setUserName(std::string userName);
+		std::string					getRealName(void) const;
+		void						setRealName(std::string realName);
+		int							getClientFd();
+		void						setClientFd(int clientFd);
+		bool						getIsAuthValid(void) const;
+		void						setAuthValid(bool isValid);
+		std::vector<std::string>&	getJoinedChannels(void);
+        void						setJoinedChannels(std::string joinedChannel);
 
 		~Client();
 };
