@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 11:38:15 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/08 18:13:02 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,14 @@ std::vector<std::string>& Channel::getChannelModes(void)
 void Channel::setChannelModes(std::string channelMode)
 {
     _channelModes.push_back(channelMode);
+}
+std::vector<std::string>& Channel::getInvitedMembers(void)
+{
+	return (_invitedMembers);
+}
+void Channel::setInvitedMembers(std::string invitedMember)
+{
+	_invitedMembers.push_back(invitedMember);	
 }
 
 Channel::~Channel()
