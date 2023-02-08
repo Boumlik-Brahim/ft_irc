@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:39:42 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/07 16:02:20 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ class Message
 {
 	private:
 		std::vector<std::string>	_arguments;
+		std::vector<std::string>	_multiArgs;
 		std::string					_command;
 		bool						_isValidCommad;
+		
 
 	public:
 		Message();
@@ -31,11 +33,14 @@ class Message
 
 		std::string					getCommand(void) const;
 		void						setCommand(std::string command);
-		std::vector<std::string>	getArgument(void) const;
+		std::vector<std::string>&	getArguments(void);
 		void						setArguments(std::vector<std::string> arguments);
+		std::vector<std::string>	getMultiArgs(void) const;
+		void						setMultiArgs(std::vector<std::string> multiArgs);
 		bool						getIsValidCommand(void) const;
 		void						setIsValidCommand(bool isValid);
 
+		void erase(std::vector<std::string>::iterator it);
 		~Message();
 };
 

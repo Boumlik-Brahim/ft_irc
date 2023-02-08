@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:14 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/05 16:54:49 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/07 16:02:00 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,21 @@ void Message::setCommand(std::string command)
 {
 	_command = command;
 }
-std::vector<std::string> Message::getArgument(void) const
+std::vector<std::string>& Message::getArguments(void)
 {	
 	return (_arguments);
 }
 void Message::setArguments(std::vector<std::string> arguments)
 {
 	_arguments = arguments;	
+}
+std::vector<std::string> Message::getMultiArgs(void) const
+{	
+	return (_multiArgs);
+}
+void Message::setMultiArgs(std::vector<std::string> multiArgs)
+{
+	_multiArgs = multiArgs;	
 }
 bool Message::getIsValidCommand(void) const
 {
@@ -51,6 +59,11 @@ bool Message::getIsValidCommand(void) const
 void Message::setIsValidCommand(bool isValid)
 {
 	_isValidCommad = isValid;
+}
+
+void Message::erase(std::vector<std::string>::iterator it)
+{
+	_arguments.erase(it);
 }
 
 Message::~Message()

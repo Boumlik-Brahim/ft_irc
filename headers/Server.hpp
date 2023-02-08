@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 15:28:25 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/08 11:37:36 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Server
 		struct pollfd			_fds[MAX_CONNECTIONS];
 		std::map<int, Client*>	_mapClients;
 		std::map<int, Guest*>	_mapGuest;
+		std::vector<Channel>	_channels;
 
 	public:
 		Server();
@@ -64,6 +65,7 @@ class Server
 		void close_socket(int socket_fd);
 
 		std::string	findNickClientByFd(int sender);
+		int			findFdClientByNick(std::string receiver, int senderFd);
 		int			findFdClientByNick(std::string receiver);
 		void		handleNoticeCmd(Message &msg, int senderFd);
 		void		handlePrivmsgCmd(Message &msg, int senderFd);
@@ -74,7 +76,10 @@ class Server
 		void handleUserCmd(Message &msg, int newSocketFd);
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
 
-		void handleJoinCmd(Message &msg, Channel &chnl, int senderFd);
+		int	findChannelByName(std::string channelName);
+		Channel	findChannel(std::string channelName);
+		void  handleJoinCmd(Message &msg, int senderFd);
+		void	createChannel(Channel &chnl, int senderFd, std::string channelName);
 
 		~Server();
 };
