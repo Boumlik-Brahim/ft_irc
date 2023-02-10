@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 11:37:36 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/10 11:02:47 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ class Server
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
 
 		int	findChannelByName(std::string channelName);
-		Channel	findChannel(std::string channelName);
+		Channel& findChannel(std::string channelName);
 		void  handleJoinCmd(Message &msg, int senderFd);
-		void	createChannel(Channel &chnl, int senderFd, std::string channelName);
+		void	createChannel(Channel &chnl, std::string channelName, std::string channelCreator);
 
 		~Server();
 };
