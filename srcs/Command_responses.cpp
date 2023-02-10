@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 14:24:53 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 10:54:21 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/10 18:03:25 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             message = "325 RPL_UNIQOPIS <channel>" + cmd_resp_arg + " <nickname>" + cmd_resp_arg2;
             break;
         case 332 :
-            message = "332 RPL_TOPIC <channel>" + cmd_resp_arg + " :<topic>" + cmd_resp_arg2;
+            message = "332 RPL_TOPIC " + cmd_resp_arg + " :" + cmd_resp_arg2;
             break;
         case 341 :
             message = "341 RPL_INVITING <channel>" + cmd_resp_arg + " <nick>" + cmd_resp_arg2;
@@ -264,6 +264,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 311 :
             message = "311 RPL_WHOISUSER " + cmd_resp_arg + " " + cmd_resp_arg2 + " @<host> * :" + cmd_resp_arg3;
             break;
+        case 353 :
+            message = "353 RPL_NAMREPLY ( " + cmd_resp_arg + " ) " + cmd_resp_arg2 + " :[ @ / + ] " + cmd_resp_arg3 +" *( " " [ @ / + ]" + cmd_resp_arg3 +" )";
+            break;
         // case 004 :
         //     message = "004 RPL_MYINFO <servername> <version> <available user modes><available channel modes>";
         //     break;
@@ -275,9 +278,6 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         //     break;
         // case 352 :
         //     message = "352 RPL_WHOREPLY <channel> <user> <host> <server> <nick> ( H / G > [*] [ ( @ / + ) ] :<hopcount> <real name>";
-        //     break;
-        // case 353 :
-        //     message = "353 RPL_NAMREPLY ( = / * / @ ) <channel> :[ @ / + ] <nick> *( " " [ @ / + ] <nick> ) - @ is used for secret channels, * for private channels, and = for others (public channels).";
         //     break;
         // case 364 :
         //     message = "364 RPL_LINKS <mask> <server> :<hopcount> <server info>";

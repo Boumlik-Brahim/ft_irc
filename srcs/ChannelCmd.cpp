@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 13:20:52 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/10 18:34:29 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	Server::findChannelByName(std::string channelName)
 	}
 	return (0);
 }
-void	Server::createChannel(Channel &chnl, std::string channelName, std::string channelCreator)
+void	Server::setChannel(Channel &chnl, std::string channelName, std::string channelCreator)
 {
 	chnl.setChannelName(channelName);
 	chnl.setChannelCreator(channelCreator);
@@ -53,10 +53,6 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 		{
 			if (findChannelByName(msg.getMultiArgs().at(i)))
 			{
-				Channel &chnl = findChannel(msg.getMultiArgs().at(i));
-
-				if (chnl.getChannelMembers().size() > 1)/*ERR_CHANNELISFULL*/
-					return (errorHandler(senderFd, 471, chnl.getChannelName()));
 			}
 			else
 			{
@@ -64,8 +60,11 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 				std::map<int, Client *>::iterator	it;
 
 				it = _mapClients.find(senderFd);
-				createChannel(chnl, msg.getMultiArgs().at(i), it->second->getNickName());
+				if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
+					return (errorHandler(senderFd, 405, msg.getMultiArgs().at(0)));
+				setChannel(chnl, msg.getMultiArgs().at(i), it->second->getNickName());
 				it->second->setJoinedChannels(msg.getMultiArgs().at(i));
+				cmd_Resp_Handler(senderFd, 353, "=", msg.getMultiArgs().at(i), it->second->getNickName());
 				cmd_Resp_Handler(senderFd, 332, msg.getMultiArgs().at(i), "...");
 			}
 		}
@@ -101,14 +100,21 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 					/*banned with IP*/
 				}
 			}
-			else if (chnl.getIsMode_k())
+			else if (chnl.getIsMode_s() || chnl.getIsMode_p())
 			{
 				if (chnl.getChannelkey() != msg.getArguments().at(1))
 					return (errorHandler(senderFd, 475, msg.getArguments().at(0)));/*ERR_BADCHANNELKEY*/
 			}
-			else if (it->second->getJoinedChannels().size() > (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
+			else if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
 				return (errorHandler(senderFd, 405, msg.getArguments().at(0)));
 			chnl.setChannelMembers(it->second->getNickName());
+			it->second->setJoinedChannels(msg.getArguments().at(0));
+			if (chnl.getIsMode_s())
+				cmd_Resp_Handler(senderFd, 353, "@", msg.getArguments().at(0), it->second->getNickName());
+			else if (chnl.getIsMode_p())
+				cmd_Resp_Handler(senderFd, 353, "*", msg.getArguments().at(0), it->second->getNickName());
+			else
+				cmd_Resp_Handler(senderFd, 353, "=", msg.getArguments().at(0), it->second->getNickName());
 			cmd_Resp_Handler(senderFd, 332, msg.getArguments().at(0), "...");
 		}
 		else
@@ -117,8 +123,11 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 			std::map<int, Client *>::iterator	it;
 
 			it = _mapClients.find(senderFd);
-			createChannel(chnl, msg.getArguments().at(0), it->second->getNickName());
+			if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
+				return (errorHandler(senderFd, 405, msg.getArguments().at(0)));
+			setChannel(chnl, msg.getArguments().at(0), it->second->getNickName());
 			it->second->setJoinedChannels(msg.getArguments().at(0));
+			cmd_Resp_Handler(senderFd, 353, "=", msg.getArguments().at(0), it->second->getNickName());
 			cmd_Resp_Handler(senderFd, 332, msg.getArguments().at(0), "...");
 		}	
 	}
