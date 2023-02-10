@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command_responses.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 14:24:53 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 11:40:14 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/10 11:32:54 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code)
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg)
 {
 	std::string message;
-
+    (void)sender_fd;
 	switch (cmd_resp_code)
 	{
         case 003 :
@@ -91,7 +91,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             message = "315 RPL_ENDOFWHO <name>" + cmd_resp_arg + " :End of WHO list\r\n";
             break;
         case 366 :
-            message = "366 RPL_ENDOFNAMES <channel>" + cmd_resp_arg + " :End of NAMES list\r\n";
+            message = "366 RPL_ENDOFNAMES <channel>" + cmd_resp_arg + " :End of /NAMES list";
             break;
         case 371 :
             message = "371 RPL_INFO :<string>" + cmd_resp_arg + "\r\n";
@@ -140,19 +140,20 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             break;
         case 368 :
             message = "368 RPL_ENDOFBANLIST <channel>" + cmd_resp_arg + " :End of channel ban list\r\n";
-            break;
+            break; 
         case 256 :
             message = "256 RPL_ADMINME <server>" + cmd_resp_arg + " :Administrative info\r\n";
             break;
 		default:
 			std::cout << "Invalid command response code" << std::endl;
 	}
-
-	sendMessage(sender_fd, message);
+	// sendMessage(sender_fd, message);
+    throw message;
 }
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2)
 {
 	std::string message;
+    (void)sender_fd;
 
 	switch (cmd_resp_code)
 	{
@@ -237,13 +238,13 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 		default:
 			std::cout << "Invalid command response code" << std::endl;
 	}
-
-	sendMessage(sender_fd, message);
+    throw message;
+	// sendMessage(sender_fd, message);
 }
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2, std::string cmd_resp_arg3)
 {
 	std::string message;
-
+    (void)sender_fd;
 	switch (cmd_resp_code)
 	{
 		case 001 :
@@ -264,6 +265,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 311 :
             message = "311 RPL_WHOISUSER " + cmd_resp_arg + " " + cmd_resp_arg2 + " @<host> * :" + cmd_resp_arg3 + "\r\n";
             break;
+        case 366 :
+            message = ":" +cmd_resp_arg + " 366 " + cmd_resp_arg2 + " " + cmd_resp_arg3 + " :End of /NAMES list.";
+            break;
         // case 004 :
         //     message = "004 RPL_MYINFO <servername> <version> <available user modes><available channel modes>\r\n";
         //     break;
@@ -277,7 +281,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         //     message = "352 RPL_WHOREPLY <channel> <user> <host> <server> <nick> ( H / G > [*] [ ( @ / + ) ] :<hopcount> <real name>\r\n";
         //     break;
         // case 353 :
-        //     message = "353 RPL_NAMREPLY ( = / * / @ ) <channel> :[ @ / + ] <nick> *( " " [ @ / + ] <nick> ) - @ is used for secret channels, * for private channels, and = for others (public channels).\r\n";
+        //     message = "353 RPL_NAMREPLY @  <channel> :@ <nick> @ <nick> ) \r\n";
         //     break;
         // case 364 :
         //     message = "364 RPL_LINKS <mask> <server> :<hopcount> <server info>\r\n";
@@ -310,5 +314,6 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 			std::cout << "Invalid command response code" << std::endl;
 	}
 
-	sendMessage(sender_fd, message);
+    throw message;
+	// sendMessage(sender_fd, message);
 }

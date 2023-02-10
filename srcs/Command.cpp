@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 11:02:50 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/09 16:12:13 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 		else if (!msg.getCommand().compare("TOPIC"))
 			handleTopicCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("NAMES"))
-			std::cout << "i got the names" << std::endl;
+			handleNamesCmd(msg,newSocketFd);
 		else if (!msg.getCommand().compare("LIST"))
 			std::cout << "i got the names" << std::endl;
 		else if (!msg.getCommand().compare("INVITE"))

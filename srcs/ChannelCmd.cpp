@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 11:41:16 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/09 13:48:09 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,16 @@ int	Server::findChannelByName(std::string channelName)
 	}
 	return (0);
 }
-Channel Server::findChannel(std::string channelName)
+Channel& Server::findChannel(std::string channelName)
 {
 	for(size_t i = 0; i < _channels.size(); i++)
 	{
 		if (_channels.at(i).getChannelName() == channelName)
 			return (_channels.at(i));
 	}
-	throw "there is no channel";
+	throw "channel not found";
 }
+
 void	Server::createChannel(Channel &chnl, int senderFd, std::string channelName)
 {
     std::map<int, Client *>::iterator	it;
@@ -41,7 +42,8 @@ void	Server::createChannel(Channel &chnl, int senderFd, std::string channelName)
 	chnl.setChannelName(channelName);
 	chnl.setChannelMembers(it->second->getNickName());
 	chnl.setChannelOperators(it->second->getNickName());
-	chnl.setChannelModes("n");
+	// chnl.setChannelModes("n");
+	chnl.setIsMode_n(true);
 	_channels.push_back(chnl);
 }
 void  Server::handleJoinCmd(Message &msg, int senderFd)
@@ -66,27 +68,29 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 			{
 				// check mode;
 				tmp = findChannel(channelName);
-				for(size_t i = 0; i < tmp.getChannelModes().size() ; i++)
-				{
-					if (tmp.getChannelModes().at(i) == "a")
-					{}
-					else if (tmp.getChannelModes().at(i) == "i")
-					{}
-					else if (tmp.getChannelModes().at(i) == "m")
-					{}
-					else if (tmp.getChannelModes().at(i) == "n")
-					{}
-					else if (tmp.getChannelModes().at(i) == "q")
-					{}
-					else if (tmp.getChannelModes().at(i) == "p")
-					{}
-					else if (tmp.getChannelModes().at(i) == "s")
-					{}
-					else if (tmp.getChannelModes().at(i) == "r")
-					{}
-					else if (tmp.getChannelModes().at(i) == "t")
-					{}
-				}
+				// for(size_t i = 0; i < tmp.getChannelModes().size() ; i++)
+				// {
+				// 	if (tmp.getChannelModes().at(i) == "a")
+				// 	{}
+				// 	else if (tmp.getChannelModes().at(i) == "i")
+				// 	{}
+				// 	else if (tmp.getChannelModes().at(i) == "m")
+				// 	{}
+				// 	else if (tmp.getChannelModes().at(i) == "n")
+				// 	{}
+				// 	else if (tmp.getChannelModes().at(i) == "q")
+				// 	{}
+				// 	else if (tmp.getChannelModes().at(i) == "p")
+				// 	{}
+				// 	else if (tmp.getChannelModes().at(i) == "s")
+				// 	{}
+				// 	else if (tmp.getChannelModes().at(i) == "r")
+				// 	{}
+				// 	else if (tmp.getChannelModes().at(i) == "t")
+				// 	{}
+				// }
+				// check if the channels reaches its limited users
+				// check if the user reach  limit channels
 				// Join user to channel
 			}
 			else

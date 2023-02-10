@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:32:47 by izail             #+#    #+#             */
-/*   Updated: 2023/02/09 15:10:02 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/10 11:34:28 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
     Channel         &tmpChnl  = findChannel(channelName);
     sender = findNickClientByFd(senderFd);
     
-    // check the mode is set
+    // check the mode 't' is set
     if (tmpChnl.getIsMode_t())
     {
-        // if mode t is true then check if the user who wants to change topic is operator
+        // if mode 't' is true then check if the user who wants to change topic is operator
         if (!findChannelOperator(sender, tmpChnl))
             errorHandler(senderFd, 482, sender);
         // check if channel has topic before
@@ -69,6 +69,7 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
                 tmpChnl.setChannelTopic(topic);
                 cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
             }
+            // set topic empty
             else if (topic.at(0) == ':' && topic.size() == 1)
                 tmpChnl.setChannelTopic("");
         }
@@ -110,4 +111,76 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
         else
             errorHandler(senderFd, 442, sender);
     }
+}
+
+void    Server::handleNamesCmd(Message &msg, int senderFd)
+{
+    std::string     channelName;
+    std::string     topic;
+    std::string     sender;
+    int             channelExist;
+    std::string     cmd = msg.getCommand();
+    std::string     messageForm;
+
+    std::cout << "Hello from NAMES\n";
+    // check if user is authenticated
+    if (!_mapClients[senderFd]->getIsAuthValid())
+		errorHandler(senderFd, 451);
+    
+    sender = findNickClientByFd(senderFd);
+    
+    if (msg.getArguments().size() != 0)
+        checkMultiArgs(msg);
+    else if (msg.getArguments().size() == 0 && msg.getMultiArgs().size() == 0)
+    {
+        std::cout << "khass ytprintaw ga3 channels bl users dialhom\n";
+        // if (_channels.size() == 0)
+            errorHandler(senderFd, 451);
+            // cmd_Resp_Handler(senderFd, 366, "irc" ,sender, "*");
+        // else
+        //     std::cout << "kayna chi channel\n";
+    }
+    // list a channel and it users
+    if (!msg.getMultiArgs().empty())
+    {
+        for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
+        {
+            channelName = msg.getMultiArgs().at(i);
+            channelExist = findChannelByName(channelName);
+            if (!channelExist)
+                errorHandler(senderFd, 401, channelName);
+            Channel &tmpChnl  = findChannel(channelName);
+            // messageForm = "Channel Name ==" + tmpChnl.getChannelName();
+            sendMessage(senderFd, messageForm);
+            // std::cout << "channel member size ==" << tmpChnl.getChannelMembers().size() << std::endl;
+            for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
+            {
+                messageForm = "Member :" + tmpChnl.getChannelMembers().at(i);
+                sendMessage(senderFd, messageForm);
+            }
+            // cmd_Resp_Handlers(senderFd, 366, channelName);
+            
+        }
+    }
+    // list all channels and their users
+    else if (msg.getArguments().size() > 0)
+    {
+        std::cout << "dkhel hna\n";
+        channelName = msg.getArguments()[0];
+        // check if channel exist
+        channelExist = findChannelByName(channelName);
+        if (!channelExist)
+            errorHandler(senderFd, 401, channelName);
+        Channel &tmpChnl  = findChannel(channelName);
+        // std::cout << "Channel Name ==" << tmpChnl.getChannelName() << std::endl;
+        // messageForm = "Channel Name ==" + tmpChnl.getChannelName();
+        sendMessage(senderFd, messageForm);
+        for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
+        {
+            messageForm = "Member :" + tmpChnl.getChannelMembers().at(i);
+            sendMessage(senderFd, messageForm);
+        }
+        cmd_Resp_Handler(senderFd, 366, channelName);
+    }
+    // list all visible users
 }
