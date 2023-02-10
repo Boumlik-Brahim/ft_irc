@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 10:59:11 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/10 13:17:23 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void Channel::setChannelkey(std::string channelkey)
 {
 	_channelkey = channelkey;
 }
-int	Channel::getChannelLimit(void)
+int	Channel::getChannelLimit(void) const
 {
 	return(_channelLimit);	
 }

@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 11:51:39 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/10 13:20:52 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 				if (chnl.getChannelkey() != msg.getArguments().at(1))
 					return (errorHandler(senderFd, 475, msg.getArguments().at(0)));/*ERR_BADCHANNELKEY*/
 			}
+			else if (it->second->getJoinedChannels().size() > (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
+				return (errorHandler(senderFd, 405, msg.getArguments().at(0)));
 			chnl.setChannelMembers(it->second->getNickName());
 			cmd_Resp_Handler(senderFd, 332, msg.getArguments().at(0), "...");
 		}

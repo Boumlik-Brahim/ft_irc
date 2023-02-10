@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 16:26:37 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/10 13:13:23 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Client
 		std::string					_realName;
 		int							_clientFd;
 		bool						_isAuthValid;
+		int							_clientMaxnumOfChannels;
 		std::vector<std::string>	_joinedChannels;
 
 	public:
@@ -46,6 +47,8 @@ class Client
 		void						setClientFd(int clientFd);
 		bool						getIsAuthValid(void) const;
 		void						setAuthValid(bool isValid);
+		int							getClientMaxnumOfChannels(void) const;
+		void						setClientMaxnumOfChannels(int clientMaxnumOfChannels);
 		std::vector<std::string>&	getJoinedChannels(void);
         void						setJoinedChannels(std::string joinedChannel);
 

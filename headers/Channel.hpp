@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 10:28:38 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/10 13:17:09 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class Channel
 		void						setChannelCreator(std::string channelCreator);
 		std::string&				getChannelkey(void);
 		void						setChannelkey(std::string channelkey);
-		int							getChannelLimit(void);
+		int							getChannelLimit(void) const;
 		void						setChannelLimit(int channelLimit);
 		std::vector<std::string>& 	getChannelMembers(void);
 		void 						setChannelMembers(std::string channelMember);
