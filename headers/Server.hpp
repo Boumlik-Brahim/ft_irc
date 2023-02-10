@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 14:53:53 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/09 15:22:04 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ class Server
 
 		// Ishak
 		void	handleTopicCmd(Message &msg, int senderFd);
+		void    handleNamesCmd(Message &msg, int senderFd);
 		int		findChannelOperator(std::string sender, Channel chnl);
 		int 	findUserInChannel(std::string sender, Channel chnl);
-
 		~Server();
 };
 
