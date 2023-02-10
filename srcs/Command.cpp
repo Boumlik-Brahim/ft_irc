@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 12:06:25 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/09 13:06:32 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 		else if (!msg.getCommand().compare("PART"))
 			std::cout << "i got the part" << std::endl;
 		else if (!msg.getCommand().compare("MODE"))
-			std::cout << "i got the mode" << std::endl;
+			handleModeCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("TOPIC"))
 			std::cout << "i got the topic" << std::endl;
 		else if (!msg.getCommand().compare("NAMES"))

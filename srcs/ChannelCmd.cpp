@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 15:04:12 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/09 10:42:30 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	Server::createChannel(Channel &chnl, int senderFd, std::string channelName)
 	chnl.setChannelName(channelName);
 	chnl.setChannelMembers(it->second->getNickName());
 	chnl.setChannelOperators(it->second->getNickName());
-	chnl.setChannelModes("n");
 	_channels.push_back(chnl);
 }
 void  Server::handleJoinCmd(Message &msg, int senderFd)

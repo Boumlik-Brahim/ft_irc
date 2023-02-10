@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 11:37:36 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/09 14:56:02 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,13 @@ class Server
 		void handleNickCmd(Message &msg, int newSocketFd);
 		void handleUserCmd(Message &msg, int newSocketFd);
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
+		void handleModeCmd(Message &msg, int newSocketFd);
 
-		int	findChannelByName(std::string channelName);
+		int		findChannelByName(std::string channelName);
 		Channel	findChannel(std::string channelName);
-		void  handleJoinCmd(Message &msg, int senderFd);
+		void  	handleJoinCmd(Message &msg, int senderFd);
 		void	createChannel(Channel &chnl, int senderFd, std::string channelName);
-
+		
 		~Server();
 };
 

@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 14:33:27 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/10 11:01:50 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 			break;
 		case 424:
 			message = "424 ERR_FILEERROR:File error doing " + err_arg2 + " on " + err_arg+"";
-			break;
-		case 472:
-			message = "472 ERR_UNKNOWNMODE " + err_arg + " :is unknown mode char to me for " + err_arg2+"";
 			break;
 		case 478:
 			message = "478 ERR_BANLISTFULL " + err_arg + err_arg2 + " :Channel list is full";
@@ -75,6 +72,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			break;
 		case 461:
 			message = "461 ERR_NEEDMOREPARAMS "+err_arg+" :Not enough parameters";
+			break;
+		case 472:
+			message = "472 ERR_UNKNOWNMODE " + err_arg + " :is unknown mode char to me";
 			break;
 		case 402:
 			message = "402 ERR_NOSUCHSERVER "+err_arg+" :No such server";

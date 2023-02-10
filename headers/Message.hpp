@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 16:02:20 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/10 11:03:35 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ class Message
 		std::vector<std::string>	_arguments;
 		std::vector<std::string>	_multiArgs;
 		std::string					_command;
+		std::vector<char>			_vecAddMode;
+		std::vector<char>			_vecRmMode;
 		bool						_isValidCommad;
 		
 
@@ -39,6 +41,10 @@ class Message
 		void						setMultiArgs(std::vector<std::string> multiArgs);
 		bool						getIsValidCommand(void) const;
 		void						setIsValidCommand(bool isValid);
+		std::vector<char>&			getVecAddMode(void);
+		void						setVecAddMode(char m, int newSocketFd);
+		std::vector<char>&			getVecRmMode(void);
+		void						setVecRmMode(char m, int newSocketFd);
 
 		void erase(std::vector<std::string>::iterator it);
 		~Message();
