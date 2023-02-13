@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 10:30:17 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/07 17:42:42 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/13 09:52:29 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,10 @@ void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
 	
 	tmpClient->setNickName(tmpGuest->getGuestNick()); 
 	tmpClient->setUserName(tmpGuest->getGuestUser()); 
-	tmpClient->setRealName(tmpGuest->getGuestRealName()); 
+	tmpClient->setRealName(tmpGuest->getGuestRealName());
     tmpClient->setAuthValid(true);
+	tmpClient->setHasChannel(false);
+	WelcomeMsg(newSocketFd);
 }
 
 void Server::handleUserCmd(Message &msg, int newSocketFd)
