@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 14:24:53 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/06 11:40:14 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/12 15:32:36 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             break;
         case 002 :
             message = "002 RPL_YOURHOST Your host is <servername>" + cmd_resp_arg + ", running version <ver>" + cmd_resp_arg2 + "\r\n";
+            break;
+        case 324 :
+            message = "324 RPL_CHANNELMODEIS " + cmd_resp_arg + " " + cmd_resp_arg2 + " +o\r\n";
             break;
 		default:
 			std::cout << "Invalid command response code" << std::endl;

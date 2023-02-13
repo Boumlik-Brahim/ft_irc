@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 14:56:02 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/13 14:33:52 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SERVER_HPP
 
 # include <iostream>
+#include <cstdlib>
 # include <string>
 # include <unistd.h>
 # include <sys/types.h>
@@ -78,10 +79,21 @@ class Server
 		void handleModeCmd(Message &msg, int newSocketFd);
 
 		int		findChannelByName(std::string channelName);
-		Channel	findChannel(std::string channelName);
+		Channel	&findChannel(std::string channelName);
 		void  	handleJoinCmd(Message &msg, int senderFd);
 		void	createChannel(Channel &chnl, int senderFd, std::string channelName);
 		
+		void checkModes(Message &msg, int newSocketFd);
+		void checkIfClientExist(int newSocketFd, std::string nickName);
+		void executeModes(Message &msg, int newSocketFd);
+		void execMode(Message &msg, char mode, int newSocketFd, bool addOrRm);
+		void exec_o(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_k(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_l(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_i(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_s(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_p(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_t(Message &msg, int newSocketFd, bool addOrRm);
 		~Server();
 };
 

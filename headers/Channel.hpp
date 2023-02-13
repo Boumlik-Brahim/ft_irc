@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 10:38:03 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/13 15:04:45 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,14 @@ class Channel
 	private:
 		std::string								_channelName;
 		std::string								_channelCreator;
+		std::string								_channelTopic;
 		std::string								_channelkey;
+		std::vector<std::string>				_channelMemberAndOperators;
 		std::vector<std::string>				_channelMembers;
 		std::vector<std::string>				_channelOperators;
 		std::vector<std::string>				_channelBannedMembers;
 		std::vector<std::string>				_invitedMembers;
+		int										_channelLimit;
 		bool 									_isMode_O;
         bool 									_isMode_o;
         bool 									_isMode_v;
@@ -60,6 +63,10 @@ class Channel
 		void						setChannelCreator(std::string channelCreator);
 		std::string&				getChannelkey(void);
 		void						setChannelkey(std::string channelkey);
+		int&						getChannelLimit(void);
+		void						setChannelLimit(int channelLimit);
+		std::string&				getChannelTopic(void);
+		void						setChannelTopic(std::string channelkey);
 		std::vector<std::string>& 	getChannelMembers(void);
 		void 						setChannelMembers(std::string channelMember);
 		std::vector<std::string>& 	getChannelOperators(void);

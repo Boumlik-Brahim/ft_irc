@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 11:01:50 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/13 16:06:19 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 			message = "437 ERR_UNAVAILRESOURCE <" + err_arg + "/" + err_arg2 + "> :Nick/channel is temporarily unavailable";
 			break;
 		case 441:
-			message = "441 ERR_USERNOTINCHANNEL " + err_arg + err_arg2 + " :They aren't on that channel";
+			message = "441 ERR_USERNOTINCHANNEL " + err_arg + " " + err_arg2 + " :They aren't on that channel";
 			break;
 		case 443:
 			message = "443 ERR_USERONCHANNEL " + err_arg2 + err_arg + " :is already on channel";

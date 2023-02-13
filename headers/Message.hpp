@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 11:03:35 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/11 10:59:14 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class Message
 		std::string					_command;
 		std::vector<char>			_vecAddMode;
 		std::vector<char>			_vecRmMode;
+		bool						_isAddOrRm;
 		bool						_isValidCommad;
 		
 
@@ -42,9 +43,11 @@ class Message
 		bool						getIsValidCommand(void) const;
 		void						setIsValidCommand(bool isValid);
 		std::vector<char>&			getVecAddMode(void);
-		void						setVecAddMode(char m, int newSocketFd);
+		void						setVecAddMode(char m);
 		std::vector<char>&			getVecRmMode(void);
-		void						setVecRmMode(char m, int newSocketFd);
+		void						setVecRmMode(char m);
+		void						setIsAddOrRm(bool trueOrFalse);
+		bool						getIsAddOrRm(void) const;
 
 		void erase(std::vector<std::string>::iterator it);
 		~Message();

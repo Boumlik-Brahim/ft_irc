@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 10:37:09 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/13 16:49:20 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,25 @@ void Channel::setChannelkey(std::string channelkey)
 {
 	_channelkey = channelkey;
 }
+
+int& Channel::getChannelLimit(void)
+{
+	return _channelLimit;
+}
+void Channel::setChannelLimit(int channelLimit)
+{
+	_channelLimit = channelLimit;
+}
+
+std::string& Channel::getChannelTopic(void)
+{
+	return _channelTopic;
+}
+void Channel::setChannelTopic(std::string channelTopic)
+{
+	_channelTopic = channelTopic;
+}
+
 std::vector<std::string>& Channel::getChannelMembers(void)
 {
     return (_channelMembers);

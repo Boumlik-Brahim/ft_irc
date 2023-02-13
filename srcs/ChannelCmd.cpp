@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 10:42:30 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/13 09:34:06 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	Server::findChannelByName(std::string channelName)
 	}
 	return (0);
 }
-Channel Server::findChannel(std::string channelName)
+Channel &Server::findChannel(std::string channelName)
 {
 	for(size_t i = 0; i < _channels.size(); i++)
 	{

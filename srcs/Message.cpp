@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:14 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 11:04:22 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/11 10:59:32 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,25 +70,27 @@ std::vector<char>& Message::getVecAddMode(void)
 {
 	return _vecAddMode;
 }
-void Message::setVecAddMode(char m, int newSocketFd)
+void Message::setVecAddMode(char m)
 {
-	std::string modeList = "OovaimnqpsrtklbeI";
-	
-	if (modeList.find(m) != std::string::npos)
-		errorHandler(newSocketFd, 472);
 	_vecAddMode.push_back(m);
 }
 std::vector<char>& Message::getVecRmMode(void)
 {
 	return _vecRmMode;
 }
-void Message::setVecRmMode(char m, int newSocketFd)
+void Message::setVecRmMode(char m)
 {
-	std::string modeList = "OovaimnqpsrtklbeI";
-	
-	if (modeList.find(m) != std::string::npos)
-		errorHandler(newSocketFd, 472);
 	_vecAddMode.push_back(m);
+}
+
+void Message::setIsAddOrRm(bool trueOrFalse)
+{
+	_isAddOrRm = trueOrFalse;
+}
+
+bool Message::getIsAddOrRm(void) const
+{
+	return _isAddOrRm;
 }
 
 Message::~Message()
