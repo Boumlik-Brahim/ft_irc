@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 11:44:51 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/13 18:21:20 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,13 @@ class Server
 
 		int	findChannelByName(std::string channelName);
 		Channel& findChannel(std::string channelName);
+		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
+		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
 		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator);
 		void joinNewChannel(int senderFd, std::string channelName);
 		void joinExistChannel(int senderFd, Channel &chnl, std::map<int, Client *>::iterator	&it);
 		void checkExistChannel(int senderFd, Message &msg, std::string channelName, int i);
+		void leaveAllChannels(int senderFd);
 		void handleJoinCmd(Message &msg, int senderFd);
 
 		void partFromChannel(int senderFd, std::string channelName);
