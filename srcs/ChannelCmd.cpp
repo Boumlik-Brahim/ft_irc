@@ -6,11 +6,13 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/12 16:03:08 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/13 11:52:41 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Server.hpp"
+
+/****************************************************************************************************************************************/
 
 Channel& Server::findChannel(std::string channelName)
 {
@@ -108,8 +110,8 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 			if (chnl.getChannelkey() != msg.getArguments().at(i))
 				return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
 		}
-		else
-			return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
+		// else
+		// 	return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
 	}
 	joinExistChannel(senderFd, chnl, it);
 }
@@ -140,3 +142,50 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 			joinNewChannel(senderFd, msg.getArguments().at(0));
 	}
 }
+
+/****************************************************************************************************************************************/
+
+void Server::partFromChannel(int senderFd, std::string channelName)
+{
+	std::map<int, Client *>::iterator	it;
+	std::string							message;
+
+	if(!findChannelByName(channelName))
+		return (errorHandler(senderFd, 403, channelName)); /*ERR_NOSUCHCHANNEL*/
+	it = _mapClients.find(senderFd);
+	Channel &chnl = findChannel(channelName);
+	std::vector<std::string>::iterator	channelMember = std::find(chnl.getChannelMembers().begin(), chnl.getChannelMembers().end(), it->second->getNickName());
+	if (channelMember == chnl.getChannelMembers().end())
+		return (errorHandler(senderFd, 442, "channel")); /*ERR_NOTONCHANNEL*/
+	chnl.getChannelMembers().erase(channelMember);
+	std::vector<std::string>::iterator	joinedChannel = std::find(it->second->getJoinedChannels().begin(), it->second->getJoinedChannels().end(), channelName);
+	it->second->getJoinedChannels().erase(joinedChannel);
+}
+void  Server::handlePartCmd(Message &msg, int senderFd)
+{
+	if (msg.getArguments().empty()) /*ERR_NEEDMOREPARAMS*/
+		return (errorHandler(senderFd, 461, msg.getCommand()));
+	checkMultiArgs(msg);
+	checkChnlNames(msg.getMultiArgs(), senderFd);
+	if (!msg.getMultiArgs().empty())
+	{
+		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
+		{
+			partFromChannel(senderFd, msg.getMultiArgs().at(i));
+			if(!msg.getArguments().empty())
+				cmd_Resp_Handler(senderFd, 404, msg.getMultiArgs().at(i), msg.getArguments().at(0));
+			else
+				cmd_Resp_Handler(senderFd, 404, msg.getMultiArgs().at(i));
+		}
+	}
+	else
+	{
+		partFromChannel(senderFd, msg.getArguments().at(0));
+		if(msg.getArguments().size() > 1)
+			cmd_Resp_Handler(senderFd, 404, msg.getArguments().at(0), msg.getArguments().at(1));
+		else
+			cmd_Resp_Handler(senderFd, 404, msg.getArguments().at(0));
+	}
+}
+
+/****************************************************************************************************************************************/

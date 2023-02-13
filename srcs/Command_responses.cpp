@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 14:24:53 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 18:03:25 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/13 11:25:13 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 
 	switch (cmd_resp_code)
 	{
+        case 404 :
+            message = "PART " + cmd_resp_arg;
+            break;
         case 003 :
             message = "003 RPL_CREATED This server was created <date>" + cmd_resp_arg;
             break;
@@ -156,6 +159,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 
 	switch (cmd_resp_code)
 	{
+        case 404 :
+            message = "PART " + cmd_resp_arg + " " + cmd_resp_arg2;
+            break;
         case 005 :
             message = "005 RPL_BOUNCE Try server <server name>" + cmd_resp_arg + ", port <port number>" + cmd_resp_arg2;
             break;

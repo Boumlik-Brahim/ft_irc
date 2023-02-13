@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 12:06:25 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/13 08:33:32 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 		else if (!msg.getCommand().compare("JOIN"))
 			handleJoinCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("PART"))
-			std::cout << "i got the part" << std::endl;
+			handlePartCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("MODE"))
 			std::cout << "i got the mode" << std::endl;
 		else if (!msg.getCommand().compare("TOPIC"))
