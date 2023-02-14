@@ -69,9 +69,6 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 404 :
             message = "PART " + cmd_resp_arg;
             break;
-        case 003 :
-            message = "003 RPL_CREATED This server was created <date>" + cmd_resp_arg;
-            break;
         case 313 :
             message = "313 RPL_WHOISOPERATOR <nick>" + cmd_resp_arg + " :is an IRC operator";
             break;
@@ -284,9 +281,6 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 311 :
             message = "311 RPL_WHOISUSER " + cmd_resp_arg + " " + cmd_resp_arg2 + " @<host> * :" + cmd_resp_arg3;
             break;
-        case 353 :
-            message = "353 RPL_NAMREPLY ( " + cmd_resp_arg + " ) " + cmd_resp_arg2 + " :[ @ / + ] " + cmd_resp_arg3 +" *( " " [ @ / + ]" + cmd_resp_arg3 +" )";
-            break;
         
         // case 004 :
         //     message = "004 RPL_MYINFO <servername> <version> <available user modes><available channel modes>";
@@ -381,6 +375,9 @@ void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName,
 	{
         case 322 :
             message = ":" + serverName + " 322 " + nickName + " " + channelName + " " + arg2 + " " + arg3;
+            break;
+        case 341 :
+            message = ":" + serverName + " 341 " + nickName + " " + arg2 + "  " + channelName;
             break;
         case 353 :
             message = ":" + serverName + " 353 " + nickName + " = " + channelName + " : " + arg2;
