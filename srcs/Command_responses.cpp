@@ -3,10 +3,6 @@
 /*                                                        :::      ::::::::   */
 /*   Command_responses.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/04 14:24:53 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 11:25:13 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +14,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code)
 
 	switch (cmd_resp_code)
 	{
+        case 002 :
+            message = ":irc 002 Your host is irc , running version 1.0";
+            break;
         case 305 :
             message = "305 RPL_UNAWAY :You are no longer marked as being away";
             break;
@@ -60,9 +59,13 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code)
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg)
 {
 	std::string message;
-
 	switch (cmd_resp_code)
 	{
+        case 001 :
+	        message = ":irc 001 " + cmd_resp_arg + " Welcome to the Internet Relay Network";
+            break;
+        case 003 :
+            message = ":irc 003 "+ cmd_resp_arg + " This server was created 23/01/2023";
         case 404 :
             message = "PART " + cmd_resp_arg;
             break;
@@ -75,11 +78,17 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 318 :
             message = "318 RPL_ENDOFWHOIS <nick>" + cmd_resp_arg + " :End of WHOIS list";
             break;
+        case 321 :
+            message = ":irc 321 " + cmd_resp_arg + " Channel :Users Name";
+            break;
+        case 323 :
+            message = ":irc 323 " + cmd_resp_arg + " :End of /LIST";
+            break;
         case 369 :
             message = "369 RPL_ENDOFWHOWAS <nick>" + cmd_resp_arg + " :End of WHOWAS";
             break;
         case 331 :
-            message = "331 RPL_NOTOPIC <channel>" + cmd_resp_arg + " :No topic is set";
+            message = "331 RPL_NOTOPIC " + cmd_resp_arg + " :No topic is set\r\n";
             break;
         case 342 :
             message = "342 RPL_SUMMONING <user>" + cmd_resp_arg + " :Summoning user to IRC";
@@ -94,7 +103,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             message = "315 RPL_ENDOFWHO <name>" + cmd_resp_arg + " :End of WHO list";
             break;
         case 366 :
-            message = "366 RPL_ENDOFNAMES <channel>" + cmd_resp_arg + " :End of NAMES list";
+            message = ": irc 366 " + cmd_resp_arg + " :End of /NAMES list";
             break;
         case 371 :
             message = "371 RPL_INFO :<string>" + cmd_resp_arg;
@@ -150,7 +159,6 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 		default:
 			std::cout << "Invalid command response code" << std::endl;
 	}
-
 	sendMessage(sender_fd, message);
 }
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2)
@@ -180,6 +188,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 319 :
             message = "319 RPL_WHOISCHANNELS <nick>" + cmd_resp_arg + " :*( ( @ / + ) <channel>" + cmd_resp_arg2 + " " " )";
             break;
+        case 322 :
+            message = ":irc 322 " + cmd_resp_arg + " : " + cmd_resp_arg2;
+            break;
         case 325 :
             message = "325 RPL_UNIQOPIS <channel>" + cmd_resp_arg + " <nickname>" + cmd_resp_arg2;
             break;
@@ -194,6 +205,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             break;
         case 348 :
             message = "348 RPL_EXCEPTLIST <channel>" + cmd_resp_arg + " <exceptionmask>" + cmd_resp_arg2;
+            break;
+        case 366 :
+            message = ":irc 366 " + cmd_resp_arg + " " + cmd_resp_arg2 + " :End of /NAMES list.";
             break;
         case 367 :
             message = "367 RPL_BANLIST <channel>" + cmd_resp_arg + " <banmask>" + cmd_resp_arg2;
@@ -243,13 +257,11 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 		default:
 			std::cout << "Invalid command response code" << std::endl;
 	}
-
 	sendMessage(sender_fd, message);
 }
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2, std::string cmd_resp_arg3)
 {
 	std::string message;
-
 	switch (cmd_resp_code)
 	{
 		case 001 :
@@ -258,6 +270,8 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 312 :
             message = "312 RPL_WHOISSERVER <nick>" + cmd_resp_arg + " <server>" + cmd_resp_arg2 + " :<server info>" + cmd_resp_arg3;
             break;
+        case 353 :
+            message = ":irc 353 " + cmd_resp_arg + " = " + cmd_resp_arg2 + " : " + cmd_resp_arg3;
         case 322 :
             message = "322 RPL_LIST <channel>" + cmd_resp_arg + " <# visible>" + cmd_resp_arg2 + " :<topic>" + cmd_resp_arg3;
             break;
@@ -273,6 +287,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 353 :
             message = "353 RPL_NAMREPLY ( " + cmd_resp_arg + " ) " + cmd_resp_arg2 + " :[ @ / + ] " + cmd_resp_arg3 +" *( " " [ @ / + ]" + cmd_resp_arg3 +" )";
             break;
+        
         // case 004 :
         //     message = "004 RPL_MYINFO <servername> <version> <available user modes><available channel modes>";
         //     break;
@@ -283,6 +298,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         //     message = "351 RPL_VERSION <version>.<debuglevel> <server> :<comments>";
         //     break;
         // case 352 :
+        //     message = "352 RPL_WHOREPLY <channel> <user> <host> <server> <nick> ( H / G > [*] [ ( @ / + ) ] :<hopcount> <real name>\r\n";
         //     message = "352 RPL_WHOREPLY <channel> <user> <host> <server> <nick> ( H / G > [*] [ ( @ / + ) ] :<hopcount> <real name>";
         //     break;
         // case 364 :
@@ -315,6 +331,65 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 		default:
 			std::cout << "Invalid command response code" << std::endl;
 	}
+	sendMessage(sender_fd, message);
+}
 
+void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg1, std::string cmd_resp_arg2, std::string cmd_resp_arg3, std::string cmd_resp_arg4)
+{
+	std::string message;
+	switch (cmd_resp_code)
+	{
+		case 322 :
+	        message = ":irc 322 " + cmd_resp_arg1 + " " + cmd_resp_arg2 + " " + cmd_resp_arg3 + " " + cmd_resp_arg4;
+            break;
+		default:
+			std::cout << "Invalid command response code" << std::endl;
+	}
+	sendMessage(sender_fd, message);
+}
+
+void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName)
+{
+	std::string message;
+	switch (cmd_resp_code)
+	{
+		case 1 :
+	        message = ":" + serverName + " 001 " + nickName + " Welcome to Internet Chat Relay";
+            break;
+		case 2 :
+	        message = ":" + serverName + " 002 " + nickName + " Your Host is localhost, running version 1.0";
+            break;
+		case 3 :
+	        message = ":" + serverName + " 003 " + nickName + " The server was created on 23/0/2023";
+            break;
+        case 321 :
+            message = ":" + serverName + " 321 " + nickName + " Channel :Users Name";
+            break;
+        case 323 :
+            message = ":" + serverName + " 323 " + nickName + " :End of /LIST";
+            break;
+		default:
+			std::cout << "Invalid command response code 1" << std::endl;
+	}
+	sendMessage(sender_fd, message);
+}
+
+void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName, std::string channelName, std::string arg2, std::string arg3)
+{
+	std::string message;
+	switch (cmd_resp_code)
+	{
+        case 322 :
+            message = ":" + serverName + " 322 " + nickName + " " + channelName + " " + arg2 + " " + arg3;
+            break;
+        case 353 :
+            message = ":" + serverName + " 353 " + nickName + " = " + channelName + " : " + arg2;
+            break;
+        case 366 :
+            message = ":" + serverName + " 366 " + nickName + " " + channelName +" :End of /NAMES list";
+            break;
+		default:
+			std::cout << "Invalid command response code 2" << std::endl;
+	}
 	sendMessage(sender_fd, message);
 }

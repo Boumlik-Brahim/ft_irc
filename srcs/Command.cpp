@@ -6,7 +6,6 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 08:33:32 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +208,6 @@ void parseMessageFormat(Message &msg, char **data)
 void Server::backBone(std::string buffer, int newSocketFd)
 {
 	Message msg;
-	Channel chnl;
 	char 	**data;
 
 	data = ft_split(buffer.c_str(), ' ');
@@ -236,9 +234,9 @@ void Server::backBone(std::string buffer, int newSocketFd)
 		else if (!msg.getCommand().compare("MODE"))
 			std::cout << "i got the mode" << std::endl;
 		else if (!msg.getCommand().compare("TOPIC"))
-			std::cout << "i got the topic" << std::endl;
+			handleTopicCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("NAMES"))
-			std::cout << "i got the names" << std::endl;
+			handleNamesCmd(msg,newSocketFd);
 		else if (!msg.getCommand().compare("LIST"))
 			std::cout << "i got the names" << std::endl;
 		else if (!msg.getCommand().compare("INVITE"))

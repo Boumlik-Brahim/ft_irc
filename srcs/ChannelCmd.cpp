@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 11:08:41 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +68,24 @@ void	Server::setChannel(Channel &chnl, std::string channelName, std::string chan
 	chnl.setIsMode_o(true);
 	_channels.push_back(chnl);
 }
+
+/*void	Server::setChannel(Channel &chnl, std::string channelName, std::string channelCreator)
+{
+	chnl.setChannelName(channelName);
+
+	chnl.setChannelMembers(it->second->getNickName());
+	chnl.setChannelOperators(it->second->getNickName());
+	// chnl.setChannelModes("n");
+	chnl.setIsMode_n(true);
+	it->second->setHasChannel(true);
+
+	chnl.setChannelCreator(channelCreator);
+	chnl.setChannelMembers(channelCreator);
+	chnl.setChannelOperators(channelCreator);
+	chnl.setIsMode_o(true);
+
+	_channels.push_back(chnl);
+}*/
 
 void	Server::joinNewChannel(int senderFd, std::string channelName)
 {

@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 13:13:23 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +26,7 @@ class Client
 		std::string					_realName;
 		int							_clientFd;
 		bool						_isAuthValid;
+    bool		        _hasChannel;
 		int							_clientMaxnumOfChannels;
 		std::vector<std::string>	_joinedChannels;
 
@@ -37,6 +37,8 @@ class Client
 		Client(const Client &copy);
 		Client & operator=(const Client &assign);
 
+		bool		getHasChannel(void);
+		void		setHasChannel(bool hasChannel);
 		std::string					getNickName(void);
 		void						setNickName(std::string nickName);
 		std::string					getUserName(void) const;
@@ -51,7 +53,6 @@ class Client
 		void						setClientMaxnumOfChannels(int clientMaxnumOfChannels);
 		std::vector<std::string>&	getJoinedChannels(void);
         void						setJoinedChannels(std::string joinedChannel);
-
 		~Client();
 };
 

@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/10 13:17:09 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +26,7 @@ class Channel
 		std::string								_channelName;
 		std::string								_channelCreator;
 		std::string								_channelkey;
+		std::string								_channelTopic;
 		int										_channelLimit;
 		std::vector<std::string>				_channelMembers;
 		std::vector<std::string>				_channelOperators;
@@ -61,6 +61,8 @@ class Channel
 		void						setChannelCreator(std::string channelCreator);
 		std::string&				getChannelkey(void);
 		void						setChannelkey(std::string channelkey);
+		std::string&				getChannelTopic(void);
+		void						setChannelTopic(std::string channelTopic);
 		int							getChannelLimit(void) const;
 		void						setChannelLimit(int channelLimit);
 		std::vector<std::string>& 	getChannelMembers(void);

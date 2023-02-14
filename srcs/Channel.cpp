@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 09:54:21 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +19,7 @@ Channel::Channel(const Channel &copy)
 }
 Channel & Channel::operator=(const Channel &assign)
 {
+	std::cout << "Copy= Constructor" << std::endl;
 	if (this != &assign)
 	{
 		_channelName = assign._channelName;
@@ -75,6 +75,7 @@ void Channel::setChannelkey(std::string channelkey)
 {
 	_channelkey = channelkey;
 }
+
 int	Channel::getChannelLimit(void) const
 {
 	return(_channelLimit);	
@@ -114,6 +115,17 @@ std::vector<std::string>& Channel::getInvitedMembers(void)
 void Channel::setInvitedMembers(std::string invitedMember)
 {
 	_invitedMembers.push_back(invitedMember);	
+}
+
+
+std::string&	Channel::getChannelTopic(void)
+{
+	return _channelTopic;
+}
+
+void	Channel::setChannelTopic(std::string channelTopic)
+{
+	_channelTopic = channelTopic;
 }
 
 bool Channel::getIsMode_O(void) const
