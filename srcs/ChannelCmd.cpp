@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 13:48:09 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/13 18:43:18 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	Server::createChannel(Channel &chnl, int senderFd, std::string channelName)
 	chnl.setChannelOperators(it->second->getNickName());
 	// chnl.setChannelModes("n");
 	chnl.setIsMode_n(true);
+	it->second->setHasChannel(true);
 	_channels.push_back(chnl);
 }
 void  Server::handleJoinCmd(Message &msg, int senderFd)
