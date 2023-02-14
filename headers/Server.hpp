@@ -6,6 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/14 15:04:59 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +97,12 @@ class Server
 		void			handleTopicCmd(Message &msg, int senderFd);
 		void    		handleNamesCmd(Message &msg, int senderFd);
 		void    		handleListCmd(Message &msg, int senderFd);
+		void    		handleInviteCmd(Message &msg, int senderFd);
 		int				findChannelOperator(std::string sender, Channel chnl);
 		int 			findUserInChannel(std::string sender, Channel &chnl);
 		bool 			checkIfClientIsMember(Channel &chnl, std::string clientName);
 		std::string 	findClientWithNoChannel();
+		Client& 		findClient(std::string nickName);
 		void 	WelcomeMsg(int fd);
 		~Server();
 };

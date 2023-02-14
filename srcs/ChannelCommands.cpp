@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:32:47 by izail             #+#    #+#             */
-/*   Updated: 2023/02/14 10:29:27 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/14 18:24:00 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,22 @@ int Server::findChannelOperator(std::string sender, Channel chnl)
 
 int Server::findUserInChannel(std::string sender, Channel &chnl)
 {
-    std::cout << "sender ==" << sender << std::endl;
     for (size_t i = 0; i < chnl.getChannelMembers().size(); i++)
     {
-        std::cout << "channel member ==" << chnl.getChannelMembers().at(i) << std::endl;
         if (chnl.getChannelMembers().at(i) == sender)
-        {
-            std::cout << "equals\n";
             return 1;
-        }
     }
     return 0;
+}
+
+Client&     Server::findClient(std::string nickName)
+{
+    for (std::map<int, Client *>::iterator it = _mapClients.begin(); it != _mapClients.end() ; it++)
+    {
+        if (it->second->getNickName() == nickName)
+            return *(it->second);  
+    }
+    throw "client not found";
 }
 
 bool Server::checkIfClientIsMember(Channel &chnl, std::string clientName)
@@ -49,11 +54,21 @@ std::string Server::findClientWithNoChannel()
     
     for (std::map<int, Client *>::iterator it = _mapClients.begin(); it != _mapClients.end() ; it++)
     {
-        if (it->second->getHasChannel() == false)
+        if (it->second->getJoinedChannels().size() == 0)
             ChannelClients += it->second->getNickName().append(" ");
     }
     return ChannelClients;
 }
+
+// Client& Server::findClient(std::string nickName)
+// {
+//     for (std::map<int, Client *>::iterator it = _mapClients.begin(); it != _mapClients.end() ; it++)
+//     {
+//         if (it->second->getNickName() == nickName)
+//             return it->second;
+//     }
+//     throw "client not found";
+// }
 
 void    Server::handleTopicCmd(Message &msg, int senderFd)
 {
@@ -175,6 +190,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
             }
         }
         ChannelClients = findClientWithNoChannel();
+        std::cout << "channel Clients ==" << ChannelClients << std::endl;
         if (ChannelClients.size() > 0)
             cmd_Resp_Handler1(senderFd, 353, _server_name, sender, std::string("*") , ChannelClients, std::string(""));    
     }
@@ -285,4 +301,63 @@ void    Server::handleListCmd(Message &msg, int senderFd)
         }
     }
     cmd_Resp_Handler1(senderFd, 323, _server_name, sender);
+}
+
+
+void    Server::handleInviteCmd(Message &msg, int senderFd)
+{
+    std::string     channelName = "";
+    std::string     sender = "";
+    std::string     receiver = "";
+    int             channelExist = 0;
+    std::string     cmd = msg.getCommand();
+
+    // check if user is authenticated
+    if (!_mapClients[senderFd]->getIsAuthValid())
+		errorHandler(senderFd, 451);
+    
+    sender = findNickClientByFd(senderFd);
+    receiver = msg.getArguments()[0];
+    channelName = msg.getArguments()[1];
+    channelExist = findChannelByName(channelName);
+    // check if the channel exist to perform the INVITE command
+    if (channelExist)
+    {
+        Channel &tmpChannel = findChannel(channelName);
+        // check if channel has invite-only flag set
+        if (tmpChannel.getIsMode_i())
+        {
+            // check if the inviter is operator or not
+            if (findChannelOperator(sender, tmpChannel) == 1)
+            {
+                // check if the channel the receiver being invited to is exist in his invitedChannels
+                // else the invitation will be sent and the channel will be added to his _invitedChannels
+            }
+            else
+                errorHandler(senderFd, 482, sender);
+        }
+        else
+        {
+            std::cout << "channel without flag i" << std::endl;
+            // check if inviter is member of the channel
+            if (findUserInChannel(sender, tmpChannel) == 1)
+            {
+                std::cout << "channel without flag i" << std::endl;
+                Client &target = findClient(receiver);
+                if (findUserInChannel(target.getNickName(), tmpChannel))
+                    errorHandler(senderFd, 443, target.getNickName(), tmpChannel.getChannelName());
+                else
+                {
+                    std::cout << "dkhel hna\n";
+                    target.setInvitedChannels(tmpChannel.getChannelName());
+                    cmd_Resp_Handler1(senderFd, 341, _server_name, sender, tmpChannel.getChannelName(), target.getNickName(), std::string(""));
+                    std::cout << "fd dial l client" << target.getClientFd() <<std::endl;
+                    sendMessage(target.getClientFd(), "SENDER invited you to #channel");
+                }
+            }
+            else
+                errorHandler(senderFd, 442, sender);
+            // else he needs to be a member to perform te INVITE command
+        }
+    }
 }
