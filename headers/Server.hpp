@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 15:22:04 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/13 18:24:06 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 class Server
 {
 	private:
+		std::string				_server_name;
 		std::string				_password;
 		int						_port_number;
 		int						_socket_fd;
@@ -39,11 +40,12 @@ class Server
 		struct pollfd			_fds[MAX_CONNECTIONS];
 		std::map<int, Client*>	_mapClients;
 		std::map<int, Guest*>	_mapGuest;
-		std::vector<Channel>	_channels;
+		std::vector<Channel >	_channels;
 
 	public:
 		Server();
 		Server(int port_number, std::string password);
+		Server(std::string server_name, int port_number, std::string password);
 		Server &operator=(const Server &assign);
 		Server(const Server &copy);
 
@@ -83,10 +85,14 @@ class Server
 
 
 		// Ishak
-		void	handleTopicCmd(Message &msg, int senderFd);
-		void    handleNamesCmd(Message &msg, int senderFd);
-		int		findChannelOperator(std::string sender, Channel chnl);
-		int 	findUserInChannel(std::string sender, Channel chnl);
+		void			handleTopicCmd(Message &msg, int senderFd);
+		void    		handleNamesCmd(Message &msg, int senderFd);
+		void    		handleListCmd(Message &msg, int senderFd);
+		int				findChannelOperator(std::string sender, Channel chnl);
+		int 			findUserInChannel(std::string sender, Channel &chnl);
+		bool 			checkIfClientIsMember(Channel &chnl, std::string clientName);
+		std::string 	findClientWithNoChannel();
+		void 	WelcomeMsg(int fd);
 		~Server();
 };
 
