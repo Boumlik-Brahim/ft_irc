@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 09:51:46 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Client.hpp"
 
-Client::Client():  buf("")
+Client::Client(): _clientMaxnumOfChannels(2), buf("")
 {}
-Client::Client(const Client &copy) : _nickName(copy._nickName), _userName(copy._userName), _clientFd(copy._clientFd), buf("")
+Client::Client(const Client &copy) : _nickName(copy._nickName), _userName(copy._userName), _realName(copy._realName), _clientFd(copy._clientFd), _isAuthValid(copy._isAuthValid), _clientMaxnumOfChannels(copy._clientMaxnumOfChannels), _joinedChannels(copy._joinedChannels), buf("")
 {}
 
 Client & Client::operator=(const Client &assign)
@@ -23,7 +22,11 @@ Client & Client::operator=(const Client &assign)
 	{
 		_nickName = assign._nickName;
 		_userName = assign._userName;
+		_realName = assign._realName;
 		_clientFd = assign._clientFd;
+		_isAuthValid = assign._isAuthValid;
+		_clientMaxnumOfChannels = assign._clientMaxnumOfChannels;
+		_joinedChannels = assign._joinedChannels;
 	}
 	return *this;
 }
@@ -59,6 +62,22 @@ bool Client::getIsAuthValid(void) const
 void Client::setAuthValid(bool isValid)
 {
 	_isAuthValid = isValid;
+}
+int	Client::getClientMaxnumOfChannels(void) const
+{
+	return (_clientMaxnumOfChannels);	
+}
+void Client::setClientMaxnumOfChannels(int clientMaxnumOfChannels)
+{
+	_clientMaxnumOfChannels = clientMaxnumOfChannels;	
+}
+std::vector<std::string>& Client::getJoinedChannels(void)
+{
+    return (_joinedChannels);
+}
+void Client::setJoinedChannels(std::string joinedChannel)
+{
+	_joinedChannels.push_back(joinedChannel);
 }
 
 bool		Client::getHasChannel(void)

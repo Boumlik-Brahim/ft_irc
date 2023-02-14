@@ -6,7 +6,6 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 18:24:06 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +78,18 @@ class Server
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
 
 		int	findChannelByName(std::string channelName);
-		Channel&	findChannel(std::string channelName);
-		void  handleJoinCmd(Message &msg, int senderFd);
-		void	createChannel(Channel &chnl, int senderFd, std::string channelName);
+		Channel& findChannel(std::string channelName);
+		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
+		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
+		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator);
+		void joinNewChannel(int senderFd, std::string channelName);
+		void joinExistChannel(int senderFd, Channel &chnl, std::map<int, Client *>::iterator	&it);
+		void checkExistChannel(int senderFd, Message &msg, std::string channelName, int i);
+		void leaveAllChannels(int senderFd);
+		void handleJoinCmd(Message &msg, int senderFd);
+
+		void partFromChannel(int senderFd, std::string channelName);
+		void handlePartCmd(Message &msg, int senderFd);
 
 
 		// Ishak

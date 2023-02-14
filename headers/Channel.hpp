@@ -6,7 +6,6 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 13:49:18 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +27,7 @@ class Channel
 		std::string								_channelCreator;
 		std::string								_channelkey;
 		std::string								_channelTopic;
+		int										_channelLimit;
 		std::vector<std::string>				_channelMembers;
 		std::vector<std::string>				_channelOperators;
 		std::vector<std::string>				_channelBannedMembers;
@@ -63,6 +63,8 @@ class Channel
 		void						setChannelkey(std::string channelkey);
 		std::string&				getChannelTopic(void);
 		void						setChannelTopic(std::string channelTopic);
+		int							getChannelLimit(void) const;
+		void						setChannelLimit(int channelLimit);
 		std::vector<std::string>& 	getChannelMembers(void);
 		void 						setChannelMembers(std::string channelMember);
 		std::vector<std::string>& 	getChannelOperators(void);
@@ -109,4 +111,7 @@ class Channel
 		
 		~Channel();
 };
+
+void checkInviteOnlyChanFlag(Channel chnl, std::string nickname, int senderFd);
+
 #endif

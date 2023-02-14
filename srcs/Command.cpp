@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/09 16:12:13 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +107,7 @@ void  Server::handleNoticeCmd(Message &msg, int senderFd)
 	//412
 	if (msg.getArguments().size() < 2)
 		errorHandler(senderFd, 412);
-	
-	// std::cout << "size == " << msg.getMultiArgs().size() << std::endl;
+
 	checkMultiArgs(msg);
 	if (msg.getMultiArgs().size())
 	{
@@ -134,6 +132,15 @@ void  Server::handleNoticeCmd(Message &msg, int senderFd)
 	}
 }
 
+void checkChnlNames(std::vector<std::string> tmpArgs, int newSocketFd)
+{
+	for (size_t i = 0; i < tmpArgs.size(); i++)
+	{
+		if (tmpArgs.at(i).at(0) != '#')
+			errorHandler(newSocketFd, 403, tmpArgs.at(i));
+	}
+}
+
 std::vector<std::string> splitBySeparator(std::string args, std::string sep)
 {
     std::vector<std::string> newArgs;
@@ -145,15 +152,6 @@ std::vector<std::string> splitBySeparator(std::string args, std::string sep)
     }
     newArgs.push_back(args.substr(0, pos));
     return newArgs;
-}
-
-void checkChnlNames(std::vector<std::string> tmpArgs, int newSocketFd)
-{
-	for (size_t i = 0; i < tmpArgs.size(); i++)
-	{
-		if (tmpArgs.at(i).at(0) != '#')
-			errorHandler(newSocketFd, 403, tmpArgs.at(i));				
-	}
 }
 
 void checkMultiArgs(Message &msg)
@@ -175,6 +173,7 @@ void checkMultiArgs(Message &msg)
 		}
 	}
 }
+
 void parseMessageFormat(Message &msg, char **data)
 {
 	std::vector<std::string> args;
@@ -231,7 +230,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 		else if (!msg.getCommand().compare("JOIN"))
 			handleJoinCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("PART"))
-			std::cout << "i got the part" << std::endl;
+			handlePartCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("MODE"))
 			std::cout << "i got the mode" << std::endl;
 		else if (!msg.getCommand().compare("TOPIC"))

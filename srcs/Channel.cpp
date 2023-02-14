@@ -6,23 +6,16 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 09:43:27 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Channel.hpp"
 
-Channel::Channel() : _isMode_O(false) , _isMode_o(false), _isMode_v(false), _isMode_a(false), 
-					_isMode_i(false), _isMode_m(false), _isMode_n(false), _isMode_q(false), 
-					_isMode_p(false), _isMode_s(false),_isMode_r(false), _isMode_t(false), 
-					_isMode_k(false), _isMode_l(false), _isMode_b(false), _isMode_e(false), _isMode_I(false)
-{
-	std::cout << "Default Constructor" << std::endl;
-}
+Channel::Channel(): _channelName(""), _channelCreator(""), _channelkey(""), _channelLimit(2), _isMode_O(false), _isMode_o(false), _isMode_v(false), _isMode_a(false), _isMode_i(false), _isMode_m(false), _isMode_n(false), _isMode_q(false), _isMode_p(false), _isMode_s(false), _isMode_r(false), _isMode_t(false), _isMode_k(false), _isMode_l(false), _isMode_b(false), _isMode_e(false), _isMode_I(false)
+{}
 Channel::Channel(const Channel &copy)
 {
 	*this = copy;
-	std::cout << "Copy Constructor" << std::endl;
 }
 Channel & Channel::operator=(const Channel &assign)
 {
@@ -32,26 +25,28 @@ Channel & Channel::operator=(const Channel &assign)
 		_channelName = assign._channelName;
 		_channelCreator = assign._channelCreator;
 		_channelkey = assign._channelkey;
+		_channelLimit = assign._channelLimit;
 		_channelMembers = assign._channelMembers;
 		_channelOperators = assign._channelOperators;
 		_channelBannedMembers = assign._channelBannedMembers;
+		_invitedMembers = assign._invitedMembers;
 		_isMode_O = assign._isMode_O;
-		_isMode_o = assign._isMode_o;
-		_isMode_v = assign._isMode_v;
-		_isMode_a = assign._isMode_a;
-		_isMode_i = assign._isMode_i;
-		_isMode_m = assign._isMode_m;
-		_isMode_n = assign._isMode_n;
-		_isMode_q = assign._isMode_q;
-		_isMode_p = assign._isMode_p;
-		_isMode_s = assign._isMode_s;
-		_isMode_r = assign._isMode_r;
-		_isMode_t = assign._isMode_t;
-		_isMode_k = assign._isMode_k;
-		_isMode_l = assign._isMode_l;
-		_isMode_b = assign._isMode_b;
-		_isMode_e = assign._isMode_e;
-		_isMode_I = assign._isMode_I;
+        _isMode_o = assign._isMode_o;
+        _isMode_v = assign._isMode_v;
+        _isMode_a = assign._isMode_a;
+        _isMode_i = assign._isMode_i;
+        _isMode_m = assign._isMode_m;
+        _isMode_n = assign._isMode_n;
+        _isMode_q = assign._isMode_q;
+        _isMode_p = assign._isMode_p;
+        _isMode_s = assign._isMode_s;
+        _isMode_r = assign._isMode_r;
+        _isMode_t = assign._isMode_t;
+        _isMode_k = assign._isMode_k;
+        _isMode_l = assign._isMode_l;
+        _isMode_b = assign._isMode_b;
+        _isMode_e = assign._isMode_e;
+        _isMode_I = assign._isMode_I;
 	}
 	return *this;
 }
@@ -79,6 +74,15 @@ std::string& Channel::getChannelkey(void)
 void Channel::setChannelkey(std::string channelkey)
 {
 	_channelkey = channelkey;
+}
+
+int	Channel::getChannelLimit(void) const
+{
+	return(_channelLimit);	
+}
+void Channel::setChannelLimit(int channelLimit)
+{
+	_channelLimit = channelLimit;
 }
 std::vector<std::string>& Channel::getChannelMembers(void)
 {
@@ -112,6 +116,7 @@ void Channel::setInvitedMembers(std::string invitedMember)
 {
 	_invitedMembers.push_back(invitedMember);	
 }
+
 
 std::string&	Channel::getChannelTopic(void)
 {

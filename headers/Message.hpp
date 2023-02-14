@@ -3,10 +3,6 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 14:44:08 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +20,6 @@ class Message
 		std::vector<std::string>	_multiArgs;
 		std::string					_command;
 		bool						_isValidCommad;
-		
 
 	public:
 		Message();
