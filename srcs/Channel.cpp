@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 13:10:17 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/14 13:22:19 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ Channel::Channel(const Channel &copy)
 }
 Channel & Channel::operator=(const Channel &assign)
 {
-	std::cout << "Copy= Constructor" << std::endl;
 	if (this != &assign)
 	{
 		_channelName = assign._channelName;
@@ -117,18 +116,14 @@ void Channel::setInvitedMembers(std::string invitedMember)
 {
 	_invitedMembers.push_back(invitedMember);	
 }
-
-
 std::string&	Channel::getChannelTopic(void)
 {
 	return _channelTopic;
 }
-
 void	Channel::setChannelTopic(std::string channelTopic)
 {
 	_channelTopic = channelTopic;
 }
-
 bool Channel::getIsMode_O(void) const
 {
 	return (_isMode_O);

@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 13:10:33 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/14 18:44:05 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,6 @@ void	Server::setChannel(Channel &chnl, std::string channelName, std::string chan
 	_channels.push_back(chnl);
 }
 
-/*void	Server::setChannel(Channel &chnl, std::string channelName, std::string channelCreator)
-{
-	chnl.setChannelName(channelName);
-
-	chnl.setChannelMembers(it->second->getNickName());
-	chnl.setChannelOperators(it->second->getNickName());
-	// chnl.setChannelModes("n");
-	chnl.setIsMode_n(true);
-	it->second->setHasChannel(true);
-
-	chnl.setChannelCreator(channelCreator);
-	chnl.setChannelMembers(channelCreator);
-	chnl.setChannelOperators(channelCreator);
-	chnl.setIsMode_o(true);
-
-	_channels.push_back(chnl);
-}*/
-
 void	Server::joinNewChannel(int senderFd, std::string channelName)
 {
 	Channel								chnl;
@@ -98,7 +80,7 @@ void	Server::joinNewChannel(int senderFd, std::string channelName)
 		return (errorHandler(senderFd, 405, channelName));
 	setChannel(chnl, channelName, it->second->getNickName());
 	it->second->setJoinedChannels(channelName);
-	cmd_Resp_Handler(senderFd, 353, "=", channelName, it->second->getNickName());
+	cmd_Resp_Handler1(senderFd, 353, "irc", it->second->getNickName(), channelName, channelName, it->second->getNickName());
 	cmd_Resp_Handler(senderFd, 332, channelName, "...");
 }
 
@@ -128,18 +110,18 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 	}
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
 		return (errorHandler(senderFd, 405, channelName));
-	else if (chnl.getIsMode_l())
+	if (chnl.getIsMode_l())
 	{
 		if (chnl.getChannelMembers().size() >= (size_t)chnl.getChannelLimit())/*ERR_CHANNELISFULL*/
 			return (errorHandler(senderFd, 471, chnl.getChannelName()));
 	}
-	else if (chnl.getIsMode_i())
+	if (chnl.getIsMode_i())
 	{
 		std::vector<std::string>::iterator	result = std::find(chnl.getInvitedMembers().begin(), chnl.getInvitedMembers().end(), it->second->getNickName());
 		if (result == chnl.getInvitedMembers().end())
 			return (errorHandler(senderFd, 473, chnl.getChannelName()));/*ERR_INVITEONLYCHAN*/
 	}
-	else if (chnl.getIsMode_b())
+	if (chnl.getIsMode_b())
 	{
 		for(size_t i = 0; i < chnl.getChannelBannedMembers().size(); i++)
 		{
@@ -147,7 +129,7 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 				return (errorHandler(senderFd, 474,  chnl.getChannelName()));/*ERR_BANNEDFROMCHAN*/
 		}
 	}
-	else if (chnl.getIsMode_k())
+	if (chnl.getIsMode_k())
 	{
 		if ((!msg.getMultiArgs().empty() && !msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() > 1))
 		{
