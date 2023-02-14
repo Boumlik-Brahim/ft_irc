@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/14 16:14:32 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,9 +239,9 @@ void Server::backBone(std::string buffer, int newSocketFd)
 		else if (!msg.getCommand().compare("NAMES"))
 			handleNamesCmd(msg,newSocketFd);
 		else if (!msg.getCommand().compare("LIST"))
-			std::cout << "i got the names" << std::endl;
+			handleListCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("INVITE"))
-			std::cout << "i got the names" << std::endl;
+			handleInviteCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("KICK"))
 			std::cout << "i got the kick" << std::endl;
 		else if (!msg.getCommand().compare("PRIVMSG"))
