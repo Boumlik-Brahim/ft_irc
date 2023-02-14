@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/14 16:36:09 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Client.hpp"
 
-Client::Client(): _clientMaxnumOfChannels(2), buf("")
+Client::Client()
+{}
+
+Client::Client(int newSocketFd): _clientFd(newSocketFd), _clientMaxnumOfChannels(2), buf("") 
 {}
 Client::Client(const Client &copy) : _nickName(copy._nickName), _userName(copy._userName), _realName(copy._realName), _clientFd(copy._clientFd), _isAuthValid(copy._isAuthValid), _clientMaxnumOfChannels(copy._clientMaxnumOfChannels), _joinedChannels(copy._joinedChannels), buf("")
 {}
@@ -29,6 +33,15 @@ Client & Client::operator=(const Client &assign)
 		_joinedChannels = assign._joinedChannels;
 	}
 	return *this;
+}
+
+void Client::setClientFd(int clientFd)
+{
+	_clientFd = clientFd;
+}
+int Client::getClientFd()
+{
+	return (_clientFd);
 }
 
 void Client::setNickName(std::string nickName)
@@ -87,6 +100,15 @@ bool		Client::getHasChannel(void)
 void		Client::setHasChannel(bool hasChannel)
 {
 	_hasChannel = hasChannel;
+}
+
+std::vector<std::string>&	Client::getInvitedChannels(void)
+{
+	return (_invitedChannels);
+}
+void						Client::setInvitedChannels(std::string invitedChannel)
+{
+	this->_invitedChannels.push_back(invitedChannel);
 }
 
 Client::~Client()
