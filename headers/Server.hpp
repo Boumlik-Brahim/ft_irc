@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 13:13:13 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 13:13:16 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/14 13:16:05 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,16 @@ class Server
 		void partFromChannel(int senderFd, std::string channelName);
 		void handlePartCmd(Message &msg, int senderFd);
 
-
 		// Ishak
-		void			handleTopicCmd(Message &msg, int senderFd);
-		void    		handleNamesCmd(Message &msg, int senderFd);
-		void    		handleListCmd(Message &msg, int senderFd);
-		int				findChannelOperator(std::string sender, Channel chnl);
-		int 			findUserInChannel(std::string sender, Channel &chnl);
-		bool 			checkIfClientIsMember(Channel &chnl, std::string clientName);
-		std::string 	findClientWithNoChannel();
-		void 	WelcomeMsg(int fd);
+		std::string findClientWithNoChannel();
+		void handleTopicCmd(Message &msg, int senderFd);
+		void handleNamesCmd(Message &msg, int senderFd);
+		void handleListCmd(Message &msg, int senderFd);
+		void WelcomeMsg(int fd);
+		int findChannelOperator(std::string sender, Channel chnl);
+		int findUserInChannel(std::string sender, Channel &chnl);
+		bool checkIfClientIsMember(Channel &chnl, std::string clientName);
+
 		~Server();
 };
 

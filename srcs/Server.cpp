@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 11:59:46 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/14 15:18:17 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void Server::accept_socket()
 	
 
 	client_lenght = sizeof(_cli_addr);
+	memset(_fds, 0, MAX_CONNECTIONS * sizeof(struct pollfd));
 	numfds = 1;
 	_fds[0].fd = _socket_fd;
 	_fds[0].events = POLLIN;
