@@ -3,11 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/14 18:34:46 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../headers/Server.hpp"
 
@@ -102,53 +104,56 @@ void Server::listen_socket()
 }
 void Server::accept_socket()
 {
-	int numfds;
-	int ret;
-	int sock;
-	int i;
-	int	client_lenght;
-	int	count;
-	
+    int numfds;
+    int ret;
+    int sock;
+    int i;
+    int    client_lenght;
+    int    count;
+    
 
-	client_lenght = sizeof(_cli_addr);
-	numfds = 1;
-	_fds[0].fd = _socket_fd;
-	_fds[0].events = POLLIN;
-	while (1)
-	{
-		ret = poll(_fds, numfds, -1);
-		if (ret < 0)
-		{
-			std::cout << "ERROR ON POLL" << std::endl;
-			exit(EXIT_FAILURE);
-		}
-		for (i = 0; i < numfds; i++)
-		{
-			if (_fds[i].revents & POLLIN)
-			{
-				if (_fds[i].fd == _socket_fd)
-				{
-					_new_socket_fd = accept(_socket_fd, (struct sockaddr *)&_cli_addr, (socklen_t *)&client_lenght);
-					if (_new_socket_fd < 0)
-					{
-						std::cout << "ERROR ON ACCEPT" << std::endl;
-						exit(EXIT_FAILURE);
-					}
-					_fds[numfds].fd = _new_socket_fd;
-					_fds[numfds].events = POLLIN;
-					numfds++;
-					count = numfds;
-					_mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
-					_mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client()));
-				}
-				else
-				{
-					sock = _fds[i].fd;
-					read_write_socket(sock, &count);
-				}
-			}
-		}
-	}
+    client_lenght = sizeof(_cli_addr);
+    memset(_fds, 0, MAX_CONNECTIONS * sizeof(struct pollfd));
+    numfds = 1;
+    _fds[0].fd = _socket_fd;
+    _fds[0].events = POLLIN;
+    while (1)
+    {
+        ret = poll(_fds, numfds, -1);
+        if (ret < 0)
+        {
+            std::cout << "ERROR ON POLL" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        for (i = 0; i < numfds; i++)
+        {
+            if (_fds[i].revents & POLLIN)
+            {
+                if (_fds[i].fd == _socket_fd)
+                {
+                    _new_socket_fd = accept(_socket_fd, (struct sockaddr *)&_cli_addr, (socklen_t *)&client_lenght);
+                    std::cout << "new connection from: " << _new_socket_fd << std::endl;
+                    if (_new_socket_fd < 0)
+                    {
+                        std::cout << "ERROR ON ACCEPT" << std::endl;
+                        exit(EXIT_FAILURE);
+                    }
+                    _fds[numfds].fd = _new_socket_fd;
+                    _fds[numfds].events = POLLIN;
+                    numfds++;
+                    count = numfds;
+                    _mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
+                    _mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client()));
+                }
+                else
+                {
+                    sock = _fds[i].fd;
+                    std::cout << "new request from: " << sock << std::endl;
+                    read_write_socket(sock, &count);
+                }
+            }
+        }
+    }
 }
 void Server::read_write_socket(int newSocketFd, int *count)
 {
