@@ -3,6 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command_responses.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/14 13:11:13 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/14 13:11:18 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +72,6 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             message = ":irc 003 "+ cmd_resp_arg + " This server was created 23/01/2023";
         case 404 :
             message = "PART " + cmd_resp_arg;
-            break;
-        case 003 :
-            message = "003 RPL_CREATED This server was created <date>" + cmd_resp_arg;
             break;
         case 313 :
             message = "313 RPL_WHOISOPERATOR <nick>" + cmd_resp_arg + " :is an IRC operator";
@@ -283,9 +284,6 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             break;
         case 311 :
             message = "311 RPL_WHOISUSER " + cmd_resp_arg + " " + cmd_resp_arg2 + " @<host> * :" + cmd_resp_arg3;
-            break;
-        case 353 :
-            message = "353 RPL_NAMREPLY ( " + cmd_resp_arg + " ) " + cmd_resp_arg2 + " :[ @ / + ] " + cmd_resp_arg3 +" *( " " [ @ / + ]" + cmd_resp_arg3 +" )";
             break;
         
         // case 004 :
