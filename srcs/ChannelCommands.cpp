@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:32:47 by izail             #+#    #+#             */
-/*   Updated: 2023/02/13 18:56:08 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/14 10:29:27 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,6 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
     {
         // check if user in channel
         isUserInChannel = findUserInChannel(sender, tmpChnl);
-        std::cout << "channl name ==" << tmpChnl.getChannelName() << std::endl;
-        std::cout << "sneder 1==" << sender << std::endl;
-        std::cout << "usr in Channel ==" << isUserInChannel << std::endl;
         if (isUserInChannel)
         {
             // check if channel has topic before
@@ -160,29 +157,14 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
     
     if (msg.getArguments().size() != 0)
         checkMultiArgs(msg);
+    // if only Command NAMES typed , then it prints the list of channels and the users who are not in any channel and visible
     else if (msg.getArguments().size() == 0 && msg.getMultiArgs().size() == 0)
-    {
-        std::cout << "Only NAMES\n";
-        
+    {        
         if (_channels.size() > 0)
         {    
             for (size_t i = 0; i < _channels.size(); i++)
             {
                 Channel tmpChnl = _channels.at(i);
-                std::cout << "---> " << tmpChnl.getIsMode_o() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_a() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_b() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_r() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_q() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_t() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_k() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_n() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_m() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_v() << std::endl;
-                std::cout << "---> " << tmpChnl.getIsMode_o() << std::endl;
-                std::cout << "channal at -" << i << " name ==" << tmpChnl.getChannelName() <<std::endl;
-                std::cout << "channal at -" << i << " member size ==" << tmpChnl.getChannelMembers().size() <<std::endl;
-                std::cout << "channal at -" << i << " modes ==" << tmpChnl.getIsMode_s() << " " << tmpChnl.getIsMode_p() <<std::endl;
                 if (tmpChnl.getIsMode_p() == false && tmpChnl.getIsMode_s() == false)
                 {
                     ChannelClients = "";
@@ -196,11 +178,9 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
         if (ChannelClients.size() > 0)
             cmd_Resp_Handler1(senderFd, 353, _server_name, sender, std::string("*") , ChannelClients, std::string(""));    
     }
-    // list a channel and it users
+    // list all channels and their users
     if (!msg.getMultiArgs().empty())
     {
-        // errorHandler(senderFd, 407, "");
-        std::cout << "multiargs\n";
         for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
         {
             channelName = msg.getMultiArgs().at(i);
@@ -218,7 +198,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
             }
         }
     }
-    // list all channels and their users
+    // list a single channel and their users
     else if (msg.getArguments().size() > 0)
     {
         std::cout << "dkhel hna\n";
@@ -237,7 +217,6 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
         }
     }
     cmd_Resp_Handler1(senderFd, 366, _server_name, sender, std::string("*") , std::string("") , std::string(""));
-    // list all visible users
 }
 
 void    Server::handleListCmd(Message &msg, int senderFd)
@@ -249,7 +228,6 @@ void    Server::handleListCmd(Message &msg, int senderFd)
     std::string     cmd = msg.getCommand();
     std::string     messageForm;
 
-    std::cout << "Hello from List\n";
     // check if user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
 		errorHandler(senderFd, 451);
@@ -260,18 +238,17 @@ void    Server::handleListCmd(Message &msg, int senderFd)
     
     if (msg.getArguments().size() != 0)
         checkMultiArgs(msg);
+    // if no Args nor Multiargs , then it will print the channels and the number of users in it with their topic. 
     else if (msg.getArguments().size() == 0 && msg.getMultiArgs().size() == 0)
-    {
-        std::cout << "dkhel l LIST with no args\n";
-        
+    {   
         for (size_t i = 0; i < _channels.size(); i++)
         {
             channelName = _channels.at(i).getChannelName();
             channelExist = findChannelByName(channelName);
-            std::cout << "chan exist ==" << channelExist << std::endl;
             if (channelExist)
             {
                 Channel &tmpChnl  = findChannel(channelName);
+                // check if the channel is not private nor secret and also if the user requesting is member of that channel
                 if (tmpChnl.getIsMode_s() == false && tmpChnl.getIsMode_p() == false 
                     && checkIfClientIsMember(tmpChnl, sender) == true)
                         cmd_Resp_Handler1(senderFd, 322, _server_name , sender , tmpChnl.getChannelName(), std::to_string(tmpChnl.getChannelMembers().size()), tmpChnl.getChannelTopic());
@@ -295,13 +272,11 @@ void    Server::handleListCmd(Message &msg, int senderFd)
             }
         }
     }
-    // list all channels and their users
+    // list single channel, it's number of users and topic 
     else if (msg.getArguments().size() > 0)
     {
-        std::cout << "dkhel l single args\n";
         channelName = msg.getArguments()[0];
         channelExist = findChannelByName(channelName);
-        std::cout << "chan exist ==" << channelExist << std::endl;
         if (channelExist)
         {
             Channel &tmpChnl  = findChannel(channelName);
