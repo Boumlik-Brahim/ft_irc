@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 18:43:09 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/14 10:28:23 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	Server::joinNewChannelWithKey(int senderFd, std::string channelName, std::s
 {
 	Channel								chnl;
 	std::map<int, Client *>::iterator	it;
-	std::cout << "dkhel ljoin new channel with key" << std::endl;
 
 	it = _mapClients.find(senderFd);
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
@@ -138,7 +137,7 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 			if (chnl.getChannelkey() != msg.getArguments().at(i))
 				return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
 		}
-		else if ((!msg.getMultiArgs().empty() && msg.getArguments().empty()) /*|| (msg.getMultiArgs().empty() && msg.getArguments().size() == 1)*/)
+		else if ((!msg.getMultiArgs().empty() && msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() == 1))
 			return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
 	}
 	joinExistChannel(senderFd, chnl, it);
