@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 10:28:23 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/14 11:08:41 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	Server::joinNewChannel(int senderFd, std::string channelName)
 	Channel								chnl;
 	std::map<int, Client *>::iterator	it;
 
-	std::cout << "dkhel ljoin new channel" << std::endl;
 	it = _mapClients.find(senderFd);
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
 		return (errorHandler(senderFd, 405, channelName));
@@ -160,6 +159,8 @@ void	Server::leaveAllChannels(int senderFd)
 
 void  Server::handleJoinCmd(Message &msg, int senderFd)
 {
+	if (!_mapClients[senderFd]->getIsAuthValid())	
+		return (errorHandler(senderFd , 451));
 	if (msg.getArguments().empty()) /*ERR_NEEDMOREPARAMS*/
 		return (errorHandler(senderFd, 461, msg.getCommand()));
 	if (msg.getArguments().at(0) == "0")
@@ -218,6 +219,8 @@ void Server::partFromChannel(int senderFd, std::string channelName)
 
 void  Server::handlePartCmd(Message &msg, int senderFd)
 {
+	if (!_mapClients[senderFd]->getIsAuthValid())	
+		return (errorHandler(senderFd , 451));
 	if (msg.getArguments().empty()) /*ERR_NEEDMOREPARAMS*/
 		return (errorHandler(senderFd, 461, msg.getCommand()));
 	checkMultiArgs(msg);
