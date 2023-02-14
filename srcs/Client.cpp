@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 18:59:15 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/13 09:51:46 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,15 @@ bool Client::getIsAuthValid(void) const
 void Client::setAuthValid(bool isValid)
 {
 	_isAuthValid = isValid;
+}
+
+bool		Client::getHasChannel(void)
+{
+	return _hasChannel;
+}
+void		Client::setHasChannel(bool hasChannel)
+{
+	_hasChannel = hasChannel;
 }
 
 Client::~Client()
