@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 13:10:49 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 13:10:54 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/15 10:47:23 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
             {
                 topic = topic.substr(1, topic.size());
                 tmpChnl.setChannelTopic(topic);
-                cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
+                // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
             }
             // set topic empty
             else if (topic.at(0) == ':' && topic.size() == 1)
@@ -100,10 +100,10 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
         }
         else if (msg.getArguments().size() == 1)
         {
-            if (tmpChnl.getChannelTopic().size() == 0)
-                cmd_Resp_Handler(senderFd, 331, channelName);
-            else
-                cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
+            // if (tmpChnl.getChannelTopic().size() == 0)
+            //     cmd_Resp_Handler(senderFd, 331, channelName);
+            // else
+            //     cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
         }
     }
     else
@@ -120,17 +120,17 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
                 {
                     topic = topic.substr(1, topic.size());
                     tmpChnl.setChannelTopic(topic);
-                    cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
+                    // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
                 }
                 else if (topic.at(0) == ':' && topic.size() == 1)
                     tmpChnl.setChannelTopic("");
             }
             else if (msg.getArguments().size() == 1)
             {
-                if (tmpChnl.getChannelTopic().size() == 0)
-                    cmd_Resp_Handler(senderFd, 331, channelName);
-                else
-                    cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
+                // if (tmpChnl.getChannelTopic().size() == 0)
+                //     cmd_Resp_Handler(senderFd, 331, channelName);
+                // else
+                //     cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
             }
         }
         else
