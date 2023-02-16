@@ -6,7 +6,7 @@
 #    By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/07 10:08:15 by bbrahim           #+#    #+#              #
-#    Updated: 2023/02/11 11:20:52 by iomayr           ###   ########.fr        #
+#    Updated: 2023/02/15 11:55:46 by iomayr           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = ircserv
 
 CXX = c++
 
-FLAGS =  -Wall -Wextra -Werror -std=c++98
+FLAGS =  -Wall -Wextra -Werror -std=c++98 -fsanitize=address
 
 HEADERS = server client channel bot Utils Guest Message
 MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))

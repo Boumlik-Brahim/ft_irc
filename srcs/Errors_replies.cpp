@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 16:06:19 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/14 16:01:51 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 			message = "478 ERR_BANLISTFULL " + err_arg + err_arg2 + " :Channel list is full";
 			break;
 		default:
-			std::cout << "Invalid error code" << std::endl;
+			std::cout << "Invalid error code" << err_code << std::endl;
 	}
 	throw message;
 }
@@ -134,7 +134,7 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			message = "415 ERR_BADMASK "+err_arg+" :Bad Server/host mask";
 			break;
 		default:
-			std::cout << "Invalid error code" << std::endl;
+			std::cout << "Invalid error code" << err_code << std::endl;
 	}
 	throw message;
 }
@@ -206,7 +206,7 @@ void errorHandler(int sender_fd, int err_code)
 			message = "502 ERR_USERSDONTMATCH:Cannot change mode for other users";
 			break;
 		default:
-			std::cout << "Invalid error code" << std::endl;
+			std::cout << "Invalid error code" << err_code << std::endl;
 	}
 	throw message;
 }

@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 14:24:53 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/12 15:32:36 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/14 11:02:04 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code)
             message = "210 RPL_TRACERECONNECT Unused.\r\n";
             break;
 		default:
-			std::cout << "Invalid command response code" << std::endl;
+			std::cout << "Invalid command response code " << cmd_resp_code <<  std::endl;
+			// std::cout << "Invalid command response code" << std::endl;
 	}
 
 	sendMessage(sender_fd, message);
@@ -145,7 +146,8 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             message = "256 RPL_ADMINME <server>" + cmd_resp_arg + " :Administrative info\r\n";
             break;
 		default:
-			std::cout << "Invalid command response code" << std::endl;
+			std::cout << "Invalid command response code " << cmd_resp_code <<  std::endl;
+			// std::cout << "Invalid command response code" << std::endl;
 	}
 
 	sendMessage(sender_fd, message);
@@ -238,7 +240,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             message = "324 RPL_CHANNELMODEIS " + cmd_resp_arg + " " + cmd_resp_arg2 + " +o\r\n";
             break;
 		default:
-			std::cout << "Invalid command response code" << std::endl;
+			std::cout << "Invalid command response code " << cmd_resp_code <<  std::endl;
 	}
 
 	sendMessage(sender_fd, message);
@@ -267,6 +269,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         case 311 :
             message = "311 RPL_WHOISUSER " + cmd_resp_arg + " " + cmd_resp_arg2 + " @<host> * :" + cmd_resp_arg3 + "\r\n";
             break;
+        case 353 :
+            message = "353 RPL_NAMREPLY ( " + cmd_resp_arg + " ) " + cmd_resp_arg2 + " :[ @ / + ] " + cmd_resp_arg3 +" *( " " [ @ / + ]" + cmd_resp_arg3 +" )";
+            break;
         // case 004 :
         //     message = "004 RPL_MYINFO <servername> <version> <available user modes><available channel modes>\r\n";
         //     break;
@@ -278,9 +283,6 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         //     break;
         // case 352 :
         //     message = "352 RPL_WHOREPLY <channel> <user> <host> <server> <nick> ( H / G > [*] [ ( @ / + ) ] :<hopcount> <real name>\r\n";
-        //     break;
-        // case 353 :
-        //     message = "353 RPL_NAMREPLY ( = / * / @ ) <channel> :[ @ / + ] <nick> *( " " [ @ / + ] <nick> ) - @ is used for secret channels, * for private channels, and = for others (public channels).\r\n";
         //     break;
         // case 364 :
         //     message = "364 RPL_LINKS <mask> <server> :<hopcount> <server info>\r\n";
@@ -310,7 +312,8 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
         //     message = "251 RPL_LUSERCLIENT :There are <integer> users and <integer>services on <integer> servers\r\n";
         //     break;
 		default:
-			std::cout << "Invalid command response code" << std::endl;
+			std::cout << "Invalid command response code " << cmd_resp_code <<  std::endl;
+			// std::cout << "Invalid command response code" << std::endl;
 	}
 
 	sendMessage(sender_fd, message);

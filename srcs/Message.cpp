@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:14 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/11 10:59:32 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/15 09:06:25 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ std::vector<char>& Message::getVecRmMode(void)
 }
 void Message::setVecRmMode(char m)
 {
-	_vecAddMode.push_back(m);
+	_vecRmMode.push_back(m);
 }
 
 void Message::setIsAddOrRm(bool trueOrFalse)

@@ -6,22 +6,15 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 09:34:06 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/14 16:34:37 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Server.hpp"
 
-int	Server::findChannelByName(std::string channelName)
-{
-	for(size_t i = 0; i < _channels.size(); i++)
-	{
-		if (channelName == _channels.at(i).getChannelName())
-			return (1);
-	}
-	return (0);
-}
-Channel &Server::findChannel(std::string channelName)
+/****************************************************************************************************************************************/
+
+Channel& Server::findChannel(std::string channelName)
 {
 	for(size_t i = 0; i < _channels.size(); i++)
 	{
@@ -30,29 +23,154 @@ Channel &Server::findChannel(std::string channelName)
 	}
 	throw "there is no channel";
 }
-void	Server::createChannel(Channel &chnl, int senderFd, std::string channelName)
-{
-    std::map<int, Client *>::iterator	it;
-	std::string							creator;
 
-	it = _mapClients.find(senderFd);
-	creator = findNickClientByFd(senderFd);
-	chnl.setChannelCreator(creator);
+int	Server::findChannelByName(std::string channelName)
+{
+	for(size_t i = 0; i < _channels.size(); i++)
+	{
+		if (_channels.at(i).getChannelName() == channelName)
+			return (1);
+	}
+	return (0);
+}
+
+void	Server::setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey)
+{
 	chnl.setChannelName(channelName);
-	chnl.setChannelMembers(it->second->getNickName());
-	chnl.setChannelOperators(it->second->getNickName());
+	chnl.setChannelCreator(channelCreator);
+	chnl.setChannelMembers(channelCreator);
+	chnl.setIsMode_o(true);
+	chnl.setChannelOperators(channelCreator);
+	chnl.setIsMode_k(true);
+	chnl.setChannelkey(channelkey);
 	_channels.push_back(chnl);
 }
+
+void	Server::joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey)
+{
+	Channel								chnl;
+	std::map<int, Client *>::iterator	it;
+
+	it = _mapClients.find(senderFd);
+	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
+		return (errorHandler(senderFd, 405, channelName));
+	setChannel(chnl, channelName, it->second->getNickName(), channelkey);
+	it->second->setJoinedChannels(channelName);
+	cmd_Resp_Handler(senderFd, 353, "=", channelName, it->second->getNickName());
+	cmd_Resp_Handler(senderFd, 332, channelName, "...");
+}
+
+void	Server::setChannel(Channel &chnl, std::string channelName, std::string channelCreator)
+{
+	chnl.setChannelName(channelName);
+	chnl.setChannelCreator(channelCreator);
+	chnl.setChannelMembers(channelCreator);
+	chnl.setChannelOperators(channelCreator);
+	chnl.setIsMode_o(true);
+	_channels.push_back(chnl);
+}
+
+void	Server::joinNewChannel(int senderFd, std::string channelName)
+{
+	Channel								chnl;
+	std::map<int, Client *>::iterator	it;
+
+	std::cout << "dkhel ljoin new channel" << std::endl;
+	it = _mapClients.find(senderFd);
+	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
+		return (errorHandler(senderFd, 405, channelName));
+	setChannel(chnl, channelName, it->second->getNickName());
+	it->second->setJoinedChannels(channelName);
+	cmd_Resp_Handler(senderFd, 353, "=", channelName, it->second->getNickName());
+	cmd_Resp_Handler(senderFd, 332, channelName, "...");
+}
+
+void	Server::joinExistChannel(int senderFd, Channel &chnl, std::map<int, Client *>::iterator	&it)
+{
+	chnl.setChannelMembers(it->second->getNickName());
+	it->second->setJoinedChannels(chnl.getChannelName());
+	if (chnl.getIsMode_s())
+		cmd_Resp_Handler(senderFd, 353, "@", chnl.getChannelName(), it->second->getNickName());
+	else if (chnl.getIsMode_p())
+		cmd_Resp_Handler(senderFd, 353, "*", chnl.getChannelName(), it->second->getNickName());
+	else
+		cmd_Resp_Handler(senderFd, 353, "=", chnl.getChannelName(), it->second->getNickName());
+	cmd_Resp_Handler(senderFd, 332, chnl.getChannelName(), "...");
+	//------------------------------------------
+	for (size_t i = 0; i < chnl.getChannelMembers().size(); i++)
+		std::cout << chnl.getChannelMembers().at(i) << std::endl;
+}
+
+void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelName, int i)
+{
+	std::map<int, Client *>::iterator	it;
+
+	it = _mapClients.find(senderFd);
+	Channel &chnl = findChannel(channelName);
+	std::cout << chnl.getChannelName() << std::endl;
+	std::cout << chnl.getChannelkey() << std::endl;
+	for(size_t i = 0; i < chnl.getChannelMembers().size(); i++)
+	{
+		if (chnl.getChannelMembers().at(i) == it->second->getNickName())
+			return ;
+	}
+	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
+		return (errorHandler(senderFd, 405, channelName));
+	if (chnl.getIsMode_l())
+	{
+		if (chnl.getChannelMembers().size() >= (size_t)chnl.getChannelLimit())/*ERR_CHANNELISFULL*/
+			return (errorHandler(senderFd, 471, chnl.getChannelName()));
+	}
+	if (chnl.getIsMode_i())
+	{
+		std::vector<std::string>::iterator	result = std::find(chnl.getInvitedMembers().begin(), chnl.getInvitedMembers().end(), it->second->getNickName());
+		if (result == chnl.getInvitedMembers().end())
+			return (errorHandler(senderFd, 473, chnl.getChannelName()));/*ERR_INVITEONLYCHAN*/
+	}
+	if (chnl.getIsMode_b())
+	{
+		for(size_t i = 0; i < chnl.getChannelBannedMembers().size(); i++)
+		{
+			if (chnl.getChannelBannedMembers().at(i) == it->second->getNickName())
+				return (errorHandler(senderFd, 474,  chnl.getChannelName()));/*ERR_BANNEDFROMCHAN*/
+		}
+	}
+	if (chnl.getIsMode_k())
+	{
+		std::cout << "here" << std::endl;
+		if ((!msg.getMultiArgs().empty() && !msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() > 1))
+		{
+			if (chnl.getChannelkey() != msg.getArguments().at(i))
+				return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
+		}
+		else if ((!msg.getMultiArgs().empty() && msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() == 1))
+			return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
+	}
+	std::cout << "after : " << chnl.getIsMode_k() << std::endl;
+	joinExistChannel(senderFd, chnl, it);
+}
+
+void	Server::leaveAllChannels(int senderFd)
+{
+	std::map<int, Client *>::iterator	it;
+
+	it = _mapClients.find(senderFd);
+	for(size_t i = 0; i < it->second->getJoinedChannels().size(); i++)
+	{
+		Channel &chnl = findChannel(it->second->getJoinedChannels().at(i));
+		std::vector<std::string>::iterator	channelMember = std::find(chnl.getChannelMembers().begin(), chnl.getChannelMembers().end(), it->second->getNickName());
+		chnl.getChannelMembers().erase(channelMember);
+		cmd_Resp_Handler(senderFd, 404, chnl.getChannelName());
+	}
+	it->second->getJoinedChannels().clear();
+}
+
 void  Server::handleJoinCmd(Message &msg, int senderFd)
 {
-    std::string	receiver;
-    std::string	channelName;
-	std::string	cmd;
-	Channel		tmpChannel;
-	Channel		tmp;
-	int			channelExist;
-
-	// check if JOIN command have multiple channels
+	if (msg.getArguments().empty()) /*ERR_NEEDMOREPARAMS*/
+		return (errorHandler(senderFd, 461, msg.getCommand()));
+	if (msg.getArguments().at(0) == "0")
+		leaveAllChannels(senderFd);
 	checkMultiArgs(msg);
 	checkChnlNames(msg.getMultiArgs(), senderFd);
 	if (!msg.getMultiArgs().empty())
@@ -61,66 +179,27 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 			return (errorHandler(senderFd, 407, msg.getMultiArgs().at(0), "reduce the number of targets and try the request again"));
 		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
 		{
-			channelName = msg.getMultiArgs().at(i);
-			// if (!findChannelByName(channelName))/*ERR_NOSUCHCHANNEL*/
-			// 	return (errorHandler(senderFd, 403, channelName));
-			channelExist = findChannelByName(channelName);
-			if (channelExist)
-			{
-				tmp = findChannel(channelName);
-				if (tmp.getChannelMembers().size() > 9)/*ERR_CHANNELISFULL*/
-					return (errorHandler(senderFd, 471, tmp.getChannelName()));
-				// for(size_t i = 0; i < tmp.getChannelModes().size() ; i++)
-				// {
-				// 	if (tmp.getChannelModes().at(i) == "a")
-				// 		void checkAnonymousChanFlag();
-				// 	else if (tmp.getChannelModes().at(i) == "i")
-				// 		void checkInviteOnlyChanFlag();
-				// 	else if (tmp.getChannelModes().at(i) == "m")
-				// 		void checkModeratedChan();
-				// 	else if (tmp.getChannelModes().at(i) == "n")
-				// 		void checkNoMsgToChannel();
-				// 	else if (tmp.getChannelModes().at(i) == "q")
-				// 		void checkQuietChanFlag();
-				// 	else if (tmp.getChannelModes().at(i) == "p")
-				// 		void PrivateChanFlag();
-				// 	else if (tmp.getChannelModes().at(i) == "s")
-				// 		void checkSecretChanFlag();
-				// 	else if (tmp.getChannelModes().at(i) == "r")
-				// 		void checkServerReopChanFlag();
-				// 	else if (tmp.getChannelModes().at(i) == "t")
-				// 		void checkTopic();
-				// }
-			}
+			if (findChannelByName(msg.getMultiArgs().at(i)))
+				checkExistChannel(senderFd, msg, msg.getMultiArgs().at(i), i);
 			else
-				createChannel(tmpChannel, senderFd, msg.getArguments().at(i));
+			{
+				if (msg.getArguments().empty())
+					joinNewChannel(senderFd, msg.getMultiArgs().at(i));
+				else
+					joinNewChannelWithKey(senderFd, msg.getMultiArgs().at(i), msg.getArguments().at(i));
+			}
 		}
 	}
-	else
+	else if (msg.getMultiArgs().empty() && msg.getArguments().at(0) != "0")
 	{
-		channelExist = findChannelByName(msg.getArguments().at(0));
-		if (channelExist)
-		{
-			// check mode
-			// join user to channel
-		}
+		if (findChannelByName(msg.getArguments().at(0)))
+			checkExistChannel(senderFd, msg, msg.getArguments().at(0), 1);
 		else
-			createChannel(tmpChannel, senderFd, msg.getArguments().at(0));
+		{
+			if (msg.getArguments().size() == 1)
+				joinNewChannel(senderFd, msg.getArguments().at(0));
+			else if (msg.getArguments().size() > 1)
+				joinNewChannelWithKey(senderFd, msg.getArguments().at(0), msg.getArguments().at(1));
+		}
 	}
-	if (msg.getMultiArgs().empty() && msg.getArguments().at(0).empty()) /*ERR_NEEDMOREPARAMS*/
-		return (errorHandler(senderFd, 461, cmd));
-	// else if ()/*ERR_INVITEONLYCHAN*/
-	// 	return (errorHandler(senderFd, 473, channelName));
-	// else if ()/*ERR_BANNEDFROMCHAN*/
-	// 	return (errorHandler(senderFd, 474, channelName));
-	// else if ()/*ERR_BADCHANNELKEY*/
-	// 	return (errorHandler(senderFd, 475, channelName));
-	// else if ()/*ERR_BADCHANMASK*/
-	// 	return (errorHandler(senderFd, 476, channelName));
-	// else if ()/*ERR_TOOMANYCHANNELS*/
-	// 	return (errorHandler(senderFd, 405, channelName));
-	// else if ()/*ERR_UNAVAILRESOURCE*/
-	// 	return (errorHandler(senderFd, 437, receiver, channelName));
-	// else if ()/*RPL_TOPIC*/
-	// 	return (cmd_Resp_Handler(senderFd, 332, channelName, "topic"));
 }

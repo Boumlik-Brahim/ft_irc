@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/13 14:33:52 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/15 13:12:21 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,6 @@ class Server
 		void handleUserCmd(Message &msg, int newSocketFd);
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
 		void handleModeCmd(Message &msg, int newSocketFd);
-
-		int		findChannelByName(std::string channelName);
-		Channel	&findChannel(std::string channelName);
-		void  	handleJoinCmd(Message &msg, int senderFd);
-		void	createChannel(Channel &chnl, int senderFd, std::string channelName);
 		
 		void checkModes(Message &msg, int newSocketFd);
 		void checkIfClientExist(int newSocketFd, std::string nickName);
@@ -94,6 +89,20 @@ class Server
 		void exec_s(Message &msg, int newSocketFd, bool addOrRm);
 		void exec_p(Message &msg, int newSocketFd, bool addOrRm);
 		void exec_t(Message &msg, int newSocketFd, bool addOrRm);
+
+		int	findChannelByName(std::string channelName);
+		Channel& findChannel(std::string channelName);
+		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
+		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
+		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator);
+		void joinNewChannel(int senderFd, std::string channelName);
+		void joinExistChannel(int senderFd, Channel &chnl, std::map<int, Client *>::iterator	&it);
+		void checkExistChannel(int senderFd, Message &msg, std::string channelName, int i);
+		void leaveAllChannels(int senderFd);
+		void handleJoinCmd(Message &msg, int senderFd);
+
+		void freeClient(int newSocketFd);
+		
 		~Server();
 };
 

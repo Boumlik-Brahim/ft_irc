@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 11:09:44 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/06 15:26:14 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/14 11:25:21 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Guest::Guest()
 {}
-Guest::Guest(int newSocketFd) : _guestFd(newSocketFd)
+Guest::Guest(int newSocketFd) : _guestFd(newSocketFd), _passValid(false), _nickValid(false), _userValid(false)
 {}
 Guest::Guest(const Guest &copy)
 {

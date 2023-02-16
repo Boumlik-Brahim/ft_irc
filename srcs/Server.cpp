@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 11:24:53 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/16 10:14:39 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,54 +101,90 @@ void Server::listen_socket()
 }
 void Server::accept_socket()
 {
-	int numfds;
-	int ret;
-	int sock;
-	int i;
-	int	client_lenght;
-	int	count;
-	
+    int numfds;
+    int ret;
+    int sock;
+    int i;
+    int    client_lenght;
+    int    count;
+    
 
-	client_lenght = sizeof(_cli_addr);
-	numfds = 1;
-	_fds[0].fd = _socket_fd;
-	_fds[0].events = POLLIN;
-	while (1)
+    client_lenght = sizeof(_cli_addr);
+    memset(_fds, 0, MAX_CONNECTIONS * sizeof(struct pollfd));
+    numfds = 1;
+    _fds[0].fd = _socket_fd;
+    _fds[0].events = POLLIN;
+    while (1)
+    {
+        ret = poll(_fds, numfds, -1);
+        if (ret < 0)
+        {
+            std::cout << "ERROR ON POLL" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        for (i = 0; i < numfds; i++)
+        {
+            if (_fds[i].revents & POLLIN)
+            {
+                if (_fds[i].fd == _socket_fd)
+                {
+                    _new_socket_fd = accept(_socket_fd, (struct sockaddr *)&_cli_addr, (socklen_t *)&client_lenght);
+                    if (_new_socket_fd < 0)
+                    {
+                        std::cout << "ERROR ON ACCEPT" << std::endl;
+                        exit(EXIT_FAILURE);
+                    }
+                    _fds[numfds].fd = _new_socket_fd;
+                    _fds[numfds].events = POLLIN;
+                    numfds++;
+                    count = numfds;
+                    _mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
+                    _mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client()));
+                }
+                else
+                {
+                    sock = _fds[i].fd;
+                    read_write_socket(sock, &count);
+                }
+            }
+        }
+    }
+}
+
+void Server::freeClient(int newSocketFd)
+{
+	std::map<int, Client*>::iterator	itClient = _mapClients.find(newSocketFd);
+	std::string 						clientNick = itClient->second->getNickName();
+	std::vector<std::string> 			chnlVec = itClient->second->getJoinedChannels();
+
+	for (std::vector<std::string>::iterator it = chnlVec.begin(); it != chnlVec.end(); it++)
 	{
-		ret = poll(_fds, numfds, -1);
-		if (ret < 0)
-		{
-			std::cout << "ERROR ON POLL" << std::endl;
-			exit(EXIT_FAILURE);
+		Channel &tmpChnl = findChannel(*it);
+		for (std::vector<std::string>::iterator it = tmpChnl.getChannelMembers().begin(); it != tmpChnl.getChannelMembers().end(); it++){
+			if (*it == clientNick){
+				tmpChnl.getChannelMembers().erase(it);
+				break;
+			}
 		}
-		for (i = 0; i < numfds; i++)
-		{
-			if (_fds[i].revents & POLLIN)
-			{
-				if (_fds[i].fd == _socket_fd)
-				{
-					_new_socket_fd = accept(_socket_fd, (struct sockaddr *)&_cli_addr, (socklen_t *)&client_lenght);
-					if (_new_socket_fd < 0)
-					{
-						std::cout << "ERROR ON ACCEPT" << std::endl;
-						exit(EXIT_FAILURE);
-					}
-					_fds[numfds].fd = _new_socket_fd;
-					_fds[numfds].events = POLLIN;
-					numfds++;
-					count = numfds;
-					_mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
-					_mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client()));
-				}
-				else
-				{
-					sock = _fds[i].fd;
-					read_write_socket(sock, &count);
-				}
+		for (std::vector<std::string>::iterator it = tmpChnl.getChannelOperators().begin(); it != tmpChnl.getChannelOperators().end(); it++){
+			if (*it == clientNick){
+				tmpChnl.getChannelOperators().erase(it);
+				break;
+			}
+		}
+		for (std::vector<std::string>::iterator it = tmpChnl.getInvitedMembers().begin(); it != tmpChnl.getInvitedMembers().end(); it++){
+			if (*it == clientNick){
+				tmpChnl.getInvitedMembers().erase(it);
+				break;
 			}
 		}
 	}
+	if (itClient != _mapClients.end()){
+		delete itClient->second;
+		_mapClients.erase(itClient);
+	}
 }
+
 void Server::read_write_socket(int newSocketFd, int *count)
 {
 	int		n;
@@ -166,8 +202,9 @@ void Server::read_write_socket(int newSocketFd, int *count)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
-		_mapClients.erase(newSocketFd);
+		freeClient(newSocketFd);
 		close(newSocketFd);
+		std::cout << "-------> " << *count << std::endl;
 		if ((*count) == 1)
 			exit(EXIT_SUCCESS);
 		return ;
