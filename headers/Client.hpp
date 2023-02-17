@@ -3,10 +3,6 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/15 10:25:51 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +25,12 @@ class Client
 		bool						_isAuthValid;
 		int							_clientMaxnumOfChannels;
 		std::vector<std::string>	_joinedChannels;
-
+		std::vector<std::string>	_invitedChannels;
 	public:
 		std::string	buf;
 
 		Client();
+		Client(int newSocketFd);
 		Client(const Client &copy);
 		Client & operator=(const Client &assign);
 
@@ -50,7 +47,9 @@ class Client
 		int							getClientMaxnumOfChannels(void) const;
 		void						setClientMaxnumOfChannels(int clientMaxnumOfChannels);
 		std::vector<std::string>&	getJoinedChannels(void);
+		std::vector<std::string>&	getInvitedChannels(void);
         void						setJoinedChannels(std::string joinedChannel);
+        void						setInvitedChannels(std::string invitedChannel);
 
 		~Client();
 };

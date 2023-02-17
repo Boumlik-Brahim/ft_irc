@@ -3,10 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/31 13:35:17 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/11 10:59:14 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +25,6 @@ class Message
 		std::vector<char>			_vecRmMode;
 		bool						_isAddOrRm;
 		bool						_isValidCommad;
-		
 
 	public:
 		Message();
@@ -58,9 +55,16 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 void errorHandler(int sender_fd, int err_code, std::string err_arg);
 void errorHandler(int sender_fd, int err_code);
 
+void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg1, std::string cmd_resp_arg2, std::string cmd_resp_arg3, std::string cmd_resp_arg4);
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2, std::string cmd_resp_arg3);
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2);
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg);
+
+// ishak
+void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName);
+void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName, std::string arg1, std::string arg2);
+void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName, std::string channelName, std::string arg2, std::string arg3);
+
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code);
 
 #endif

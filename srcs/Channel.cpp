@@ -6,7 +6,6 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 10:51:05 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,22 +75,13 @@ void Channel::setChannelkey(std::string channelkey)
 	_channelkey = channelkey;
 }
 
-int& Channel::getChannelLimit(void)
+int	Channel::getChannelLimit(void) const
 {
-	return _channelLimit;
+	return(_channelLimit);	
 }
 void Channel::setChannelLimit(int channelLimit)
 {
 	_channelLimit = channelLimit;
-}
-
-std::string& Channel::getChannelTopic(void)
-{
-	return _channelTopic;
-}
-void Channel::setChannelTopic(std::string channelTopic)
-{
-	_channelTopic = channelTopic;
 }
 
 std::vector<std::string>& Channel::getChannelMembers(void)
@@ -125,6 +115,14 @@ std::vector<std::string>& Channel::getInvitedMembers(void)
 void Channel::setInvitedMembers(std::string invitedMember)
 {
 	_invitedMembers.push_back(invitedMember);	
+}
+std::string&	Channel::getChannelTopic(void)
+{
+	return _channelTopic;
+}
+void	Channel::setChannelTopic(std::string channelTopic)
+{
+	_channelTopic = channelTopic;
 }
 
 bool Channel::getIsMode_O(void) const

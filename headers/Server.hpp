@@ -5,8 +5,6 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/16 15:56:36 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +30,7 @@
 class Server
 {
 	private:
+		std::string				_server_name;
 		std::string				_password;
 		int						_port_number;
 		int						_socket_fd;
@@ -40,11 +39,12 @@ class Server
 		struct pollfd			_fds[MAX_CONNECTIONS];
 		std::map<int, Client*>	_mapClients;
 		std::map<int, Guest*>	_mapGuest;
-		std::vector<Channel>	_channels;
+		std::vector<Channel >	_channels;
 
 	public:
 		Server();
 		Server(int port_number, std::string password);
+		Server(std::string server_name, int port_number, std::string password);
 		Server &operator=(const Server &assign);
 		Server(const Server &copy);
 
@@ -93,16 +93,34 @@ class Server
 		void exec_n(Message &msg, int newSocketFd, bool addOrRm);
 		
 		int	findChannelByName(std::string channelName);
+
 		Channel& findChannel(std::string channelName);
 		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
 		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
 		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator);
 		void joinNewChannel(int senderFd, std::string channelName);
-		void joinExistChannel(int senderFd, Channel &chnl, std::map<int, Client *>::iterator	&it);
+		void joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator	&it);
 		void checkExistChannel(int senderFd, Message &msg, std::string channelName, int i);
 		void leaveAllChannels(int senderFd);
 		void handleJoinCmd(Message &msg, int senderFd);
 
+		void partFromChannel(int senderFd, std::string channelName);
+		void handlePartCmd(Message &msg, int senderFd);
+
+		// Ishak
+		void			handleTopicCmd(Message &msg, int senderFd);
+		void    		handleNamesCmd(Message &msg, int senderFd);
+		void    		handleListCmd(Message &msg, int senderFd);
+		void    		handleInviteCmd(Message &msg, int senderFd);
+		void    		handleKickCmd(Message &msg, int senderFd);
+		bool			findChannelOperator(std::string sender, Channel chnl);
+		bool 			findUserInChannel(std::string sender, Channel &chnl);
+		bool 			checkIfClientIsMember(Channel &chnl, std::string clientName);
+		bool   			checkInvitedChannels(Client &client, std::string channelName);
+		std::string 	findClientWithNoChannel();
+		Client& 		findClient(std::string nickName);
+		int 			findClientByNick(std::string nickName);
+		void 	WelcomeMsg(int fd);
 		~Server();
 };
 

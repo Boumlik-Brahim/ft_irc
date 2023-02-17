@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Errors_replies.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/16 10:41:54 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +59,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			break;
 		case 407:
 			message = "407 ERR_TOOMANYTARGETS "+err_arg+" :Duplicate recipients. No message delivered";
+			break;
+		case 441:
+			message = "441 ERR_USERNOTINCHANNEL " + err_arg + " : is not on that channel";
 			break;
 		case 444:
 			message = "444 ERR_NOLOGIN "+err_arg+" :User not logged in";

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/16 15:56:16 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Server.hpp"
 
 Server::Server()
+{}
+Server::Server(std::string server_name, int port_number, std::string password) : _server_name(server_name),  _password(password), _port_number(port_number)
 {}
 Server::Server(int port_number, std::string password) : _password(password), _port_number(port_number)
 {}
@@ -107,7 +105,6 @@ void Server::accept_socket()
     int i;
     int    client_lenght;
     int    count;
-    
 
     client_lenght = sizeof(_cli_addr);
     memset(_fds, 0, MAX_CONNECTIONS * sizeof(struct pollfd));
@@ -139,7 +136,7 @@ void Server::accept_socket()
                     numfds++;
                     count = numfds;
                     _mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
-                    _mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client()));
+                    _mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client(_new_socket_fd)));
                 }
                 else
                 {
@@ -195,6 +192,14 @@ void Server::read_write_socket(int newSocketFd, int *count)
 void Server::close_socket(int socket_fd)
 {
 	close(socket_fd);
+}
+
+void Server::WelcomeMsg(int fd)
+{
+	std::string sender = findNickClientByFd(fd);
+	cmd_Resp_Handler1(fd, 1, _server_name, sender);
+	cmd_Resp_Handler1(fd, 2, _server_name, sender);
+	cmd_Resp_Handler1(fd, 3, _server_name, sender);
 }
 
 // Destructor

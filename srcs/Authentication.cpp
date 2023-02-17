@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 10:30:17 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/16 15:43:08 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +72,8 @@ void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
 	tmpClient->setNickName(tmpGuest->getGuestNick()); 
 	tmpClient->setUserName(tmpGuest->getGuestUser()); 
 	tmpClient->setRealName(tmpGuest->getGuestRealName()); 
-    tmpClient->setAuthValid(true);
+  tmpClient->setAuthValid(true);
+  WelcomeMsg(newSocketFd);
 	it = _mapGuest.find(newSocketFd);
 	if (it != _mapGuest.end()){
 		delete it->second;
