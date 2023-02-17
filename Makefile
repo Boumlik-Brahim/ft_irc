@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: izail <izail@student.42.fr>                +#+  +:+       +#+         #
+#    By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/07 10:08:15 by bbrahim           #+#    #+#              #
-#    Updated: 2023/02/08 16:33:07 by izail            ###   ########.fr        #
+#    Updated: 2023/02/17 09:55:06 by bbrahim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))
 
 MAIN := main.cpp
 
-CLASSES = Bot Channel Server Client Message Command Errors_replies Command_responses Split Guest Authentication ChannelCmd Modes ChannelCommands
+CLASSES = Bot Channel Server Client Message Command Errors_replies Command_responses Split Guest Authentication ChannelCmd ChannelCommands
 SRC := $(addprefix srcs/, $(addsuffix .cpp, $(CLASSES)))
 
 OBJ = $(SRC:.cpp=.o)
