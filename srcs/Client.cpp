@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/17 17:45:11 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +43,6 @@ int Client::getClientFd()
 {
 	return (_clientFd);
 }
-
 void Client::setNickName(std::string nickName)
 {
 	_nickName = nickName;
@@ -91,16 +91,6 @@ void Client::setJoinedChannels(std::string joinedChannel)
 {
 	_joinedChannels.push_back(joinedChannel);
 }
-
-bool		Client::getHasChannel(void)
-{
-	return _hasChannel;
-}
-void		Client::setHasChannel(bool hasChannel)
-{
-	_hasChannel = hasChannel;
-}
-
 std::vector<std::string>&	Client::getInvitedChannels(void)
 {
 	return (_invitedChannels);

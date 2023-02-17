@@ -3,8 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/17 15:30:58 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/17 16:37:48 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +89,6 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 			Channel &tmpChannel = findChannel(channelName);
 			for (size_t i = 0; i < tmpChannel.getChannelMembers().size(); i++)
 			{
-				std::cout << "kaydkhol l PRIVMSG f #\n";
 				receivers.push_back(tmpChannel.getChannelMembers().at(i));
 				receiversFd.push_back(findFdClientByNick(tmpChannel.getChannelMembers().at(i), senderFd));
 				message = msg.getArguments()[1];
@@ -168,7 +169,6 @@ std::vector<std::string> splitBySeparator(std::string args, std::string sep)
         args.erase(0, pos + 1);
     }
     newArgs.push_back(args.substr(0, pos));
-	std::cout << "huf hna \n";
     return newArgs;
 }
 
@@ -230,7 +230,6 @@ void Server::backBone(std::string buffer, int newSocketFd)
 	char 	**data;
 
 	data = ft_split(buffer.c_str(), ' ');
-	std::cout << "buf ==" << buffer << std::endl;
 	try{
 		parseMessageFormat(msg, data);
 		if (!msg.getCommand().compare("PASS"))

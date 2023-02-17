@@ -5,6 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/17 15:30:30 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/17 17:44:35 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +77,6 @@ void checkMultiArgs2(Message &msg)
     
 	if (msg.getArguments().at(1).find(',') != std::string::npos)
 	{
-        std::cout << "---" << msg.getArguments().at(1) << std::endl;
-        std::cout << "dkhel lhna \n";
 		tmpArgs = splitBySeparator(msg.getArguments().at(1), ",");
 		msg.setMultiArgs(tmpArgs);
 		msg.erase(msg.getArguments().begin());
@@ -88,7 +88,6 @@ void checkMultiArgs2(Message &msg)
 				msg.setArguments(tmpArgs);
 			}
 		}
-        std::cout << "kochy nadi\n";
 	}
 }
 // Client& Server::findClient(std::string nickName)
@@ -211,21 +210,16 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
             for (size_t i = 0; i < _channels.size(); i++)
             {
                 Channel &tmpChnl = findChannel(_channels.at(i).getChannelName());
-                std::cout << "Channel " << i << " " << tmpChnl.getChannelName() << std::endl;
-                std::cout << "Channel mode s--" << tmpChnl.getIsMode_s() << std::endl;
-                std::cout << "Channel mode p--" << tmpChnl.getIsMode_p() << std::endl;
                 if (!tmpChnl.getIsMode_p() && !tmpChnl.getIsMode_s())
                 {
-                    std::cout << "dkhel hna nchuf\n";
                     ChannelClients = "";
                     for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
-                        ChannelClients += tmpChnl.getChannelMembers().at(i).append(" ");
+                        ChannelClients += tmpChnl.getChannelMembers().at(i);
                     cmd_Resp_Handler1(senderFd, 353, _server_name, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
                 }
             }
         }
         ChannelClients = findClientWithNoChannel();
-        std::cout << "Client without channel ==" << ChannelClients << std::endl;
         if (ChannelClients.size() > 0)
             cmd_Resp_Handler1(senderFd, 353, _server_name, sender, std::string("*") , ChannelClients, std::string(""));    
     }
@@ -252,7 +246,6 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
     // list a single channel and their users
     else if (msg.getArguments().size() > 0)
     {
-        std::cout << "dkhel hna\n";
         channelName = msg.getArguments()[0];
         // check if channel exist
         channelExist = findChannelByName(channelName);
@@ -311,10 +304,8 @@ void    Server::handleListCmd(Message &msg, int senderFd)
     {
         for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
         {
-            std::cout << "dkhel l mulitargs\n";
             channelName = msg.getMultiArgs().at(i);
             channelExist = findChannelByName(channelName);
-            std::cout << "chan exist ==" << channelExist << std::endl;
             if (channelExist)
             {
                 Channel &tmpChnl  = findChannel(channelName);
@@ -381,7 +372,6 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
                 // else the invitation will be sent and the channel will be added to his _invitedChannels
                 else
                 {
-                    std::cout << "hna hna\n";
                     target.setInvitedChannels(tmpChannel.getChannelName());
                     cmd_Resp_Handler1(senderFd, 341, _server_name, sender, tmpChannel.getChannelName(), target.getNickName(), std::string(""));
                     messageForm = ":" + _server_name + " " + sender + " has invited you to " + tmpChannel.getChannelName();
@@ -400,7 +390,6 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
                     errorHandler(senderFd, 443, target.getNickName(), tmpChannel.getChannelName());
                 else
                 {
-                    std::cout << "dkhel hna\n";
                     target.setInvitedChannels(tmpChannel.getChannelName());
                     cmd_Resp_Handler1(senderFd, 341, _server_name, sender, tmpChannel.getChannelName(), target.getNickName(), std::string(""));
                     messageForm = ":" + _server_name + " " + sender + " has invited you to " + tmpChannel.getChannelName();
@@ -416,7 +405,7 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
 
 void    Server::handleKickCmd(Message &msg, int senderFd)
 {
-     std::string     channelName = "";
+    std::string     channelName = "";
     std::string     reason = "";
     std::string     sender = "";
     int             channelExist = 0;
@@ -439,7 +428,6 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
 
     if (channelExist)
     {
-        std::cout << "channel kayna\n";
         Channel &tmpChannel  = findChannel(channelName);
         if (findChannelOperator(sender, tmpChannel))
         {    
