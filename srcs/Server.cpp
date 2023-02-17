@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 18:34:46 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/15 09:30:56 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void Server::accept_socket()
                     numfds++;
                     count = numfds;
                     _mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
-                    _mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client()));
+                    _mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client(_new_socket_fd)));
                 }
                 else
                 {
