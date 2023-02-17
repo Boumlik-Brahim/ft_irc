@@ -6,9 +6,9 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 17:45:11 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../headers/Client.hpp"
 
@@ -91,6 +91,7 @@ void Client::setJoinedChannels(std::string joinedChannel)
 {
 	_joinedChannels.push_back(joinedChannel);
 }
+
 std::vector<std::string>&	Client::getInvitedChannels(void)
 {
 	return (_invitedChannels);

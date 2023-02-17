@@ -79,6 +79,7 @@ class Server
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
 
 		int	findChannelByName(std::string channelName);
+
 		Channel& findChannel(std::string channelName);
 		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
 		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);

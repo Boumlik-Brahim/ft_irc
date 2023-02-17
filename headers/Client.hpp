@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/17 15:31:37 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 15:34:28 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef CLIENT_HPP
+#ifndef CLIENT_HPP
 # define CLIENT_HPP
 
 # include <iostream>
