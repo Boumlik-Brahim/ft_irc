@@ -3,10 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/16 13:41:40 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +82,13 @@ class Server
 		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
 		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator);
 		void joinNewChannel(int senderFd, std::string channelName);
-		void joinExistChannel(int senderFd, Channel &chnl, std::map<int, Client *>::iterator	&it);
+		void joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator	&it);
 		void checkExistChannel(int senderFd, Message &msg, std::string channelName, int i);
 		void leaveAllChannels(int senderFd);
 		void handleJoinCmd(Message &msg, int senderFd);
 
 		void partFromChannel(int senderFd, std::string channelName);
 		void handlePartCmd(Message &msg, int senderFd);
-
 
 		// Ishak
 		void			handleTopicCmd(Message &msg, int senderFd);

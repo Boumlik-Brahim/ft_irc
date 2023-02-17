@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/17 09:54:45 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +112,5 @@ class Channel
 		
 		~Channel();
 };
-
-void checkInviteOnlyChanFlag(Channel chnl, std::string nickname, int senderFd);
 
 #endif

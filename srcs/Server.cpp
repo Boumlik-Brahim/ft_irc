@@ -6,7 +6,6 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/15 09:30:56 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +110,7 @@ void Server::accept_socket()
     int    client_lenght;
     int    count;
     
+
 
     client_lenght = sizeof(_cli_addr);
     memset(_fds, 0, MAX_CONNECTIONS * sizeof(struct pollfd));

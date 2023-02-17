@@ -5,8 +5,6 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 10:28:38 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +67,6 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 	//412
 	if (msg.getArguments().size() < 2)
 		errorHandler(senderFd, 412);
-
 	checkMultiArgs(msg);
 	if (msg.getMultiArgs().size())
 	{

@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/17 10:57:40 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Server.hpp"
 
 /****************************************************************************************************************************************/
+
+void sendReplay(int fd, std::string message)
+{
+	size_t i = 0;
+	while (i != message.length())
+		i += send(fd, message.c_str(), message.length() - i, 0);
+}
 
 Channel& Server::findChannel(std::string channelName)
 {
@@ -38,7 +46,7 @@ void	Server::setChannel(Channel &chnl, std::string channelName, std::string chan
 	chnl.setChannelName(channelName);
 	chnl.setChannelCreator(channelCreator);
 	chnl.setChannelMembers(channelCreator);
-	chnl.setIsMode_o(true);
+	chnl.setIsMode_n(true);
 	chnl.setChannelOperators(channelCreator);
 	chnl.setIsMode_k(true);
 	chnl.setChannelkey(channelkey);
@@ -49,14 +57,20 @@ void	Server::joinNewChannelWithKey(int senderFd, std::string channelName, std::s
 {
 	Channel								chnl;
 	std::map<int, Client *>::iterator	it;
+	std::string							rpl;
+	char								hostname[256];
 
 	it = _mapClients.find(senderFd);
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
 		return (errorHandler(senderFd, 405, channelName));
 	setChannel(chnl, channelName, it->second->getNickName(), channelkey);
 	it->second->setJoinedChannels(channelName);
-	cmd_Resp_Handler(senderFd, 353, "=", channelName, it->second->getNickName());
-	cmd_Resp_Handler(senderFd, 332, channelName, "...");
+	gethostname(hostname, sizeof(hostname));
+	rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " JOIN :" + channelName + "\r\n"
+		+ ":" + it->second->getNickName() + " MODE " + channelName + " +kn\r\n"
+		+ ":irc" + " 353 " + it->second->getNickName() + " = " + channelName + " :@" + it->second->getNickName() + "\r\n" 
+		+ ":irc" + " 366 " + it->second->getNickName() + " " + channelName + " :End of /NAMES list\r\n";
+	sendReplay(senderFd, rpl);
 }
 
 void	Server::setChannel(Channel &chnl, std::string channelName, std::string channelCreator)
@@ -65,53 +79,47 @@ void	Server::setChannel(Channel &chnl, std::string channelName, std::string chan
 	chnl.setChannelCreator(channelCreator);
 	chnl.setChannelMembers(channelCreator);
 	chnl.setChannelOperators(channelCreator);
-	chnl.setIsMode_o(true);
+	chnl.setIsMode_n(true);
 	_channels.push_back(chnl);
 }
-
-/*void	Server::setChannel(Channel &chnl, std::string channelName, std::string channelCreator)
-{
-	chnl.setChannelName(channelName);
-
-	chnl.setChannelMembers(it->second->getNickName());
-	chnl.setChannelOperators(it->second->getNickName());
-	// chnl.setChannelModes("n");
-	chnl.setIsMode_n(true);
-	it->second->setHasChannel(true);
-
-	chnl.setChannelCreator(channelCreator);
-	chnl.setChannelMembers(channelCreator);
-	chnl.setChannelOperators(channelCreator);
-	chnl.setIsMode_o(true);
-
-	_channels.push_back(chnl);
-}*/
 
 void	Server::joinNewChannel(int senderFd, std::string channelName)
 {
 	Channel								chnl;
 	std::map<int, Client *>::iterator	it;
+	std::string							rpl;
+	char								hostname[256];
 
 	it = _mapClients.find(senderFd);
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
 		return (errorHandler(senderFd, 405, channelName));
 	setChannel(chnl, channelName, it->second->getNickName());
 	it->second->setJoinedChannels(channelName);
-	cmd_Resp_Handler(senderFd, 353, "=", channelName, it->second->getNickName());
-	cmd_Resp_Handler(senderFd, 332, channelName, "...");
+	gethostname(hostname, sizeof(hostname));
+	rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " JOIN :" + channelName + "\r\n"
+		+ ":" + it->second->getNickName() + " MODE " + channelName + " +n\r\n"
+		+ ":irc" + " 353 " + it->second->getNickName() + " = " + channelName + " :@" + it->second->getNickName() + "\r\n" 
+		+ ":irc" + " 366 " + it->second->getNickName() + " " + channelName + " :End of /NAMES list\r\n";
+	sendReplay(senderFd, rpl);
 }
 
-void	Server::joinExistChannel(int senderFd, Channel &chnl, std::map<int, Client *>::iterator	&it)
+void	Server::joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator	&it)
 {
+	int			fd;
+	char		hostname[256];
+	std::string	rpl;
+
 	chnl.setChannelMembers(it->second->getNickName());
 	it->second->setJoinedChannels(chnl.getChannelName());
-	if (chnl.getIsMode_s())
-		cmd_Resp_Handler(senderFd, 353, "@", chnl.getChannelName(), it->second->getNickName());
-	else if (chnl.getIsMode_p())
-		cmd_Resp_Handler(senderFd, 353, "*", chnl.getChannelName(), it->second->getNickName());
-	else
-		cmd_Resp_Handler(senderFd, 353, "=", chnl.getChannelName(), it->second->getNickName());
-	cmd_Resp_Handler(senderFd, 332, chnl.getChannelName(), "...");
+	gethostname(hostname, sizeof(hostname));
+	rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " JOIN :" + chnl.getChannelName() + "\r\n"
+		+ ":irc" + " 353 " + it->second->getNickName() + " @ " + chnl.getChannelName() + " :" + it->second->getNickName() + " @" + chnl.getChannelCreator() + "\r\n"
+		+ ":irc" + " 366 " + it->second->getNickName() + " " + chnl.getChannelName() + " :End of /NAMES list\r\n";
+	for(size_t i = 0; i < chnl.getChannelMembers().size(); i++)
+	{
+		fd = findFdClientByNick(chnl.getChannelMembers().at(i));
+		sendReplay(fd, rpl);
+	}
 }
 
 void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelName, int i)
@@ -127,18 +135,18 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 	}
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
 		return (errorHandler(senderFd, 405, channelName));
-	else if (chnl.getIsMode_l())
+	if (chnl.getIsMode_l())
 	{
 		if (chnl.getChannelMembers().size() >= (size_t)chnl.getChannelLimit())/*ERR_CHANNELISFULL*/
 			return (errorHandler(senderFd, 471, chnl.getChannelName()));
 	}
-	else if (chnl.getIsMode_i())
+	if (chnl.getIsMode_i())
 	{
 		std::vector<std::string>::iterator	result = std::find(chnl.getInvitedMembers().begin(), chnl.getInvitedMembers().end(), it->second->getNickName());
 		if (result == chnl.getInvitedMembers().end())
 			return (errorHandler(senderFd, 473, chnl.getChannelName()));/*ERR_INVITEONLYCHAN*/
 	}
-	else if (chnl.getIsMode_b())
+	if (chnl.getIsMode_b())
 	{
 		for(size_t i = 0; i < chnl.getChannelBannedMembers().size(); i++)
 		{
@@ -146,7 +154,7 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 				return (errorHandler(senderFd, 474,  chnl.getChannelName()));/*ERR_BANNEDFROMCHAN*/
 		}
 	}
-	else if (chnl.getIsMode_k())
+	if (chnl.getIsMode_k())
 	{
 		if ((!msg.getMultiArgs().empty() && !msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() > 1))
 		{
@@ -156,20 +164,29 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 		else if ((!msg.getMultiArgs().empty() && msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() == 1))
 			return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
 	}
-	joinExistChannel(senderFd, chnl, it);
+	joinExistChannel(chnl, it);
 }
 
 void	Server::leaveAllChannels(int senderFd)
 {
 	std::map<int, Client *>::iterator	it;
+	std::string							rpl;
+	int									fd;
+	char								hostname[256];
 
+	gethostname(hostname, sizeof(hostname));
 	it = _mapClients.find(senderFd);
 	for(size_t i = 0; i < it->second->getJoinedChannels().size(); i++)
 	{
 		Channel &chnl = findChannel(it->second->getJoinedChannels().at(i));
+		rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " PART :" + chnl.getChannelName() + "\r\n";
+		for(size_t i = 0; i < chnl.getChannelMembers().size(); i++)
+		{
+			fd = findFdClientByNick(chnl.getChannelMembers().at(i));
+			sendReplay(fd, rpl);
+		}
 		std::vector<std::string>::iterator	channelMember = std::find(chnl.getChannelMembers().begin(), chnl.getChannelMembers().end(), it->second->getNickName());
 		chnl.getChannelMembers().erase(channelMember);
-		cmd_Resp_Handler(senderFd, 404, chnl.getChannelName());
 	}
 	it->second->getJoinedChannels().clear();
 }
@@ -180,8 +197,11 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 		return (errorHandler(senderFd , 451));
 	if (msg.getArguments().empty()) /*ERR_NEEDMOREPARAMS*/
 		return (errorHandler(senderFd, 461, msg.getCommand()));
-	if (msg.getArguments().at(0) == "0")
+	if (msg.getArguments().at(0) == "#0")
+	{
 		leaveAllChannels(senderFd);
+		return ;
+	}
 	checkMultiArgs(msg);
 	checkChnlNames(msg.getMultiArgs(), senderFd);
 	if (!msg.getMultiArgs().empty())
@@ -221,11 +241,20 @@ void Server::partFromChannel(int senderFd, std::string channelName)
 {
 	std::map<int, Client *>::iterator	it;
 	std::string							message;
+	int									fd;
+	char								hostname[256];
 
 	if(!findChannelByName(channelName))
 		return (errorHandler(senderFd, 403, channelName)); /*ERR_NOSUCHCHANNEL*/
 	it = _mapClients.find(senderFd);
 	Channel &chnl = findChannel(channelName);
+	gethostname(hostname, sizeof(hostname));
+	std::string rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " PART :" + chnl.getChannelName() + "\r\n";
+	for(size_t i = 0; i < chnl.getChannelMembers().size(); i++)
+	{
+		fd = findFdClientByNick(chnl.getChannelMembers().at(i));
+		sendReplay(fd, rpl);
+	}
 	std::vector<std::string>::iterator	channelMember = std::find(chnl.getChannelMembers().begin(), chnl.getChannelMembers().end(), it->second->getNickName());
 	if (channelMember == chnl.getChannelMembers().end())
 		return (errorHandler(senderFd, 442, "channel")); /*ERR_NOTONCHANNEL*/
@@ -236,6 +265,7 @@ void Server::partFromChannel(int senderFd, std::string channelName)
 
 void  Server::handlePartCmd(Message &msg, int senderFd)
 {
+
 	if (!_mapClients[senderFd]->getIsAuthValid())	
 		return (errorHandler(senderFd , 451));
 	if (msg.getArguments().empty()) /*ERR_NEEDMOREPARAMS*/
@@ -245,22 +275,10 @@ void  Server::handlePartCmd(Message &msg, int senderFd)
 	if (!msg.getMultiArgs().empty())
 	{
 		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
-		{
 			partFromChannel(senderFd, msg.getMultiArgs().at(i));
-			if(!msg.getArguments().empty())
-				cmd_Resp_Handler(senderFd, 404, msg.getMultiArgs().at(i), msg.getArguments().at(0));
-			else
-				cmd_Resp_Handler(senderFd, 404, msg.getMultiArgs().at(i));
-		}
 	}
 	else
-	{
 		partFromChannel(senderFd, msg.getArguments().at(0));
-		if(msg.getArguments().size() > 1)
-			cmd_Resp_Handler(senderFd, 404, msg.getArguments().at(0), msg.getArguments().at(1));
-		else
-			cmd_Resp_Handler(senderFd, 404, msg.getArguments().at(0));
-	}
 }
 
 /****************************************************************************************************************************************/

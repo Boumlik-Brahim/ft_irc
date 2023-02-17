@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 16:34:29 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +26,6 @@ class Client
 		std::string					_realName;
 		int							_clientFd;
 		bool						_isAuthValid;
-    	bool		       			_hasChannel;
 		int							_clientMaxnumOfChannels;
 		std::vector<std::string>	_joinedChannels;
 		std::vector<std::string>	_invitedChannels;
@@ -57,6 +55,7 @@ class Client
 		std::vector<std::string>&	getInvitedChannels(void);
         void						setJoinedChannels(std::string joinedChannel);
         void						setInvitedChannels(std::string invitedChannel);
+
 		~Client();
 };
 
