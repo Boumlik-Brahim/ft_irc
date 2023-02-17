@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/16 10:14:39 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/16 15:56:16 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,40 +151,6 @@ void Server::accept_socket()
     }
 }
 
-void Server::freeClient(int newSocketFd)
-{
-	std::map<int, Client*>::iterator	itClient = _mapClients.find(newSocketFd);
-	std::string 						clientNick = itClient->second->getNickName();
-	std::vector<std::string> 			chnlVec = itClient->second->getJoinedChannels();
-
-	for (std::vector<std::string>::iterator it = chnlVec.begin(); it != chnlVec.end(); it++)
-	{
-		Channel &tmpChnl = findChannel(*it);
-		for (std::vector<std::string>::iterator it = tmpChnl.getChannelMembers().begin(); it != tmpChnl.getChannelMembers().end(); it++){
-			if (*it == clientNick){
-				tmpChnl.getChannelMembers().erase(it);
-				break;
-			}
-		}
-		for (std::vector<std::string>::iterator it = tmpChnl.getChannelOperators().begin(); it != tmpChnl.getChannelOperators().end(); it++){
-			if (*it == clientNick){
-				tmpChnl.getChannelOperators().erase(it);
-				break;
-			}
-		}
-		for (std::vector<std::string>::iterator it = tmpChnl.getInvitedMembers().begin(); it != tmpChnl.getInvitedMembers().end(); it++){
-			if (*it == clientNick){
-				tmpChnl.getInvitedMembers().erase(it);
-				break;
-			}
-		}
-	}
-	if (itClient != _mapClients.end()){
-		delete itClient->second;
-		_mapClients.erase(itClient);
-	}
-}
-
 void Server::read_write_socket(int newSocketFd, int *count)
 {
 	int		n;
@@ -202,11 +168,9 @@ void Server::read_write_socket(int newSocketFd, int *count)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
-		freeClient(newSocketFd);
-		close(newSocketFd);
-		std::cout << "-------> " << *count << std::endl;
-		if ((*count) == 1)
-			exit(EXIT_SUCCESS);
+		handleQuitCmd(newSocketFd);
+		// freeClient(newSocketFd);
+		// close(newSocketFd);
 		return ;
 	}
 	if (n > 1)

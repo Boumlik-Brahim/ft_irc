@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:22:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/15 16:27:12 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/16 16:18:15 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,14 +221,8 @@ void Server::backBone(std::string buffer, int newSocketFd)
 			handleNickCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("USER"))
 			handleUserCmd(msg, newSocketFd);
-		else if (!msg.getCommand().compare("OPER"))
-			std::cout << "i got the oper" << std::endl;
-		else if (!msg.getCommand().compare("SERVICE"))
-			std::cout << "i got the service" << std::endl;
 		else if (!msg.getCommand().compare("QUIT"))
-			std::cout << "i got the quit" << std::endl;
-		else if (!msg.getCommand().compare("SQUIT"))
-			std::cout << "i got the squit" << std::endl;
+			handleQuitCmd(newSocketFd);
 		else if (!msg.getCommand().compare("JOIN"))
 			handleJoinCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("PART"))
