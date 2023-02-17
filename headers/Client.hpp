@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/17 15:31:38 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef CLIENT_HPP
+#ifndef CLIENT_HPP
 # define CLIENT_HPP
 
 # include <iostream>
@@ -37,8 +38,8 @@ class Client
 		Client(const Client &copy);
 		Client & operator=(const Client &assign);
 
-		bool		getHasChannel(void);
-		void		setHasChannel(bool hasChannel);
+		// bool		getHasChannel(void);
+		// void		setHasChannel(bool hasChannel);
 		std::string					getNickName(void);
 		void						setNickName(std::string nickName);
 		std::string					getUserName(void) const;

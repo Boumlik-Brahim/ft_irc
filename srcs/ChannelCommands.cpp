@@ -219,7 +219,9 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
                     std::cout << "dkhel hna nchuf\n";
                     ChannelClients = "";
                     for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
-                        ChannelClients += tmpChnl.getChannelMembers().at(i).append(" ");
+                    {
+                        ChannelClients += tmpChnl.getChannelMembers().at(i);
+                    }
                     cmd_Resp_Handler1(senderFd, 353, _server_name, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
                 }
             }
