@@ -228,6 +228,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 	char 	**data;
 
 	data = ft_split(buffer.c_str(), ' ');
+	std::cout << "buf ==" << buffer << std::endl;
 	try{
 		parseMessageFormat(msg, data);
 		if (!msg.getCommand().compare("PASS"))
