@@ -6,7 +6,6 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 09:37:33 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +21,20 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 		case 437:
 			message = "437 ERR_UNAVAILRESOURCE <" + err_arg + "/" + err_arg2 + "> :Nick/channel is temporarily unavailable";
 			break;
+		case 441:
+			message = "441 ERR_USERNOTINCHANNEL " + err_arg + " " + err_arg2 + " :They aren't on that channel";
+			break;
 		case 443:
 			message = "443 ERR_USERONCHANNEL " + err_arg2 + err_arg + " :is already on channel";
 			break;
 		case 424:
 			message = "424 ERR_FILEERROR:File error doing " + err_arg2 + " on " + err_arg+"";
 			break;
-		case 472:
-			message = "472 ERR_UNKNOWNMODE " + err_arg + " :is unknown mode char to me for " + err_arg2+"";
-			break;
 		case 478:
 			message = "478 ERR_BANLISTFULL " + err_arg + err_arg2 + " :Channel list is full";
 			break;
 		default:
-			std::cout << "Invalid error code" << std::endl;
+			std::cout << "Invalid error code" << err_code << std::endl;
 	}
 	throw message;
 }
@@ -75,6 +74,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			break;
 		case 461:
 			message = "461 ERR_NEEDMOREPARAMS "+err_arg+" :Not enough parameters";
+			break;
+		case 472:
+			message = "472 ERR_UNKNOWNMODE " + err_arg + " :is unknown mode char to me";
 			break;
 		case 402:
 			message = "402 ERR_NOSUCHSERVER "+err_arg+" :No such server";
@@ -134,7 +136,7 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			message = "415 ERR_BADMASK "+err_arg+" :Bad Server/host mask";
 			break;
 		default:
-			std::cout << "Invalid error code" << std::endl;
+			std::cout << "Invalid error code" << err_code << std::endl;
 	}
 	throw message;
 }
@@ -206,7 +208,7 @@ void errorHandler(int sender_fd, int err_code)
 			message = "502 ERR_USERSDONTMATCH:Cannot change mode for other users";
 			break;
 		default:
-			std::cout << "Invalid error code" << std::endl;
+			std::cout << "Invalid error code" << err_code << std::endl;
 	}
 	throw message;
 }

@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:14 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 16:02:00 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/15 09:06:25 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,33 @@ void Message::setIsValidCommand(bool isValid)
 void Message::erase(std::vector<std::string>::iterator it)
 {
 	_arguments.erase(it);
+}
+
+std::vector<char>& Message::getVecAddMode(void)
+{
+	return _vecAddMode;
+}
+void Message::setVecAddMode(char m)
+{
+	_vecAddMode.push_back(m);
+}
+std::vector<char>& Message::getVecRmMode(void)
+{
+	return _vecRmMode;
+}
+void Message::setVecRmMode(char m)
+{
+	_vecRmMode.push_back(m);
+}
+
+void Message::setIsAddOrRm(bool trueOrFalse)
+{
+	_isAddOrRm = trueOrFalse;
+}
+
+bool Message::getIsAddOrRm(void) const
+{
+	return _isAddOrRm;
 }
 
 Message::~Message()

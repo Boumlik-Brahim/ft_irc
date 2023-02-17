@@ -5,8 +5,6 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/14 13:13:04 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 13:13:07 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +21,9 @@ class Message
 		std::vector<std::string>	_arguments;
 		std::vector<std::string>	_multiArgs;
 		std::string					_command;
+		std::vector<char>			_vecAddMode;
+		std::vector<char>			_vecRmMode;
+		bool						_isAddOrRm;
 		bool						_isValidCommad;
 
 	public:
@@ -38,6 +39,12 @@ class Message
 		void						setMultiArgs(std::vector<std::string> multiArgs);
 		bool						getIsValidCommand(void) const;
 		void						setIsValidCommand(bool isValid);
+		std::vector<char>&			getVecAddMode(void);
+		void						setVecAddMode(char m);
+		std::vector<char>&			getVecRmMode(void);
+		void						setVecRmMode(char m);
+		void						setIsAddOrRm(bool trueOrFalse);
+		bool						getIsAddOrRm(void) const;
 
 		void erase(std::vector<std::string>::iterator it);
 		~Message();

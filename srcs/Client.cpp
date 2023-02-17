@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 18:23:56 by bbrahim           #+#    #+#             */
 /*                                                                            */
 /* ************************************************************************** */
 
 
+
 #include "../headers/Client.hpp"
 
-Client::Client()
+Client::Client(): _clientMaxnumOfChannels(2), buf("")
 {}
 
 Client::Client(int newSocketFd): _clientFd(newSocketFd), _clientMaxnumOfChannels(2), buf("") 
 {}
+
 Client::Client(const Client &copy) : _nickName(copy._nickName), _userName(copy._userName), _realName(copy._realName), _clientFd(copy._clientFd), _isAuthValid(copy._isAuthValid), _clientMaxnumOfChannels(copy._clientMaxnumOfChannels), _joinedChannels(copy._joinedChannels), buf("")
 {}
 
@@ -100,6 +99,7 @@ void						Client::setInvitedChannels(std::string invitedChannel)
 {
 	this->_invitedChannels.push_back(invitedChannel);
 }
+
 
 Client::~Client()
 {}

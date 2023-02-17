@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 13:22:19 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +83,7 @@ void Channel::setChannelLimit(int channelLimit)
 {
 	_channelLimit = channelLimit;
 }
+
 std::vector<std::string>& Channel::getChannelMembers(void)
 {
     return (_channelMembers);
@@ -124,6 +124,7 @@ void	Channel::setChannelTopic(std::string channelTopic)
 {
 	_channelTopic = channelTopic;
 }
+
 bool Channel::getIsMode_O(void) const
 {
 	return (_isMode_O);

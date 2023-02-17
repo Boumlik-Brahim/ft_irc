@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 09:54:45 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +25,16 @@ class Channel
 	private:
 		std::string								_channelName;
 		std::string								_channelCreator;
-		std::string								_channelkey;
 		std::string								_channelTopic;
-		int										_channelLimit;
+		std::string								_channelkey;
+    int										_channelLimit;
+		std::vector<std::string>				_channelMemberAndOperators;
 		std::vector<std::string>				_channelMembers;
 		std::vector<std::string>				_channelOperators;
 		std::vector<std::string>				_channelBannedMembers;
 		std::vector<std::string>				_invitedMembers;
+
+
 		bool 									_isMode_O;
         bool 									_isMode_o;
         bool 									_isMode_v;
@@ -66,6 +68,7 @@ class Channel
 		void						setChannelTopic(std::string channelTopic);
 		int							getChannelLimit(void) const;
 		void						setChannelLimit(int channelLimit);
+
 		std::vector<std::string>& 	getChannelMembers(void);
 		void 						setChannelMembers(std::string channelMember);
 		std::vector<std::string>& 	getChannelOperators(void);

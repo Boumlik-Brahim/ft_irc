@@ -3,10 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/17 15:30:58 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 16:37:48 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,20 +236,14 @@ void Server::backBone(std::string buffer, int newSocketFd)
 			handleNickCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("USER"))
 			handleUserCmd(msg, newSocketFd);
-		else if (!msg.getCommand().compare("OPER"))
-			std::cout << "i got the oper" << std::endl;
-		else if (!msg.getCommand().compare("SERVICE"))
-			std::cout << "i got the service" << std::endl;
 		else if (!msg.getCommand().compare("QUIT"))
-			std::cout << "i got the quit" << std::endl;
-		else if (!msg.getCommand().compare("SQUIT"))
-			std::cout << "i got the squit" << std::endl;
+			handleQuitCmd(newSocketFd);
 		else if (!msg.getCommand().compare("JOIN"))
 			handleJoinCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("PART"))
 			handlePartCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("MODE"))
-			std::cout << "i got the mode" << std::endl;
+			handleModeCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("TOPIC"))
 			handleTopicCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("NAMES"))

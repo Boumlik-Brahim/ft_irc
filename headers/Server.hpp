@@ -3,10 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/17 15:31:26 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 15:35:27 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +12,7 @@
 # define SERVER_HPP
 
 # include <iostream>
+#include <cstdlib>
 # include <string>
 # include <unistd.h>
 # include <sys/types.h>
@@ -77,7 +76,22 @@ class Server
 		void handleNickCmd(Message &msg, int newSocketFd);
 		void handleUserCmd(Message &msg, int newSocketFd);
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
-
+		void handleModeCmd(Message &msg, int newSocketFd);
+		void handleQuitCmd(int newSocketFd);
+		
+		void checkModes(Message &msg, int newSocketFd);
+		void checkIfClientExist(int newSocketFd, std::string nickName);
+		void executeModes(Message &msg, int newSocketFd);
+		void execMode(Message &msg, char mode, int newSocketFd, bool addOrRm);
+		void exec_o(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_k(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_l(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_i(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_s(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_p(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_t(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_n(Message &msg, int newSocketFd, bool addOrRm);
+		
 		int	findChannelByName(std::string channelName);
 
 		Channel& findChannel(std::string channelName);

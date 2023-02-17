@@ -3,10 +3,6 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/17 15:31:13 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 17:45:53 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +147,7 @@ void Server::accept_socket()
         }
     }
 }
+
 void Server::read_write_socket(int newSocketFd, int *count)
 {
 	int		n;
@@ -168,10 +165,9 @@ void Server::read_write_socket(int newSocketFd, int *count)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
-		_mapClients.erase(newSocketFd);
-		close(newSocketFd);
-		if ((*count) == 1)
-			exit(EXIT_SUCCESS);
+		handleQuitCmd(newSocketFd);
+		// freeClient(newSocketFd);
+		// close(newSocketFd);
 		return ;
 	}
 	if (n > 1)
