@@ -3,12 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/05 16:41:32 by bbrahim           #+#    #+#             */
+/*   Created: 2023/02/17 15:31:13 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/17 17:45:53 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../headers/Server.hpp"
 
@@ -109,8 +109,6 @@ void Server::accept_socket()
     int i;
     int    client_lenght;
     int    count;
-    
-
 
     client_lenght = sizeof(_cli_addr);
     memset(_fds, 0, MAX_CONNECTIONS * sizeof(struct pollfd));
@@ -132,7 +130,6 @@ void Server::accept_socket()
                 if (_fds[i].fd == _socket_fd)
                 {
                     _new_socket_fd = accept(_socket_fd, (struct sockaddr *)&_cli_addr, (socklen_t *)&client_lenght);
-                    std::cout << "new connection from: " << _new_socket_fd << std::endl;
                     if (_new_socket_fd < 0)
                     {
                         std::cout << "ERROR ON ACCEPT" << std::endl;
@@ -148,7 +145,6 @@ void Server::accept_socket()
                 else
                 {
                     sock = _fds[i].fd;
-                    std::cout << "new request from: " << sock << std::endl;
                     read_write_socket(sock, &count);
                 }
             }

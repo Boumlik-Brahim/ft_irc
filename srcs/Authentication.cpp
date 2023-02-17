@@ -6,7 +6,6 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 10:30:17 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/17 15:31:06 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +64,7 @@ void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
 	tmpClient->setNickName(tmpGuest->getGuestNick()); 
 	tmpClient->setUserName(tmpGuest->getGuestUser()); 
 	tmpClient->setRealName(tmpGuest->getGuestRealName());
-    tmpClient->setAuthValid(true);
-	// tmpClient->setHasChannel(false);
+  tmpClient->setAuthValid(true);
 	WelcomeMsg(newSocketFd);
 }
 

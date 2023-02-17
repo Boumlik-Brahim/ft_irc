@@ -5,6 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/17 15:31:26 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/17 15:35:27 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +78,8 @@ class Server
 		void handleUserCmd(Message &msg, int newSocketFd);
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
 
-		int		findChannelByName(std::string channelName);
+		int	findChannelByName(std::string channelName);
+
 		Channel& findChannel(std::string channelName);
 		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
 		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
