@@ -6,11 +6,10 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 13:17:04 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_HPP
+# ifndef CLIENT_HPP
 # define CLIENT_HPP
 
 # include <iostream>
@@ -27,14 +26,14 @@ class Client
 		std::string					_realName;
 		int							_clientFd;
 		bool						_isAuthValid;
-		bool						_hasChannel;
 		int							_clientMaxnumOfChannels;
 		std::vector<std::string>	_joinedChannels;
-
+		std::vector<std::string>	_invitedChannels;
 	public:
 		std::string	buf;
 
 		Client();
+		Client(int newSocketFd);
 		Client(const Client &copy);
 		Client & operator=(const Client &assign);
 
@@ -53,7 +52,9 @@ class Client
 		int							getClientMaxnumOfChannels(void) const;
 		void						setClientMaxnumOfChannels(int clientMaxnumOfChannels);
 		std::vector<std::string>&	getJoinedChannels(void);
+		std::vector<std::string>&	getInvitedChannels(void);
         void						setJoinedChannels(std::string joinedChannel);
+        void						setInvitedChannels(std::string invitedChannel);
 
 		~Client();
 };

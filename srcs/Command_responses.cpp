@@ -196,7 +196,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             message = "325 RPL_UNIQOPIS <channel>" + cmd_resp_arg + " <nickname>" + cmd_resp_arg2;
             break;
         case 332 :
-            message = "332 RPL_TOPIC " + cmd_resp_arg + " :" + cmd_resp_arg2;
+            message = "332 RPL_TOPIC " + cmd_resp_arg + " " + cmd_resp_arg2;
             break;
         case 341 :
             message = "341 RPL_INVITING <channel>" + cmd_resp_arg + " <nick>" + cmd_resp_arg2;
@@ -380,7 +380,13 @@ void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName,
         case 322 :
             message = ":" + serverName + " 322 " + nickName + " " + channelName + " " + arg2 + " " + arg3;
             break;
+        case 341 :
+            message = ":" + serverName + " 341 " + nickName + " " + arg2 + "  " + channelName;
+            break;
         case 353 :
+            message = ":" + serverName + " 353 " + nickName + " = " + channelName + " : " + arg2;
+            break;
+        case 352 :
             message = ":" + serverName + " 353 " + nickName + " = " + channelName + " : " + arg2;
             break;
         case 366 :

@@ -3,10 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/14 13:11:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/16 18:38:56 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +49,7 @@ std::string     Server::findNickClientByFd(int sender)
 
 void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 {
-	std::string 				sender;
+    std::string 				sender;
     std::string 				cmd = msg.getCommand();
     std::vector<std::string> 	receivers;
     std::string 				message;
@@ -69,7 +67,6 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 	//412
 	if (msg.getArguments().size() < 2)
 		errorHandler(senderFd, 412);
-
 	checkMultiArgs(msg);
 	if (msg.getMultiArgs().size())
 	{
@@ -90,6 +87,7 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 			Channel &tmpChannel = findChannel(channelName);
 			for (size_t i = 0; i < tmpChannel.getChannelMembers().size(); i++)
 			{
+				std::cout << "kaydkhol l PRIVMSG f #\n";
 				receivers.push_back(tmpChannel.getChannelMembers().at(i));
 				receiversFd.push_back(findFdClientByNick(tmpChannel.getChannelMembers().at(i), senderFd));
 				message = msg.getArguments()[1];
@@ -105,7 +103,6 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 		messageFormat = ":"+ sender+ " " +cmd + " " + receivers.at(0) + " " + message;
     	sendMessage(receiversFd.at(0), messageFormat);
 	}
-
 }
 
 void  Server::handleNoticeCmd(Message &msg, int senderFd)
@@ -171,6 +168,7 @@ std::vector<std::string> splitBySeparator(std::string args, std::string sep)
         args.erase(0, pos + 1);
     }
     newArgs.push_back(args.substr(0, pos));
+	std::cout << "huf hna \n";
     return newArgs;
 }
 
@@ -193,6 +191,7 @@ void checkMultiArgs(Message &msg)
 		}
 	}
 }
+
 
 void parseMessageFormat(Message &msg, char **data)
 {
@@ -231,6 +230,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 	char 	**data;
 
 	data = ft_split(buffer.c_str(), ' ');
+	std::cout << "buf ==" << buffer << std::endl;
 	try{
 		parseMessageFormat(msg, data);
 		if (!msg.getCommand().compare("PASS"))
@@ -258,11 +258,11 @@ void Server::backBone(std::string buffer, int newSocketFd)
 		else if (!msg.getCommand().compare("NAMES"))
 			handleNamesCmd(msg,newSocketFd);
 		else if (!msg.getCommand().compare("LIST"))
-			std::cout << "i got the names" << std::endl;
+			handleListCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("INVITE"))
-			std::cout << "i got the names" << std::endl;
+			handleInviteCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("KICK"))
-			std::cout << "i got the kick" << std::endl;
+			handleKickCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("PRIVMSG"))
 			handlePrivmsgCmd(msg, newSocketFd);
 		else if (!msg.getCommand().compare("NOTICE"))
