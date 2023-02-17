@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:37:22 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/14 15:04:59 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/16 13:41:40 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ class Server
 		void handleUserCmd(Message &msg, int newSocketFd);
 		void handleWhoIsCmd(Message &msg, int newSocketFd);
 
-		int	findChannelByName(std::string channelName);
+		bool	findChannelByName(std::string channelName);
 		Channel& findChannel(std::string channelName);
 		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
 		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
@@ -98,11 +98,14 @@ class Server
 		void    		handleNamesCmd(Message &msg, int senderFd);
 		void    		handleListCmd(Message &msg, int senderFd);
 		void    		handleInviteCmd(Message &msg, int senderFd);
-		int				findChannelOperator(std::string sender, Channel chnl);
-		int 			findUserInChannel(std::string sender, Channel &chnl);
+		void    		handleKickCmd(Message &msg, int senderFd);
+		bool			findChannelOperator(std::string sender, Channel chnl);
+		bool 			findUserInChannel(std::string sender, Channel &chnl);
 		bool 			checkIfClientIsMember(Channel &chnl, std::string clientName);
+		bool   			checkInvitedChannels(Client &client, std::string channelName);
 		std::string 	findClientWithNoChannel();
 		Client& 		findClient(std::string nickName);
+		int 			findClientByNick(std::string nickName);
 		void 	WelcomeMsg(int fd);
 		~Server();
 };
