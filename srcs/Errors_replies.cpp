@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Errors_replies.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/07 14:33:27 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/17 09:37:33 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 	{
 		case 437:
 			message = "437 ERR_UNAVAILRESOURCE <" + err_arg + "/" + err_arg2 + "> :Nick/channel is temporarily unavailable";
-			break;
-		case 441:
-			message = "441 ERR_USERNOTINCHANNEL " + err_arg + err_arg2 + " :They aren't on that channel";
 			break;
 		case 443:
 			message = "443 ERR_USERONCHANNEL " + err_arg2 + err_arg + " :is already on channel";
@@ -63,6 +60,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			break;
 		case 407:
 			message = "407 ERR_TOOMANYTARGETS "+err_arg+" :Duplicate recipients. No message delivered";
+			break;
+		case 441:
+			message = "441 ERR_USERNOTINCHANNEL " + err_arg + " : is not on that channel";
 			break;
 		case 444:
 			message = "444 ERR_NOLOGIN "+err_arg+" :User not logged in";
