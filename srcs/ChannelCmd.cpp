@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 18:43:52 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/19 18:56:12 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	Server::setChannel(Channel &chnl, std::string channelName, std::string chan
 	chnl.setChannelName(channelName);
 	chnl.setChannelCreator(channelCreator);
 	chnl.setChannelMembers(channelCreator);
+	chnl.setIsMode_s(true);
 	chnl.setIsMode_n(true);
 	chnl.setChannelOperators(channelCreator);
 	chnl.setIsMode_k(true);
@@ -79,6 +80,7 @@ void	Server::setChannel(Channel &chnl, std::string channelName, std::string chan
 	chnl.setChannelCreator(channelCreator);
 	chnl.setChannelMembers(channelCreator);
 	chnl.setChannelOperators(channelCreator);
+	chnl.setIsMode_s(true);
 	chnl.setIsMode_n(true);
 	_channels.push_back(chnl);
 }
@@ -135,15 +137,10 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 	}
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
 		return (errorHandler(senderFd, 405, channelName));
-	if (chnl.getIsMode_l())
-	{
-		if (chnl.getChannelMembers().size() >= (size_t)chnl.getChannelLimit())/*ERR_CHANNELISFULL*/
-			return (errorHandler(senderFd, 471, chnl.getChannelName()));
-	}
 	if (chnl.getIsMode_i())
 	{
-		std::vector<std::string>::iterator	result = std::find(chnl.getInvitedMembers().begin(), chnl.getInvitedMembers().end(), it->second->getNickName());
-		if (result == chnl.getInvitedMembers().end())
+		std::vector<std::string>::iterator	result = std::find(it->second->getInvitedChannels().begin() , it->second->getInvitedChannels().end(), chnl.getChannelName());
+		if (result == it->second->getInvitedChannels().end())
 			return (errorHandler(senderFd, 473, chnl.getChannelName()));/*ERR_INVITEONLYCHAN*/
 	}
 	if (chnl.getIsMode_b())
@@ -153,6 +150,11 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 			if (chnl.getChannelBannedMembers().at(i) == it->second->getNickName())
 				return (errorHandler(senderFd, 474,  chnl.getChannelName()));/*ERR_BANNEDFROMCHAN*/
 		}
+	}
+	if (chnl.getIsMode_l())
+	{
+		if (chnl.getChannelMembers().size() >= (size_t)chnl.getChannelLimit())/*ERR_CHANNELISFULL*/
+			return (errorHandler(senderFd, 471, chnl.getChannelName()));
 	}
 	if (chnl.getIsMode_k())
 	{
@@ -195,7 +197,7 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 {
 	if (!_mapClients[senderFd]->getIsAuthValid())	
 		return (errorHandler(senderFd , 451));
-	if (msg.getArguments().empty()) /*ERR_NEEDMOREPARAMS*/
+	if (msg.getArguments().empty() || msg.getArguments().at(0) == "#") /*ERR_NEEDMOREPARAMS*/
 		return (errorHandler(senderFd, 461, msg.getCommand()));
 	if (msg.getArguments().at(0) == "#0")
 	{
@@ -207,7 +209,7 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 	if (!msg.getMultiArgs().empty())
 	{
 		if (msg.getMultiArgs().size() > 2)/*ERR_TOOMANYTARGETS*/
-			return (errorHandler(senderFd, 407, msg.getMultiArgs().at(0), "reduce the number of targets and try the request again"));
+			return (errorHandler(senderFd, 407, "reduce the number of targets and try the request again"));
 		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
 		{
 			if (findChannelByName(msg.getMultiArgs().at(i)))
