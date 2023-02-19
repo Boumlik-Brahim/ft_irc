@@ -91,6 +91,8 @@ class Server
 		void exec_p(Message &msg, int newSocketFd, bool addOrRm);
 		void exec_t(Message &msg, int newSocketFd, bool addOrRm);
 		void exec_n(Message &msg, int newSocketFd, bool addOrRm);
+		void exec_b(Message &msg, int newSocketFd, bool addOrRm);
+
 		
 		int	findChannelByName(std::string channelName);
 
