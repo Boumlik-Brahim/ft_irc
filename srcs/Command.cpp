@@ -3,8 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/17 18:57:58 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/19 13:48:59 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +192,6 @@ void checkMultiArgs(Message &msg)
 	}
 }
 
-
 void parseMessageFormat(Message &msg, char **data)
 {
 	std::vector<std::string> args;
@@ -228,7 +229,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 	char 	**data;
 
 	data = ft_split(buffer.c_str(), ' ');
-	std::cout << "buf ==" << buffer << std::endl;
+	std::cout << buffer << std::endl;
 	try{
 		parseMessageFormat(msg, data);
 		if (!msg.getCommand().compare("PASS"))

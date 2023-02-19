@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Errors_replies.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
+/*   Created: 2023/02/17 18:58:07 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/19 15:08:45 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +59,7 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			message = "433 ERR_NICKNAMEINUSE "+err_arg+" :Nickname is already in use";
 			break;
 		case 407:
-			message = "407 ERR_TOOMANYTARGETS "+err_arg+" :Duplicate recipients. No message delivered";
+			message = "407 ERR_TOOMANYTARGETS recipients." +err_arg ;
 			break;
 		case 441:
 			message = "441 ERR_USERNOTINCHANNEL " + err_arg + " : is not on that channel";
