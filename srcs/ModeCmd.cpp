@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:10:19 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/16 14:02:05 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/19 20:10:30 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,49 @@ void Server::exec_l(Message &msg, int newSocketFd, bool addOrRm)
     }
 }
 
+void Server::exec_b(Message &msg, int newSocketFd, bool addOrRm)
+{
+    Channel     &tmpChannel = findChannel(msg.getArguments().at(0));
+    std::string senderNick = findNickClientByFd(newSocketFd);
+    std::vector<std::string>::iterator itSender = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), senderNick);
+
+    if (msg.getArguments().size() == 1)
+        errorHandler(newSocketFd, 461, msg.getCommand()); //Need More Arguments
+    std::vector<std::string>::iterator itReceiver = std::find(tmpChannel.getChannelBannedMembers().begin(), tmpChannel.getChannelBannedMembers().end(), msg.getArguments().at(1));
+    std::vector<std::string>::iterator itReceiver1 = std::find(tmpChannel.getChannelMembers().begin(), tmpChannel.getChannelMembers().end(), msg.getArguments().at(1));
+    std::vector<std::string>::iterator itReceiver2 = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), msg.getArguments().at(1));
+    
+    if (addOrRm == true){
+        if (itSender != tmpChannel.getChannelOperators().end()){
+            if (itReceiver1 != tmpChannel.getChannelMembers().end())
+            {
+                tmpChannel.setChannelBannedMembers(msg.getArguments().at(1));
+                tmpChannel.getChannelMembers().erase(itReceiver1);
+                if (itReceiver2 != tmpChannel.getChannelOperators().end())
+                    tmpChannel.getChannelOperators().erase(itReceiver2);
+            }
+            msg.getArguments().erase(msg.getArguments().begin() + 1);
+            std::cout << "ban setted Successfully" << std::endl;
+        }
+        else{
+            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+        }
+    }
+    else{
+        if (itSender != tmpChannel.getChannelOperators().end()){
+            if (itReceiver != tmpChannel.getChannelBannedMembers().end()){
+                tmpChannel.getChannelBannedMembers().erase(itReceiver);
+                std::cout << "ban removed Successfully" << std::endl;
+            }
+            else
+                errorHandler(newSocketFd, 401, msg.getArguments().at(0)); //NO such NICK
+        }
+        else{
+            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+        }
+    }  
+}
+
 void Server::exec_i(Message &msg, int newSocketFd, bool addOrRm)
 {    
     Channel     &tmpChannel = findChannel(msg.getArguments().at(0));
@@ -295,14 +338,15 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
 {
     Channel     &tmpChannel = findChannel(msg.getArguments().at(0));
     std::string senderNick = findNickClientByFd(newSocketFd);
-    std::vector<std::string>::iterator itSender = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), senderNick);
+    std::vector<std::string>::iterator itSenderOp = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), senderNick);
+    std::vector<std::string>::iterator itSenderMem = std::find(tmpChannel.getChannelMembers().begin(), tmpChannel.getChannelMembers().end(), senderNick);
 
     if (addOrRm == true){
         if (msg.getArguments().size() == 1)
             errorHandler(newSocketFd, 461, msg.getCommand()); // Check if there's a Topic
         std::string topic = msg.getArguments().at(1);
         if (tmpChannel.getIsMode_t()){
-            if (itSender != tmpChannel.getChannelOperators().end()){
+            if (itSenderOp != tmpChannel.getChannelOperators().end()){
                 std::cout << "Topic setted by Operator Successfully" << std::endl;
                 tmpChannel.setChannelTopic(topic);
                 tmpChannel.setIsMode_t(true);
@@ -312,13 +356,17 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
             }
         }
         else{
-            std::cout << "Topic setted by Member Successfully" << std::endl;
-            tmpChannel.setChannelTopic(topic);
-            tmpChannel.setIsMode_t(true);
+            if (itSenderMem != tmpChannel.getChannelMembers().end()){
+                tmpChannel.setChannelTopic(topic);
+                tmpChannel.setIsMode_t(true);
+                std::cout << "Topic setted by Member Successfully" << std::endl;
+            }
+            else
+                errorHandler(newSocketFd, 441, msg.getArguments().at(1), msg.getArguments().at(0)); //User is Not in this channel  
         }
     }
     else{
-        if (itSender != tmpChannel.getChannelOperators().end()){
+        if (itSenderOp != tmpChannel.getChannelOperators().end()){
             std::cout << "Topic removed Successfully" << std::endl;
             tmpChannel.setIsMode_t(false);
         }
@@ -372,6 +420,8 @@ void Server::execMode(Message &msg, char mode, int newSocketFd, bool addOrRm)
         exec_t(msg, newSocketFd, addOrRm);
     if (mode == 'n')
         exec_n(msg, newSocketFd, addOrRm);
+    if (mode == 'b')
+        exec_b(msg, newSocketFd, addOrRm);
 }
 
 void Server::executeModes(Message &msg, int newSocketFd)
