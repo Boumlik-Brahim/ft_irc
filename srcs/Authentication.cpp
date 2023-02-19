@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 10:30:17 by iomayr            #+#    #+#             */
+/*   Updated: 2023/02/19 15:37:14 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +68,18 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
 {
 	Client *tmpClient = _mapClients[newSocketFd];
-	std::map<int, Guest*>::iterator it;
+	// std::map<int, Guest*>::iterator it;
 	
 	tmpClient->setNickName(tmpGuest->getGuestNick()); 
 	tmpClient->setUserName(tmpGuest->getGuestUser()); 
 	tmpClient->setRealName(tmpGuest->getGuestRealName()); 
-  tmpClient->setAuthValid(true);
-  WelcomeMsg(newSocketFd);
-	it = _mapGuest.find(newSocketFd);
-	if (it != _mapGuest.end()){
-		delete it->second;
-		_mapGuest.erase(it);
-	}
+  	tmpClient->setAuthValid(true);
+  	WelcomeMsg(newSocketFd);
+	// it = _mapGuest.find(newSocketFd);
+	// if (it != _mapGuest.end()){
+	// 	delete it->second;
+	// 	_mapGuest.erase(it);
+	// }
 }
 
 void Server::handleUserCmd(Message &msg, int newSocketFd)
