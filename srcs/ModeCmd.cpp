@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:10:19 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/19 20:10:30 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/20 16:32:11 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -440,10 +440,27 @@ void Server::executeModes(Message &msg, int newSocketFd)
     }
 }
 
+void Server::treatReplay(Message &msgCopy, int newSocketFd)
+{
+    std::string rpl;
+    std::string modes;
+    char        hostname[256];
+    Channel     &tmpChannel = findChannel(msgCopy.getArguments().at(0));
+    std::map<int, Client*>::iterator itClient = _mapClients.find(newSocketFd);
+    
+    gethostname(hostname, sizeof(hostname));
+    for (size_t i = 0; i < msgCopy.getArguments().size(); i++){
+        modes += " ";
+        modes += msgCopy.getArguments().at(i);
+    }
+    rpl = ":" + itClient->second->getNickName() + "!~" + itClient->second->getUserName() + "@" + hostname + " MODE " + tmpChannel.getChannelName() +  modes + "\r\n";
+	sendReplay(newSocketFd, rpl);
+}
 
 void Server::handleModeCmd(Message &msg, int newSocketFd)
 {
     std::vector<std::string> tmpArgs;
+    Message msgCopy = msg;
     
     if (msg.getArguments().empty())
         errorHandler(newSocketFd, 461, msg.getCommand());
@@ -452,6 +469,7 @@ void Server::handleModeCmd(Message &msg, int newSocketFd)
         if (findChannelByName(msg.getArguments().at(0))){
             checkModes(msg, newSocketFd);
             executeModes(msg, newSocketFd);
+            treatReplay(msgCopy, newSocketFd);
         }
         else
             errorHandler(newSocketFd, 403, msg.getArguments().at(0)); //NO such channel
