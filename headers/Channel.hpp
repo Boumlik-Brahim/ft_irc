@@ -6,6 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/19 17:08:30 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +28,12 @@ class Channel
 		std::string								_channelCreator;
 		std::string								_channelTopic;
 		std::string								_channelkey;
-    int										_channelLimit;
+    	int										_channelLimit;
 		std::vector<std::string>				_channelMemberAndOperators;
 		std::vector<std::string>				_channelMembers;
 		std::vector<std::string>				_channelOperators;
 		std::vector<std::string>				_channelBannedMembers;
 		std::vector<std::string>				_invitedMembers;
-
 
 		bool 									_isMode_O;
         bool 									_isMode_o;
