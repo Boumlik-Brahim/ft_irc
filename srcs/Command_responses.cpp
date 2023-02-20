@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:50 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 18:57:53 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 11:27:11 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code)
 			std::cout << "Invalid command response code " << cmd_resp_code <<  std::endl;
 			// std::cout << "Invalid command response code" << std::endl;
 	}
-
 	sendMessage(sender_fd, message);
 }
+
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg)
 {
 	std::string message;
@@ -164,6 +164,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 	}
 	sendMessage(sender_fd, message);
 }
+
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2)
 {
 	std::string message;
@@ -265,6 +266,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 	}
 	sendMessage(sender_fd, message);
 }
+
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2, std::string cmd_resp_arg3)
 {
 	std::string message;

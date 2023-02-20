@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/19 18:56:12 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 10:23:20 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	Server::joinNewChannel(int senderFd, std::string channelName)
 	gethostname(hostname, sizeof(hostname));
 	rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " JOIN :" + channelName + "\r\n"
 		+ ":" + it->second->getNickName() + " MODE " + channelName + " +n\r\n"
-		+ ":irc" + " 353 " + it->second->getNickName() + " = " + channelName + " :@" + it->second->getNickName() + "\r\n" 
+		+ ":irc" + " 353 " + it->second->getNickName() + " @ " + channelName + " :@" + it->second->getNickName() + "\r\n" 
 		+ ":irc" + " 366 " + it->second->getNickName() + " " + channelName + " :End of /NAMES list\r\n";
 	sendReplay(senderFd, rpl);
 }
@@ -110,12 +110,18 @@ void	Server::joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator	&
 	int			fd;
 	char		hostname[256];
 	std::string	rpl;
+	std::string	namreplyFlag;
 
 	chnl.setChannelMembers(it->second->getNickName());
 	it->second->setJoinedChannels(chnl.getChannelName());
 	gethostname(hostname, sizeof(hostname));
+	namreplyFlag = " = ";
+	if (chnl.getIsMode_s())
+		namreplyFlag = " @ ";
+	if (chnl.getIsMode_p())
+		namreplyFlag = " * ";
 	rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " JOIN :" + chnl.getChannelName() + "\r\n"
-		+ ":irc" + " 353 " + it->second->getNickName() + " @ " + chnl.getChannelName() + " :" + it->second->getNickName() + " @" + chnl.getChannelCreator() + "\r\n"
+		+ ":irc" + " 353 " + it->second->getNickName() + namreplyFlag + chnl.getChannelName() + " :" + it->second->getNickName() + " @" + chnl.getChannelCreator() + "\r\n"
 		+ ":irc" + " 366 " + it->second->getNickName() + " " + chnl.getChannelName() + " :End of /NAMES list\r\n";
 	for(size_t i = 0; i < chnl.getChannelMembers().size(); i++)
 	{

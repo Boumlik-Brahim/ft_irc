@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:16 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 18:57:19 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 11:19:35 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
 	tmpClient->setNickName(tmpGuest->getGuestNick()); 
 	tmpClient->setUserName(tmpGuest->getGuestUser()); 
 	tmpClient->setRealName(tmpGuest->getGuestRealName()); 
-  tmpClient->setAuthValid(true);
-  WelcomeMsg(newSocketFd);
+	tmpClient->setAuthValid(true);
+	WelcomeMsg(newSocketFd);
 	it = _mapGuest.find(newSocketFd);
 	if (it != _mapGuest.end()){
 		delete it->second;
@@ -113,6 +113,9 @@ void Server::handleUserCmd(Message &msg, int newSocketFd)
 
 void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 {
+	std::string	rpl;
+	char		hostname[256];
+
 	if (!msg.getArguments().size())
 		errorHandler(newSocketFd, 431);
 	else
@@ -123,8 +126,10 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 			{
 				if (!msg.getArguments().at(0).compare(it->second->getNickName()))
 				{
-					cmd_Resp_Handler(newSocketFd, 311, it->second->getNickName(),\
-						it->second->getUserName(), it->second->getRealName());
+					gethostname(hostname, sizeof(hostname));
+					rpl = ":irc 311 " + it->second->getNickName() + " " + it->second->getUserName() + " ~" + it->second->getUserName() + " " + hostname + " * :" + it->second->getRealName() + "\r\n"
+							+ ":irc" + " 318 " + it->second->getNickName() + " " + it->second->getUserName() + " :End of /WHOIS list.\r\n";
+					sendReplay(newSocketFd, rpl);
 					break;
 				}
 				if (it == --_mapClients.end() && msg.getArguments().at(0).compare(it->second->getNickName())) 
