@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:10:19 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/20 16:32:11 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/20 17:45:10 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../headers/Server.hpp"
 
@@ -18,11 +19,12 @@ void Server::checkIfClientExist(int newSocketFd, std::string nickName)
     
     clientIt = _mapClients.find(newSocketFd);
     if (clientIt == _mapClients.end())
-        errorHandler(newSocketFd, 401, nickName);
+        errorHandler(401, nickName);
 }
 
 void splitModes(Message &msg, std::string modes, int newSocketFd)
 {
+    (void)newSocketFd;
     std::string modeList = "OovaimnqpsrtklbeI";
     
     if (modes.at(0) == '+')
@@ -34,7 +36,7 @@ void splitModes(Message &msg, std::string modes, int newSocketFd)
             if (modeList.find(modes.at(i)) != std::string::npos)
                 msg.setVecAddMode(modes.at(i));      
 		    else
-                errorHandler(newSocketFd, 472, std::string(1, modes.at(i)));//Unkown Mode 
+                errorHandler(472, std::string(1, modes.at(i)));//Unkown Mode 
         }    
     }
     else if (modes.at(0) == '-')
@@ -47,7 +49,7 @@ void splitModes(Message &msg, std::string modes, int newSocketFd)
                 msg.setVecRmMode(modes.at(i));      
             }
             else{
-		        errorHandler(newSocketFd, 472, std::string(1, modes.at(i)));//Unkown Mode 
+		        errorHandler(472, std::string(1, modes.at(i)));//Unkown Mode 
             }
                 
         }    
@@ -72,7 +74,7 @@ void Server::checkModes(Message &msg, int newSocketFd)
             }
         }
         else
-            errorHandler(newSocketFd, 472, std::string(1, msg.getArguments().at(1).at(0)));//Unkown Mode
+            errorHandler(472, std::string(1, msg.getArguments().at(1).at(0)));//Unkown Mode
     }
     else if (argSize >= 3)
     {
@@ -81,7 +83,7 @@ void Server::checkModes(Message &msg, int newSocketFd)
             splitModes(msg, msg.getArguments().at(1), newSocketFd);
         }
         else
-            errorHandler(newSocketFd, 472, std::string(1, msg.getArguments().at(1).at(0)));//Unkown Mode
+            errorHandler(472, std::string(1, msg.getArguments().at(1).at(0)));//Unkown Mode
         msg.getArguments().erase(msg.getArguments().begin() + 1);
     }
     else if (argSize == 2)
@@ -92,10 +94,10 @@ void Server::checkModes(Message &msg, int newSocketFd)
             msg.getArguments().erase(msg.getArguments().begin() + 1);
         }
         else
-            errorHandler(newSocketFd, 472, std::string(1, msg.getArguments().at(1).at(0)));//Unkown Mode
+            errorHandler(472, std::string(1, msg.getArguments().at(1).at(0)));//Unkown Mode
     }
     else
-        errorHandler(newSocketFd, 461, msg.getCommand()); //Need More Arguments
+        errorHandler(461, msg.getCommand()); //Need More Arguments
 }
 
 void Server::exec_o(Message &msg, int newSocketFd, bool addOrRm)
@@ -106,7 +108,7 @@ void Server::exec_o(Message &msg, int newSocketFd, bool addOrRm)
     std::vector<std::string>::iterator itReceiver;
     
     if (msg.getArguments().size() == 1)
-        errorHandler(newSocketFd, 461, msg.getCommand()); //Need More Arguments
+        errorHandler(461, msg.getCommand()); //Need More Arguments
     if (addOrRm == true){
         itReceiver = std::find(tmpChannel.getChannelMembers().begin(), tmpChannel.getChannelMembers().end(), msg.getArguments().at(1));
         if (itSender != tmpChannel.getChannelOperators().end()){
@@ -116,11 +118,11 @@ void Server::exec_o(Message &msg, int newSocketFd, bool addOrRm)
                 msg.getArguments().erase(msg.getArguments().begin() + 1);
             }
             else{
-                errorHandler(newSocketFd, 441, msg.getArguments().at(1), msg.getArguments().at(0)); //User is Not in this channel  
+                errorHandler(441, msg.getArguments().at(1), msg.getArguments().at(0)); //User is Not in this channel  
             }
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
     else{
@@ -132,11 +134,11 @@ void Server::exec_o(Message &msg, int newSocketFd, bool addOrRm)
                 msg.getArguments().erase(msg.getArguments().begin() + 1);
             }
             else{
-                errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+                errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
             }
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }   
     } 
 }
@@ -149,7 +151,7 @@ void Server::exec_k(Message &msg, int newSocketFd, bool addOrRm)
 
     if (addOrRm == true){
         if (msg.getArguments().size() == 1)
-            errorHandler(newSocketFd, 461, msg.getCommand()); //Need More Arguments
+            errorHandler(461, msg.getCommand()); //Need More Arguments
         if (!tmpChannel.getIsMode_k()){
             if (itSender != tmpChannel.getChannelOperators().end()){
                 tmpChannel.setChannelkey(msg.getArguments().at(1));
@@ -158,11 +160,11 @@ void Server::exec_k(Message &msg, int newSocketFd, bool addOrRm)
                 tmpChannel.setIsMode_k(true);
             }
             else{
-                errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+                errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
             }
         }
         else{
-            errorHandler(newSocketFd, 467, msg.getArguments().at(0));
+            errorHandler(467, msg.getArguments().at(0));
         }
     }
     else{
@@ -172,7 +174,7 @@ void Server::exec_k(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_k(false);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
 }
@@ -185,10 +187,10 @@ void Server::exec_l(Message &msg, int newSocketFd, bool addOrRm)
 
     if (addOrRm == true){
         if (msg.getArguments().size() == 1)
-            errorHandler(newSocketFd, 461, msg.getCommand()); //Need More Arguments
+            errorHandler(461, msg.getCommand()); //Need More Arguments
         int limit = atoi(msg.getArguments().at(1).c_str());
         if (limit == 0){
-            errorHandler(newSocketFd, 472, "Limit");//Unkown Mode
+            errorHandler(472, "Limit");//Unkown Mode
         }
         if (itSender != tmpChannel.getChannelOperators().end()){
             tmpChannel.setChannelLimit(limit);
@@ -197,7 +199,7 @@ void Server::exec_l(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_l(true);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
     else{
@@ -207,7 +209,7 @@ void Server::exec_l(Message &msg, int newSocketFd, bool addOrRm)
             std::cout << "limit removed Successfully" << std::endl;
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
 }
@@ -219,7 +221,7 @@ void Server::exec_b(Message &msg, int newSocketFd, bool addOrRm)
     std::vector<std::string>::iterator itSender = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), senderNick);
 
     if (msg.getArguments().size() == 1)
-        errorHandler(newSocketFd, 461, msg.getCommand()); //Need More Arguments
+        errorHandler(461, msg.getCommand()); //Need More Arguments
     std::vector<std::string>::iterator itReceiver = std::find(tmpChannel.getChannelBannedMembers().begin(), tmpChannel.getChannelBannedMembers().end(), msg.getArguments().at(1));
     std::vector<std::string>::iterator itReceiver1 = std::find(tmpChannel.getChannelMembers().begin(), tmpChannel.getChannelMembers().end(), msg.getArguments().at(1));
     std::vector<std::string>::iterator itReceiver2 = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), msg.getArguments().at(1));
@@ -237,7 +239,7 @@ void Server::exec_b(Message &msg, int newSocketFd, bool addOrRm)
             std::cout << "ban setted Successfully" << std::endl;
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
     else{
@@ -247,10 +249,10 @@ void Server::exec_b(Message &msg, int newSocketFd, bool addOrRm)
                 std::cout << "ban removed Successfully" << std::endl;
             }
             else
-                errorHandler(newSocketFd, 401, msg.getArguments().at(0)); //NO such NICK
+                errorHandler( 401, msg.getArguments().at(0)); //NO such NICK
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }  
 }
@@ -267,7 +269,7 @@ void Server::exec_i(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_i(true);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
     else{
@@ -276,7 +278,7 @@ void Server::exec_i(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_i(false);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
 }
@@ -294,7 +296,7 @@ void Server::exec_p(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_p(true);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
     else{
@@ -303,7 +305,7 @@ void Server::exec_p(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_p(false);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
 }
@@ -320,7 +322,7 @@ void Server::exec_s(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_s(true);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
     else{
@@ -329,7 +331,7 @@ void Server::exec_s(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_s(false);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
 }
@@ -343,7 +345,7 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
 
     if (addOrRm == true){
         if (msg.getArguments().size() == 1)
-            errorHandler(newSocketFd, 461, msg.getCommand()); // Check if there's a Topic
+            errorHandler(461, msg.getCommand()); // Check if there's a Topic
         std::string topic = msg.getArguments().at(1);
         if (tmpChannel.getIsMode_t()){
             if (itSenderOp != tmpChannel.getChannelOperators().end()){
@@ -352,7 +354,7 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
                 tmpChannel.setIsMode_t(true);
             }
             else{
-                errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+                errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
             }
         }
         else{
@@ -362,7 +364,7 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
                 std::cout << "Topic setted by Member Successfully" << std::endl;
             }
             else
-                errorHandler(newSocketFd, 441, msg.getArguments().at(1), msg.getArguments().at(0)); //User is Not in this channel  
+                errorHandler(441, msg.getArguments().at(1), msg.getArguments().at(0)); //User is Not in this channel  
         }
     }
     else{
@@ -371,7 +373,7 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_t(false);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
 }
@@ -388,7 +390,7 @@ void Server::exec_n(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_n(true);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
     else{
@@ -397,7 +399,7 @@ void Server::exec_n(Message &msg, int newSocketFd, bool addOrRm)
             tmpChannel.setIsMode_n(false);
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
 }
@@ -463,7 +465,7 @@ void Server::handleModeCmd(Message &msg, int newSocketFd)
     Message msgCopy = msg;
     
     if (msg.getArguments().empty())
-        errorHandler(newSocketFd, 461, msg.getCommand());
+        errorHandler(461, msg.getCommand());
     if (msg.getArguments().at(0).at(0) == '#')
     {
         if (findChannelByName(msg.getArguments().at(0))){
@@ -472,10 +474,9 @@ void Server::handleModeCmd(Message &msg, int newSocketFd)
             treatReplay(msgCopy, newSocketFd);
         }
         else
-            errorHandler(newSocketFd, 403, msg.getArguments().at(0)); //NO such channel
+            errorHandler(403, msg.getArguments().at(0)); //NO such channel
     }
     else{
-        errorHandler(newSocketFd, 403, msg.getArguments().at(0)); //NO such channel
-    }
-    
+        errorHandler(403, msg.getArguments().at(0)); //NO such channel
+    }   
 }

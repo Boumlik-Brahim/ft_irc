@@ -3,10 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/17 18:57:40 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/19 11:59:14 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #include "../headers/Client.hpp"
 
@@ -16,8 +18,10 @@ Client::Client(): _clientMaxnumOfChannels(2), buf("")
 Client::Client(int newSocketFd): _clientFd(newSocketFd), _clientMaxnumOfChannels(2), buf("") 
 {}
 
-Client::Client(const Client &copy) : _nickName(copy._nickName), _userName(copy._userName), _realName(copy._realName), _clientFd(copy._clientFd), _isAuthValid(copy._isAuthValid), _clientMaxnumOfChannels(copy._clientMaxnumOfChannels), _joinedChannels(copy._joinedChannels), buf("")
-{}
+Client::Client(const Client &copy)
+{
+	*this = copy;
+}
 
 Client & Client::operator=(const Client &assign)
 {
@@ -26,10 +30,11 @@ Client & Client::operator=(const Client &assign)
 		_nickName = assign._nickName;
 		_userName = assign._userName;
 		_realName = assign._realName;
-		_clientFd = assign._clientFd;
-		_isAuthValid = assign._isAuthValid;
-		_clientMaxnumOfChannels = assign._clientMaxnumOfChannels;
 		_joinedChannels = assign._joinedChannels;
+		_invitedChannels = assign._invitedChannels;
+		_clientFd = assign._clientFd;
+		_clientMaxnumOfChannels = assign._clientMaxnumOfChannels;
+		_isAuthValid = assign._isAuthValid;
 	}
 	return *this;
 }
@@ -90,16 +95,14 @@ void Client::setJoinedChannels(std::string joinedChannel)
 {
 	_joinedChannels.push_back(joinedChannel);
 }
-
 std::vector<std::string>&	Client::getInvitedChannels(void)
 {
 	return (_invitedChannels);
 }
-void						Client::setInvitedChannels(std::string invitedChannel)
+void Client::setInvitedChannels(std::string invitedChannel)
 {
 	this->_invitedChannels.push_back(invitedChannel);
 }
-
 
 Client::~Client()
 {}

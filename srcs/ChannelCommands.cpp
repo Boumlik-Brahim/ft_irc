@@ -6,9 +6,10 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 15:30:30 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 16:09:35 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/20 17:46:37 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../headers/Server.hpp"
 
@@ -73,8 +74,7 @@ std::string Server::findClientWithNoChannel()
 void checkMultiArgs2(Message &msg)
 {
 	std::vector<std::string> 			tmpArgs;
-	
-    
+
 	if (msg.getArguments().at(1).find(',') != std::string::npos)
 	{
 		tmpArgs = splitBySeparator(msg.getArguments().at(1), ",");
@@ -90,15 +90,6 @@ void checkMultiArgs2(Message &msg)
 		}
 	}
 }
-// Client& Server::findClient(std::string nickName)
-// {
-//     for (std::map<int, Client *>::iterator it = _mapClients.begin(); it != _mapClients.end() ; it++)
-//     {
-//         if (it->second->getNickName() == nickName)
-//             return it->second;
-//     }
-//     throw "client not found";
-// }
 
 void    Server::handleTopicCmd(Message &msg, int senderFd)
 {
@@ -111,15 +102,16 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
 
     // check params
     if (msg.getArguments().size() == 0 || msg.getArguments()[0] == ":")
-        errorHandler(senderFd, 461, cmd);
+        errorHandler(461, cmd);
+        
     // check user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
-		errorHandler(senderFd, 451);
+		errorHandler(451);
     // check if channel exist
     channelName = msg.getArguments()[0];
     channelExist = findChannelByName(msg.getArguments()[0]);
     if (!channelExist)
-        errorHandler(senderFd, 401, channelName);
+        errorHandler(401, channelName);
     sender = findNickClientByFd(senderFd);
     
     Channel         &tmpChnl  = findChannel(channelName);
@@ -128,7 +120,7 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
     {
         // if mode 't' is true then check if the user who wants to change topic is operator
         if (!findChannelOperator(sender, tmpChnl))
-            errorHandler(senderFd, 482, sender);
+            errorHandler(482, sender);
         // check if channel has topic before
         if ((msg.getArguments().size() > 1))
         {
@@ -137,7 +129,7 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
             {
                 topic = topic.substr(1, topic.size());
                 tmpChnl.setChannelTopic(topic);
-                cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());  
+                cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
             }
             // set topic empty
             else if (topic.at(0) == ':' && topic.size() == 1)
@@ -179,7 +171,7 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
             }
         }
         else
-            errorHandler(senderFd, 442, sender);
+            errorHandler(442, sender);
     }
 }
 
@@ -196,7 +188,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
 
     // check if user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
-		errorHandler(senderFd, 451);
+		errorHandler(451);
     
     sender = findNickClientByFd(senderFd);
     
@@ -237,7 +229,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
                 if (tmpChnl.getIsMode_p() == false && tmpChnl.getIsMode_s() == false)
                 {
                     for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
-                        ChannelClients += tmpChnl.getChannelMembers().at(i).append(" ");
+                        ChannelClients += tmpChnl.getChannelMembers().at(i);
                     cmd_Resp_Handler1(senderFd, 353, _server_name, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
                 }
             }
@@ -274,7 +266,7 @@ void    Server::handleListCmd(Message &msg, int senderFd)
 
     // check if user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
-		errorHandler(senderFd, 451);
+		errorHandler(451);
 
     sender = findNickClientByFd(senderFd);
     
@@ -343,10 +335,10 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
 
     // check if user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
-		errorHandler(senderFd, 451);
+		errorHandler(451);
     
     if (msg.getArguments().empty())
-		errorHandler(senderFd, 461, msg.getCommand());
+		errorHandler(461, msg.getCommand());
 
     sender = findNickClientByFd(senderFd);
     receiver = msg.getArguments()[0];
@@ -381,7 +373,7 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
                 }
             }
             else
-                errorHandler(senderFd, 482, sender);
+                errorHandler(482, sender);
         }
         else
         {
@@ -389,7 +381,7 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
             if (findUserInChannel(sender, tmpChannel) == 1)
             {
                 if (findUserInChannel(target.getNickName(), tmpChannel))
-                    errorHandler(senderFd, 443, target.getNickName(), tmpChannel.getChannelName());
+                    errorHandler(443, target.getNickName(), tmpChannel.getChannelName());
                 else
                 {
                     target.setInvitedChannels(tmpChannel.getChannelName());
@@ -399,12 +391,12 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
                 }
             }
             else
-                errorHandler(senderFd, 442, sender);
+                errorHandler(442, sender);
             // else he needs to be a member to perform te INVITE command
         }
     }
     else
-        errorHandler(senderFd, 403, channelName);
+        errorHandler(403, channelName);
 }
 
 void    Server::handleKickCmd(Message &msg, int senderFd)
@@ -422,11 +414,11 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
     
     // check if user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
-		errorHandler(senderFd, 451);
+		errorHandler(451);
         
     sender = findNickClientByFd(senderFd);
     if (msg.getArguments().size() < 2)
-        errorHandler(senderFd, 461, "KICK");
+        errorHandler(461, "KICK");
     
     channelName = msg.getArguments()[0];
     channelExist = findChannelByName(channelName);
@@ -469,17 +461,17 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
                         }
                     }
                     else
-                        errorHandler(senderFd, 441, _users.at(i)); // ERR_USERNOTINCHANNE
+                        errorHandler(441, _users.at(i)); // ERR_USERNOTINCHANNE
                 }
                 else
-                    errorHandler(senderFd, 401, _users.at(i));
+                    errorHandler(401, _users.at(i));
             }
         }
         else
-            errorHandler(senderFd, 482, sender);
+            errorHandler(482, sender);
     }
     else
-        errorHandler(senderFd, 403, channelName);
+        errorHandler(403, channelName);
     
     // check if channel exists
     // check if user exist

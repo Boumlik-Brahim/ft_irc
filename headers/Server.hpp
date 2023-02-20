@@ -3,8 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/19 19:02:38 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/20 16:30:40 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +123,6 @@ class Server
 		bool   			checkInvitedChannels(Client &client, std::string channelName);
 		std::string 	findClientWithNoChannel();
 		Client& 		findClient(std::string nickName);
-		int 			findClientByNick(std::string nickName);
 		void 	WelcomeMsg(int fd);
 
 		void	treatReplay(Message &msgCopy, int newSocketFd);
