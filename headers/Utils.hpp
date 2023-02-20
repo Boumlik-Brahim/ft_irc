@@ -3,12 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/17 18:57:02 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 16:37:56 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+
 
 #ifndef UTILS_HPP
 #define UTILS_HPP
@@ -20,10 +19,10 @@
 
 #include "Server.hpp"
 
-char	                    **ft_split(const char *s, char c);
+char	                    **ft_split(char *s, char c);
 void                        checkMultiArgs(Message &msg);
 void                        checkChnlNames(std::vector<std::string> tmpArgs);
 std::vector<std::string>    splitBySeparator(std::string args, std::string sep);
-
+void                        sendReplay(int fd, std::string message);
 
 #endif

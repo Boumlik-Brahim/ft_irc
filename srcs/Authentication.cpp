@@ -3,10 +3,6 @@
 /*                                                        :::      ::::::::   */
 /*   Authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/17 18:57:16 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 15:23:25 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +64,13 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
 {
 	Client *tmpClient = _mapClients[newSocketFd];
-	std::map<int, Guest*>::iterator it;
 	
 	tmpClient->setNickName(tmpGuest->getGuestNick()); 
 	tmpClient->setUserName(tmpGuest->getGuestUser()); 
 	tmpClient->setRealName(tmpGuest->getGuestRealName()); 
-	tmpClient->setAuthValid(true);
-	WelcomeMsg(newSocketFd);
-	it = _mapGuest.find(newSocketFd);
-	if (it != _mapGuest.end()){
-		delete it->second;
-		_mapGuest.erase(it);
-	}
+  	tmpClient->setAuthValid(true);
+  	WelcomeMsg(newSocketFd);
+
 }
 
 void Server::handleUserCmd(Message &msg, int newSocketFd)

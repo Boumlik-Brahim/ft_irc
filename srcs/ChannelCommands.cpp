@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommands.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 15:30:30 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 16:29:56 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +99,9 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
     int             isUserInChannel;
 
     // check params
-    if (!msg.getArguments().size())
+    if (msg.getArguments().size() == 0 || msg.getArguments()[0] == ":")
         errorHandler(461, cmd);
+        
     // check user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
 		errorHandler(451);
@@ -204,7 +204,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
                 {
                     ChannelClients = "";
                     for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
-                        ChannelClients += tmpChnl.getChannelMembers().at(i);
+                        ChannelClients = ChannelClients.append(" ") + tmpChnl.getChannelMembers().at(i);
                     cmd_Resp_Handler1(senderFd, 353, _server_name, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
                 }
             }
@@ -329,6 +329,7 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
     int             clientExist = -1;
     std::string     cmd = msg.getCommand();
     std::string     messageForm = "";
+    char			hostname[256];
 
     // check if user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
@@ -342,6 +343,7 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
     channelName = msg.getArguments()[1];
     channelExist = findChannelByName(channelName);
     clientExist = findFdClientByNick(receiver, senderFd);
+    gethostname(hostname, sizeof(hostname));
     
     // check if the channel exist to perform the INVITE command
     if (channelExist && clientExist)
@@ -364,8 +366,8 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
                 {
                     target.setInvitedChannels(tmpChannel.getChannelName());
                     cmd_Resp_Handler1(senderFd, 341, _server_name, sender, tmpChannel.getChannelName(), target.getNickName(), std::string(""));
-                    messageForm = ":" + _server_name + " " + sender + " has invited you to " + tmpChannel.getChannelName();
-                    sendMessage(target.getClientFd(), messageForm);
+                    std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " INVITE " + " " + "  to  " + tmpChannel.getChannelName() +  "\r\n";
+                    sendReplay(target.getClientFd(), rpl);
                 }
             }
             else
@@ -382,8 +384,8 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
                 {
                     target.setInvitedChannels(tmpChannel.getChannelName());
                     cmd_Resp_Handler1(senderFd, 341, _server_name, sender, tmpChannel.getChannelName(), target.getNickName(), std::string(""));
-                    messageForm = ":" + _server_name + " " + sender + " has invited you to " + tmpChannel.getChannelName();
-                    sendMessage(target.getClientFd(), messageForm);
+                    std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " INVITE " + " " + "  to  " + tmpChannel.getChannelName() +  "\r\n";
+                    sendReplay(target.getClientFd(), rpl);
                 }
             }
             else
@@ -391,6 +393,8 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
             // else he needs to be a member to perform te INVITE command
         }
     }
+    else
+        errorHandler(senderFd, 403, channelName);
 }
 
 void    Server::handleKickCmd(Message &msg, int senderFd)
@@ -403,6 +407,8 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
     std::string     messageForm = "";
     std::string     ChannelClients = "";
     std::string     receiver;
+    char			hostname[256];
+    int             fd;
     
     // check if user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
@@ -415,6 +421,7 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
     channelName = msg.getArguments()[0];
     channelExist = findChannelByName(channelName);
     std::vector<std::string> _users = splitBySeparator(msg.getArguments()[1], ",");
+    gethostname(hostname, sizeof(hostname));
 
     if (channelExist)
     {
@@ -423,27 +430,30 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
         {    
             for (size_t i = 0; i < _users.size(); i++)
             {
-                std::cout << "user in args ==" << _users.at(i) << std::endl; 
                 if (findFdClientByNick(_users.at(i)) != -1)
                 {
                     Client &target = findClient(_users.at(i));
-                    if (target.getNickName().compare(sender) == 0)
-                    {
-                        std::cout << "You cant kick your self";
-                        return;
-                    }
                     if (findUserInChannel(target.getNickName(), tmpChannel))
                     {
                         std::vector<std::string>::iterator it = tmpChannel.getChannelMembers().begin();
-                        int memberIndex = 0;
-                        for (; it != tmpChannel.getChannelMembers().end(); ++it, ++memberIndex)
+                        for (; it != tmpChannel.getChannelMembers().end(); ++it)
                         {
                             if (*it == target.getNickName())
                             {
+                                if (msg.getArguments().size() == 3)
+                                {
+                                    reason = msg.getArguments()[2];
+                                    reason = reason.substr(1, reason.size());
+                                }              
+                                std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " KICK " + tmpChannel.getChannelName() + " " + target.getNickName() + " " + reason +"\r\n";
+                                for (size_t j = 0; j < tmpChannel.getChannelMembers().size() ; j++)
+                                {
+                                    fd = findFdClientByNick(tmpChannel.getChannelMembers().at(j));
+                                    sendReplay(fd, rpl);
+                                }
                                 tmpChannel.getChannelMembers().erase(it);
                                 std::vector<std::string>::iterator it1 = std::find(target.getJoinedChannels().begin(), target.getJoinedChannels().end(), tmpChannel.getChannelName());
                                 target.getJoinedChannels().erase(it1);
-                                std::cout << "kicked from the channel" << std::endl;
                                 break;
                             }
                         }
@@ -459,7 +469,7 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
             errorHandler(482, sender);
     }
     else
-        std::cout << "Channel does not exist\n";
+        errorHandler(senderFd, 403, channelName);
     
     // check if channel exists
     // check if user exist

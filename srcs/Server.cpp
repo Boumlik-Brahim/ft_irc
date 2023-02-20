@@ -170,8 +170,6 @@ void Server::read_write_socket(int newSocketFd, int *count)
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*count)--;
 		handleQuitCmd(newSocketFd);
-		// freeClient(newSocketFd);
-		// close(newSocketFd);
 		return ;
 	}
 	if (n > 1)
@@ -182,7 +180,6 @@ void Server::read_write_socket(int newSocketFd, int *count)
 		{
 			std::string tmp = client->buf;
 			client->buf.erase();
-			tmp.erase(size - 2, 2);
 			backBone(tmp, newSocketFd);
 		}
 	}

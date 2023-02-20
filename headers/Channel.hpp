@@ -5,10 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/17 18:56:30 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/19 18:34:50 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
@@ -28,13 +28,14 @@ class Channel
 		std::string								_channelCreator;
 		std::string								_channelTopic;
 		std::string								_channelkey;
+    	int										_channelLimit;
 		std::vector<std::string>				_channelMemberAndOperators;
 		std::vector<std::string>				_channelMembers;
 		std::vector<std::string>				_channelOperators;
 		std::vector<std::string>				_channelBannedMembers;
 		std::vector<std::string>				_invitedMembers;
-		int										_channelLimit;
-		bool 									_isMode_O;
+
+		    bool 									_isMode_O;
         bool 									_isMode_o;
         bool 									_isMode_v;
         bool 									_isMode_a;
