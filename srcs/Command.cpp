@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:58 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 10:44:32 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 16:38:14 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ void sendMessage(int fd, std::string message)
 
 int Server::findFdClientByNick(std::string receiver, int newSocketFd)
 {
+	(void)newSocketFd;
     for(std::map<int, Client *>::iterator it = _mapClients.begin(); it != _mapClients.end(); it++)
     {
         if (it->second->getNickName() == receiver)
             return (it->first);
     }
-    errorHandler(newSocketFd, 401, receiver);
+    errorHandler(401, receiver);
 	return -1;
 }
 
@@ -60,15 +61,15 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 	std::string					channelName;
 
 	if (!_mapClients[senderFd]->getIsAuthValid())
-		errorHandler(senderFd, 451);
+		errorHandler(451);
 	sender = findNickClientByFd(senderFd);
 	
 	//411
 	if (msg.getArguments().empty())
-		errorHandler(senderFd, 411, cmd);
+		errorHandler(411, cmd);
 	//412
 	if (msg.getArguments().size() < 2)
-		errorHandler(senderFd, 412);
+		errorHandler(412);
 	checkMultiArgs(msg);
 	if (msg.getMultiArgs().size())
 	{
@@ -116,15 +117,15 @@ void  Server::handleNoticeCmd(Message &msg, int senderFd)
     std::vector<int>			receiversFd;
 
 	if (!_mapClients[senderFd]->getIsAuthValid())
-		errorHandler(senderFd, 451);
+		errorHandler(451);
 	sender = findNickClientByFd(senderFd);
 	
 	//411
 	if (msg.getArguments().empty())
-		errorHandler(senderFd, 411, cmd);
+		errorHandler(411, cmd);
 	//412
 	if (msg.getArguments().size() < 2)
-		errorHandler(senderFd, 412);
+		errorHandler(412);
 
 	checkMultiArgs(msg);
 	if (msg.getMultiArgs().size())
@@ -150,12 +151,12 @@ void  Server::handleNoticeCmd(Message &msg, int senderFd)
 	}
 }
 
-void checkChnlNames(std::vector<std::string> tmpArgs, int newSocketFd)
+void checkChnlNames(std::vector<std::string> tmpArgs)
 {
 	for (size_t i = 0; i < tmpArgs.size(); i++)
 	{
 		if (tmpArgs.at(i).at(0) != '#')
-			errorHandler(newSocketFd, 403, tmpArgs.at(i));
+			errorHandler(403, tmpArgs.at(i));
 	}
 }
 
@@ -263,7 +264,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 		else if (!msg.getCommand().compare("WHOIS"))
 			handleWhoIsCmd(msg, newSocketFd);
 		else
-			std::cout << "invalid command" << std::endl;		
+			std::cout << "invalid command" << std::endl;
 	}
 	catch(std::string message){
 		size_t i = 0;

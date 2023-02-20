@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 10:23:20 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 16:39:39 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	Server::joinNewChannelWithKey(int senderFd, std::string channelName, std::s
 
 	it = _mapClients.find(senderFd);
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
-		return (errorHandler(senderFd, 405, channelName));
+		errorHandler(405, channelName);
 	setChannel(chnl, channelName, it->second->getNickName(), channelkey);
 	it->second->setJoinedChannels(channelName);
 	gethostname(hostname, sizeof(hostname));
@@ -94,7 +94,7 @@ void	Server::joinNewChannel(int senderFd, std::string channelName)
 
 	it = _mapClients.find(senderFd);
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels())/*ERR_TOOMANYCHANNELS*/
-		return (errorHandler(senderFd, 405, channelName));
+		errorHandler(405, channelName);
 	setChannel(chnl, channelName, it->second->getNickName());
 	it->second->setJoinedChannels(channelName);
 	gethostname(hostname, sizeof(hostname));
@@ -107,10 +107,10 @@ void	Server::joinNewChannel(int senderFd, std::string channelName)
 
 void	Server::joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator	&it)
 {
-	int			fd;
-	char		hostname[256];
 	std::string	rpl;
 	std::string	namreplyFlag;
+	int			fd;
+	char		hostname[256];
 
 	chnl.setChannelMembers(it->second->getNickName());
 	it->second->setJoinedChannels(chnl.getChannelName());
@@ -142,35 +142,35 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 			return ;
 	}
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
-		return (errorHandler(senderFd, 405, channelName));
+		errorHandler(405, channelName);
 	if (chnl.getIsMode_i())
 	{
 		std::vector<std::string>::iterator	result = std::find(it->second->getInvitedChannels().begin() , it->second->getInvitedChannels().end(), chnl.getChannelName());
 		if (result == it->second->getInvitedChannels().end())
-			return (errorHandler(senderFd, 473, chnl.getChannelName()));/*ERR_INVITEONLYCHAN*/
+			errorHandler(473, chnl.getChannelName());/*ERR_INVITEONLYCHAN*/
 	}
 	if (chnl.getIsMode_b())
 	{
 		for(size_t i = 0; i < chnl.getChannelBannedMembers().size(); i++)
 		{
 			if (chnl.getChannelBannedMembers().at(i) == it->second->getNickName())
-				return (errorHandler(senderFd, 474,  chnl.getChannelName()));/*ERR_BANNEDFROMCHAN*/
+				errorHandler(474,  chnl.getChannelName());/*ERR_BANNEDFROMCHAN*/
 		}
 	}
 	if (chnl.getIsMode_l())
 	{
 		if (chnl.getChannelMembers().size() >= (size_t)chnl.getChannelLimit())/*ERR_CHANNELISFULL*/
-			return (errorHandler(senderFd, 471, chnl.getChannelName()));
+			errorHandler(471, chnl.getChannelName());
 	}
 	if (chnl.getIsMode_k())
 	{
 		if ((!msg.getMultiArgs().empty() && !msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() > 1))
 		{
 			if (chnl.getChannelkey() != msg.getArguments().at(i))
-				return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
+				errorHandler(475, chnl.getChannelName());/*ERR_BADCHANNELKEY*/
 		}
 		else if ((!msg.getMultiArgs().empty() && msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() == 1))
-			return (errorHandler(senderFd, 475, chnl.getChannelName()));/*ERR_BADCHANNELKEY*/
+			errorHandler(475, chnl.getChannelName());/*ERR_BADCHANNELKEY*/
 	}
 	joinExistChannel(chnl, it);
 }
@@ -202,20 +202,20 @@ void	Server::leaveAllChannels(int senderFd)
 void  Server::handleJoinCmd(Message &msg, int senderFd)
 {
 	if (!_mapClients[senderFd]->getIsAuthValid())	
-		return (errorHandler(senderFd , 451));
+		errorHandler(451);
 	if (msg.getArguments().empty() || msg.getArguments().at(0) == "#") /*ERR_NEEDMOREPARAMS*/
-		return (errorHandler(senderFd, 461, msg.getCommand()));
+		errorHandler(461, msg.getCommand());
 	if (msg.getArguments().at(0) == "#0")
 	{
 		leaveAllChannels(senderFd);
 		return ;
 	}
 	checkMultiArgs(msg);
-	checkChnlNames(msg.getMultiArgs(), senderFd);
+	checkChnlNames(msg.getMultiArgs());
 	if (!msg.getMultiArgs().empty())
 	{
 		if (msg.getMultiArgs().size() > 2)/*ERR_TOOMANYTARGETS*/
-			return (errorHandler(senderFd, 407, "reduce the number of targets and try the request again"));
+			errorHandler(407, "reduce the number of targets and try the request again");
 		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)
 		{
 			if (findChannelByName(msg.getMultiArgs().at(i)))
@@ -225,7 +225,17 @@ void  Server::handleJoinCmd(Message &msg, int senderFd)
 				if (msg.getArguments().empty())
 					joinNewChannel(senderFd, msg.getMultiArgs().at(i));
 				else
-					joinNewChannelWithKey(senderFd, msg.getMultiArgs().at(i), msg.getArguments().at(i));
+				{
+					if (i < msg.getArguments().size())
+						joinNewChannelWithKey(senderFd, msg.getMultiArgs().at(i), msg.getArguments().at(i));
+					else
+					{
+						if (findChannelByName(msg.getMultiArgs().at(i)))
+							checkExistChannel(senderFd, msg, msg.getMultiArgs().at(i), i);
+						else
+							joinNewChannel(senderFd, msg.getMultiArgs().at(i));
+					}
+				}
 			}
 		}
 	}
@@ -253,7 +263,7 @@ void Server::partFromChannel(int senderFd, std::string channelName)
 	char								hostname[256];
 
 	if(!findChannelByName(channelName))
-		return (errorHandler(senderFd, 403, channelName)); /*ERR_NOSUCHCHANNEL*/
+		errorHandler(403, channelName); /*ERR_NOSUCHCHANNEL*/
 	it = _mapClients.find(senderFd);
 	Channel &chnl = findChannel(channelName);
 	gethostname(hostname, sizeof(hostname));
@@ -265,7 +275,7 @@ void Server::partFromChannel(int senderFd, std::string channelName)
 	}
 	std::vector<std::string>::iterator	channelMember = std::find(chnl.getChannelMembers().begin(), chnl.getChannelMembers().end(), it->second->getNickName());
 	if (channelMember == chnl.getChannelMembers().end())
-		return (errorHandler(senderFd, 442, "channel")); /*ERR_NOTONCHANNEL*/
+		errorHandler(442, "channel"); /*ERR_NOTONCHANNEL*/
 	chnl.getChannelMembers().erase(channelMember);
 	std::vector<std::string>::iterator	joinedChannel = std::find(it->second->getJoinedChannels().begin(), it->second->getJoinedChannels().end(), channelName);
 	it->second->getJoinedChannels().erase(joinedChannel);
@@ -273,13 +283,12 @@ void Server::partFromChannel(int senderFd, std::string channelName)
 
 void  Server::handlePartCmd(Message &msg, int senderFd)
 {
-
 	if (!_mapClients[senderFd]->getIsAuthValid())	
-		return (errorHandler(senderFd , 451));
+		errorHandler(451);
 	if (msg.getArguments().empty()) /*ERR_NEEDMOREPARAMS*/
-		return (errorHandler(senderFd, 461, msg.getCommand()));
+		errorHandler(461, msg.getCommand());
 	checkMultiArgs(msg);
-	checkChnlNames(msg.getMultiArgs(), senderFd);
+	checkChnlNames(msg.getMultiArgs());
 	if (!msg.getMultiArgs().empty())
 	{
 		for (size_t i = 0; i < msg.getMultiArgs().size(); i++)

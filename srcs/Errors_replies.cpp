@@ -6,17 +6,15 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:58:07 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/19 15:08:45 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 15:13:16 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Server.hpp"
 
-void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string err_arg2)
+void errorHandler(int err_code, std::string err_arg, std::string err_arg2)
 {
-	(void)sender_fd;
 	std::string message;
-
 	switch (err_code)
 	{
 		case 437:
@@ -39,11 +37,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 	}
 	throw message;
 }
-void errorHandler(int sender_fd, int err_code, std::string err_arg)
+void errorHandler(int err_code, std::string err_arg)
 {
-	(void)sender_fd;
 	std::string message;
-
 	switch (err_code)
 	{
 		case 401:
@@ -141,11 +137,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 	}
 	throw message;
 }
-void errorHandler(int sender_fd, int err_code)
+void errorHandler(int err_code)
 {
-	(void)sender_fd;
 	std::string message;
-
 	switch (err_code)
 	{
 		case 409:

@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:16 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 11:19:35 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 15:23:25 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void Server::handlePassCmd(Message &msg, int newSocketFd)
 	Guest *tmpGuest = _mapGuest[newSocketFd];
 			
 	if (!msg.getArguments().size())
-		errorHandler(newSocketFd, 461, "PASS");
+		errorHandler(461, "PASS");
 	else
 	{
 		if (msg.getArguments().at(0).compare(getPassword()))
 		{
 			std::cout << msg.getArguments().at(0).size() << std::endl;	
-			errorHandler(newSocketFd, 464);
+			errorHandler(464);
 		}
 		else
 			tmpGuest->setPassValid(true);
@@ -35,16 +35,16 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 	Guest *tmpGuest = _mapGuest[newSocketFd];
 	
     if (!msg.getArguments().size())
-		errorHandler(newSocketFd, 431);	
+		errorHandler(431);	
 	else if (tmpGuest->getPassValid())
 	{
 		for (std::map<int, Client*>::iterator it = _mapClients.begin(); it != _mapClients.end(); ++it)
 		{
 			if (!it->second->getNickName().compare(msg.getArguments().at(0)))
-				errorHandler(newSocketFd, 436 ,it->second->getNickName());
+				errorHandler(436 ,it->second->getNickName());
 		}
 		if (!isalpha(msg.getArguments().at(0).at(0)) || msg.getArguments().at(0).size() > 8)
-			errorHandler(newSocketFd, 432, msg.getArguments().at(0));
+			errorHandler(432, msg.getArguments().at(0));
 		else{
 			if (!_mapClients[newSocketFd]->getNickName().compare(""))
 			{
@@ -61,7 +61,7 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 	}
 	else
 	{
-		errorHandler(newSocketFd, 464);	
+		errorHandler(464);	
 	}
 }
 
@@ -87,13 +87,13 @@ void Server::handleUserCmd(Message &msg, int newSocketFd)
 	Guest *tmpGuest = _mapGuest[newSocketFd];
 	
 	if (msg.getArguments().size() < 4)
-		errorHandler(newSocketFd, 461, "USER");
+		errorHandler(461, "USER");
 	else if (!tmpGuest->getPassValid()){
-		errorHandler(newSocketFd, 464);
+		errorHandler(464);
 	}
 	else{
 		if (!isalpha(msg.getArguments().at(0).at(0)) && !isnumber(msg.getArguments().at(0).at(0)))
-			errorHandler(newSocketFd, 432, msg.getArguments().at(0));
+			errorHandler(432, msg.getArguments().at(0));
 		else{
 			if (!_mapClients[newSocketFd]->getUserName().compare("")){
 				tmpGuest->setGuestUser(msg.getArguments().at(0));
@@ -117,7 +117,7 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 	char		hostname[256];
 
 	if (!msg.getArguments().size())
-		errorHandler(newSocketFd, 431);
+		errorHandler(431);
 	else
 	{
 		if (_mapClients[newSocketFd]->getIsAuthValid())
@@ -133,11 +133,11 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 					break;
 				}
 				if (it == --_mapClients.end() && msg.getArguments().at(0).compare(it->second->getNickName())) 
-					errorHandler(newSocketFd, 401, msg.getArguments().at(0));
+					errorHandler(401, msg.getArguments().at(0));
 			}
 		}	
 		else
-        	errorHandler(newSocketFd , 451);
+        	errorHandler(451);
 	}
                                                                                               
 }
