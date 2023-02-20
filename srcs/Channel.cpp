@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 18:23:31 by bbrahim           #+#    #+#             */
+/*   Created: 2023/02/17 18:57:26 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/19 11:22:42 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +15,7 @@
 Channel::Channel(): _channelName(""), _channelCreator(""), _channelkey(""), _channelLimit(2), _isMode_O(false), _isMode_o(false), _isMode_v(false), _isMode_a(false), _isMode_i(false), _isMode_m(false), _isMode_n(false), _isMode_q(false), _isMode_p(false), _isMode_s(false), _isMode_r(false), _isMode_t(false), _isMode_k(false), _isMode_l(false), _isMode_b(false), _isMode_e(false), _isMode_I(false)
 {}
 Channel::Channel(const Channel &copy)
-{
+{                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 	*this = copy;
 }
 Channel & Channel::operator=(const Channel &assign)

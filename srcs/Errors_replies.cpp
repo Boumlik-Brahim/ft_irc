@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Errors_replies.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/04 10:31:45 by bbrahim           #+#    #+#             */
+/*   Created: 2023/02/17 18:58:07 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/20 15:13:16 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Server.hpp"
 
-void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string err_arg2)
+void errorHandler(int err_code, std::string err_arg, std::string err_arg2)
 {
-	(void)sender_fd;
 	std::string message;
-
 	switch (err_code)
 	{
 		case 437:
@@ -38,11 +37,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string 
 	}
 	throw message;
 }
-void errorHandler(int sender_fd, int err_code, std::string err_arg)
+void errorHandler(int err_code, std::string err_arg)
 {
-	(void)sender_fd;
 	std::string message;
-
 	switch (err_code)
 	{
 		case 401:
@@ -58,7 +55,7 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 			message = "433 ERR_NICKNAMEINUSE "+err_arg+" :Nickname is already in use";
 			break;
 		case 407:
-			message = "407 ERR_TOOMANYTARGETS "+err_arg+" :Duplicate recipients. No message delivered";
+			message = "407 ERR_TOOMANYTARGETS recipients." +err_arg ;
 			break;
 		case 441:
 			message = "441 ERR_USERNOTINCHANNEL " + err_arg + " : is not on that channel";
@@ -140,11 +137,9 @@ void errorHandler(int sender_fd, int err_code, std::string err_arg)
 	}
 	throw message;
 }
-void errorHandler(int sender_fd, int err_code)
+void errorHandler(int err_code)
 {
-	(void)sender_fd;
 	std::string message;
-
 	switch (err_code)
 	{
 		case 409:

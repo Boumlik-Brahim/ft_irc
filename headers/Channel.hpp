@@ -3,12 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 18:20:09 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/19 17:08:30 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
@@ -35,7 +35,7 @@ class Channel
 		std::vector<std::string>				_channelBannedMembers;
 		std::vector<std::string>				_invitedMembers;
 
-		bool 									_isMode_O;
+		    bool 									_isMode_O;
         bool 									_isMode_o;
         bool 									_isMode_v;
         bool 									_isMode_a;
@@ -66,9 +66,6 @@ class Channel
 		void						setChannelkey(std::string channelkey);
 		std::string&				getChannelTopic(void);
 		void						setChannelTopic(std::string channelTopic);
-		int							getChannelLimit(void) const;
-		void						setChannelLimit(int channelLimit);
-
 		std::vector<std::string>& 	getChannelMembers(void);
 		void 						setChannelMembers(std::string channelMember);
 		std::vector<std::string>& 	getChannelOperators(void);
@@ -77,9 +74,10 @@ class Channel
 		void						setChannelBannedMembers(std::string channelBannedMember);
 		std::vector<std::string>& 	getInvitedMembers(void);
 		void 						setInvitedMembers(std::string channelMember);
+		int							getChannelLimit(void) const;
+		void						setChannelLimit(int channelLimit);
 		bool						getIsMode_O(void) const;
 		void						setIsMode_O(bool isMode_O);
-
 		bool						getIsMode_o(void) const;
 		void						setIsMode_o(bool isMode_o);
 		bool						getIsMode_v(void) const;
@@ -112,7 +110,7 @@ class Channel
 		void						setIsMode_e(bool isMode_e);
 		bool						getIsMode_I(void) const;
 		void						setIsMode_I(bool isMode_I);
-		
+
 		~Channel();
 };
 

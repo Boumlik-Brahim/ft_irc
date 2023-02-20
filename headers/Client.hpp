@@ -3,6 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/17 18:56:38 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/19 11:56:55 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +21,16 @@
 class Client
 {
 	private:
-		Message 					_msg;
+		// Message 					_msg;
 		std::string					_nickName;
 		std::string					_userName;
 		std::string					_realName;
-		int							_clientFd;
-		bool						_isAuthValid;
-		int							_clientMaxnumOfChannels;
 		std::vector<std::string>	_joinedChannels;
 		std::vector<std::string>	_invitedChannels;
+		int							_clientFd;
+		int							_clientMaxnumOfChannels;
+		bool						_isAuthValid;
+
 	public:
 		std::string	buf;
 
@@ -40,16 +45,16 @@ class Client
 		void						setUserName(std::string userName);
 		std::string					getRealName(void) const;
 		void						setRealName(std::string realName);
+		std::vector<std::string>&	getJoinedChannels(void);
+        void						setJoinedChannels(std::string joinedChannel);
+		std::vector<std::string>&	getInvitedChannels(void);
+        void						setInvitedChannels(std::string invitedChannel);
 		int							getClientFd();
 		void						setClientFd(int clientFd);
-		bool						getIsAuthValid(void) const;
-		void						setAuthValid(bool isValid);
 		int							getClientMaxnumOfChannels(void) const;
 		void						setClientMaxnumOfChannels(int clientMaxnumOfChannels);
-		std::vector<std::string>&	getJoinedChannels(void);
-		std::vector<std::string>&	getInvitedChannels(void);
-        void						setJoinedChannels(std::string joinedChannel);
-        void						setInvitedChannels(std::string invitedChannel);
+		bool						getIsAuthValid(void) const;
+		void						setAuthValid(bool isValid);
 
 		~Client();
 };
