@@ -123,6 +123,9 @@ class Server
 		Client& 		findClient(std::string nickName);
 		int 			findClientByNick(std::string nickName);
 		void 	WelcomeMsg(int fd);
+
+		void	treatReplay(Message &msgCopy, int newSocketFd);
+
 		~Server();
 };
 
