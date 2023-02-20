@@ -6,8 +6,10 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 15:30:30 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/20 17:46:37 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../headers/Server.hpp"
 
@@ -394,7 +396,7 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
         }
     }
     else
-        errorHandler(senderFd, 403, channelName);
+        errorHandler(403, channelName);
 }
 
 void    Server::handleKickCmd(Message &msg, int senderFd)
@@ -469,7 +471,7 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
             errorHandler(482, sender);
     }
     else
-        errorHandler(senderFd, 403, channelName);
+        errorHandler(403, channelName);
     
     // check if channel exists
     // check if user exist
