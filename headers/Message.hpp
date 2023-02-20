@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 19:02:45 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 11:26:55 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 15:12:58 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ class Message
 
 void sendReplay(int fd, std::string message);
 void sendMessage(int sender_fd, std::string message);
-void errorHandler(int sender_fd, int err_code, std::string err_arg, std::string err_arg2);
-void errorHandler(int sender_fd, int err_code, std::string err_arg);
-void errorHandler(int sender_fd, int err_code);
+void errorHandler(int err_code, std::string err_arg, std::string err_arg2);
+void errorHandler(int err_code, std::string err_arg);
+void errorHandler(int err_code);
 
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg1, std::string cmd_resp_arg2, std::string cmd_resp_arg3, std::string cmd_resp_arg4);
 void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2, std::string cmd_resp_arg3);
