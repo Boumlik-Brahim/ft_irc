@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:58 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 16:38:14 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 17:43:25 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 						}
 					}
 					else
-						errorHandler(senderFd, 404, tmpChannel.getChannelName());
+						errorHandler(404, tmpChannel.getChannelName());
 				}
 				else
 				{
@@ -131,7 +131,7 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 				}
 			}
 			else
-				errorHandler(senderFd, 403, channelName);
+				errorHandler(403, channelName);
 		}
 		else if (msg.getArguments()[0].at(0) != '#')
 		{

@@ -3,11 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:10:19 by iomayr            #+#    #+#             */
+/*   Updated: 2023/02/20 17:45:10 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../headers/Server.hpp"
 
@@ -219,7 +221,7 @@ void Server::exec_b(Message &msg, int newSocketFd, bool addOrRm)
     std::vector<std::string>::iterator itSender = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), senderNick);
 
     if (msg.getArguments().size() == 1)
-        errorHandler(newSocketFd, 461, msg.getCommand()); //Need More Arguments
+        errorHandler(461, msg.getCommand()); //Need More Arguments
     std::vector<std::string>::iterator itReceiver = std::find(tmpChannel.getChannelBannedMembers().begin(), tmpChannel.getChannelBannedMembers().end(), msg.getArguments().at(1));
     std::vector<std::string>::iterator itReceiver1 = std::find(tmpChannel.getChannelMembers().begin(), tmpChannel.getChannelMembers().end(), msg.getArguments().at(1));
     std::vector<std::string>::iterator itReceiver2 = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), msg.getArguments().at(1));
@@ -237,7 +239,7 @@ void Server::exec_b(Message &msg, int newSocketFd, bool addOrRm)
             std::cout << "ban setted Successfully" << std::endl;
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }
     else{
@@ -247,10 +249,10 @@ void Server::exec_b(Message &msg, int newSocketFd, bool addOrRm)
                 std::cout << "ban removed Successfully" << std::endl;
             }
             else
-                errorHandler(newSocketFd, 401, msg.getArguments().at(0)); //NO such NICK
+                errorHandler( 401, msg.getArguments().at(0)); //NO such NICK
         }
         else{
-            errorHandler(newSocketFd, 482, msg.getArguments().at(0)); //Need Chanop priveleges
+            errorHandler(482, msg.getArguments().at(0)); //Need Chanop priveleges
         }
     }  
 }
@@ -362,7 +364,7 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
                 std::cout << "Topic setted by Member Successfully" << std::endl;
             }
             else
-                errorHandler(newSocketFd, 441, msg.getArguments().at(1), msg.getArguments().at(0)); //User is Not in this channel  
+                errorHandler(441, msg.getArguments().at(1), msg.getArguments().at(0)); //User is Not in this channel  
         }
     }
     else{
