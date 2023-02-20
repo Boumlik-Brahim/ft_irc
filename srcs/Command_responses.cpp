@@ -389,7 +389,7 @@ void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName,
             message = ":" + serverName + " 341 " + nickName + " " + arg2 + "  " + channelName;
             break;
         case 353 :
-            message = ":" + serverName + " 353 " + nickName + " = " + channelName + " : " + arg2;
+            message = ":" + serverName + " 353 " + nickName + " = " + channelName + " :" + arg2;
             break;
         case 352 :
             message = ":" + serverName + " 353 " + nickName + " = " + channelName + " : " + arg2;

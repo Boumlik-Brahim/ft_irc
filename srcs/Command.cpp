@@ -18,6 +18,7 @@ void sendMessage(int fd, std::string message)
 		i += send(fd, message.c_str(), message.length() - i, 0);
 }
 
+
 int Server::findFdClientByNick(std::string receiver, int newSocketFd)
 {
     for(std::map<int, Client *>::iterator it = _mapClients.begin(); it != _mapClients.end(); it++)
@@ -25,6 +26,7 @@ int Server::findFdClientByNick(std::string receiver, int newSocketFd)
         if (it->second->getNickName() == receiver)
             return (it->first);
     }
+	std::cout << "kayn chi haja hna" << std::endl;
     errorHandler(newSocketFd, 401, receiver);
 	return -1;
 }
@@ -56,6 +58,11 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
     std::string 				messageFormat;
     std::vector<int>			receiversFd;
 	std::string					channelName;
+	int							fd;
+	char						hostname[256];
+	std::map<int, Client *>::iterator	it;
+
+	int 						channelExist;
 
 	if (!_mapClients[senderFd]->getIsAuthValid())
 		errorHandler(senderFd, 451);
@@ -67,6 +74,8 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 	//412
 	if (msg.getArguments().size() < 2)
 		errorHandler(senderFd, 412);
+	it = _mapClients.find(senderFd);
+	gethostname(hostname, sizeof(hostname));
 	checkMultiArgs(msg);
 	if (msg.getMultiArgs().size())
 	{
@@ -84,23 +93,54 @@ void  Server::handlePrivmsgCmd(Message &msg, int senderFd)
 		if (msg.getArguments()[0].at(0) == '#')
 		{
 			channelName = msg.getArguments()[0];
-			Channel &tmpChannel = findChannel(channelName);
-			for (size_t i = 0; i < tmpChannel.getChannelMembers().size(); i++)
+			channelExist = findChannelByName(channelName);
+			if (channelExist)
 			{
-				receivers.push_back(tmpChannel.getChannelMembers().at(i));
-				receiversFd.push_back(findFdClientByNick(tmpChannel.getChannelMembers().at(i), senderFd));
-				message = msg.getArguments()[1];
-				messageFormat = ":"+ sender+ " " + cmd + " " + receivers.at(i) + " " + message;
-				sendMessage(receiversFd.at(i), messageFormat);
+				Channel &tmpChannel = findChannel(channelName);
+				if (tmpChannel.getIsMode_n())
+				{
+					if (checkIfClientIsMember(tmpChannel, sender) == true)
+					{
+						message = msg.getArguments()[1];
+						std::string rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " PRIVMSG " + tmpChannel.getChannelName() + " " + message + "\r\n";
+						for (size_t i = 0; i < tmpChannel.getChannelMembers().size(); i++)
+						{
+							std::cout << "member at i ==" << tmpChannel.getChannelMembers().at(i) << std::endl;
+							std::cout << "sender ==" << it->second->getNickName() << std::endl;
+							if (tmpChannel.getChannelMembers().at(i) == it->second->getNickName())
+								continue;
+							fd = findFdClientByNick(tmpChannel.getChannelMembers().at(i));
+							sendReplay(fd, rpl);
+						}
+					}
+					else
+						errorHandler(senderFd, 404, tmpChannel.getChannelName());
+				}
+				else
+				{
+					for (size_t i = 0; i < tmpChannel.getChannelMembers().size(); i++)
+					{
+						receivers.push_back(tmpChannel.getChannelMembers().at(i));
+						receiversFd.push_back(findFdClientByNick(tmpChannel.getChannelMembers().at(i), senderFd));
+						message = msg.getArguments()[1];
+						messageFormat = ":"+ sender+ " " + cmd + " " + receivers.at(i) + " " + message;
+						sendMessage(receiversFd.at(i), messageFormat);
+					}
+				}
 			}
+			else
+				errorHandler(senderFd, 403, channelName);
 		}
-		receivers.push_back(msg.getArguments()[0]);
-		receiversFd.push_back(findFdClientByNick(msg.getArguments()[0], senderFd));
-		message = msg.getArguments()[1];
-		if (message.at(0) != ':')
-        	message.insert(0,1,':');
-		messageFormat = ":"+ sender+ " " +cmd + " " + receivers.at(0) + " " + message;
-    	sendMessage(receiversFd.at(0), messageFormat);
+		else if (msg.getArguments()[0].at(0) != '#')
+		{
+			receivers.push_back(msg.getArguments()[0]);
+			receiversFd.push_back(findFdClientByNick(msg.getArguments()[0], senderFd));
+			message = msg.getArguments()[1];
+			if (message.at(0) != ':')
+				message.insert(0,1,':');
+			messageFormat = ":"+ sender+ " " +cmd + " " + receivers.at(0) + " " + message;
+			sendMessage(receiversFd.at(0), messageFormat);
+		}
 	}
 }
 
@@ -123,26 +163,14 @@ void  Server::handleNoticeCmd(Message &msg, int senderFd)
 	//412
 	if (msg.getArguments().size() < 2)
 		errorHandler(senderFd, 412);
-
-	checkMultiArgs(msg);
-	if (msg.getMultiArgs().size())
-	{
-		receivers = msg.getMultiArgs();
-		for (size_t i = 0; i < receivers.size(); i++)
-		{
-			receiversFd.push_back(findFdClientByNick(receivers.at(i), senderFd));
-			message = msg.getArguments().at(0);
-			messageFormat = ":"+ sender+ " " +cmd + " " + receivers.at(i) + " " + message;
-			sendMessage(receiversFd.at(i), messageFormat);
-		}
-	}
-	else if (msg.getArguments().size())
+	
+	if (msg.getArguments().size())
 	{
 		receivers.push_back(msg.getArguments()[0]);
 		receiversFd.push_back(findFdClientByNick(msg.getArguments()[0], senderFd));
 		message = msg.getArguments()[1];
-		if (message.at(0) != ':')
-        	message.insert(0,1,':');
+		// if (message.at(0) != ':')
+        // 	message.insert(0,1,':');
 		messageFormat = ":"+ sender+ " " +cmd + " " + receivers.at(0) + " " + message;
     	sendMessage(receiversFd.at(0), messageFormat);
 	}
