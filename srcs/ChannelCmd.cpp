@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/17 18:43:52 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/19 15:17:45 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,8 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 	}
 	if (chnl.getIsMode_i())
 	{
-		std::vector<std::string>::iterator	result = std::find(chnl.getInvitedMembers().begin(), chnl.getInvitedMembers().end(), it->second->getNickName());
-		if (result == chnl.getInvitedMembers().end())
+		std::vector<std::string>::iterator	result = std::find(it->second->getInvitedChannels().begin(), it->second->getInvitedChannels().end(), chnl.getChannelName());
+		if (result == it->second->getInvitedChannels().end())
 			return (errorHandler(senderFd, 473, chnl.getChannelName()));/*ERR_INVITEONLYCHAN*/
 	}
 	if (chnl.getIsMode_b())
