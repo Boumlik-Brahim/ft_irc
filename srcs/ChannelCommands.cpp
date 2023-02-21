@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/17 15:30:30 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 17:46:37 by izail            ###   ########.fr       */
+/*   Created: 2023/02/17 15:30:30 by izail             #+#    #+#             */
+/*   Updated: 2023/02/21 13:00:44 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,25 +71,7 @@ std::string Server::findClientWithNoChannel()
     return ChannelClients;
 }
 
-void checkMultiArgs2(Message &msg)
-{
-	std::vector<std::string> 			tmpArgs;
-
-	if (msg.getArguments().at(1).find(',') != std::string::npos)
-	{
-		tmpArgs = splitBySeparator(msg.getArguments().at(1), ",");
-		msg.setMultiArgs(tmpArgs);
-		msg.erase(msg.getArguments().begin());
-		if (msg.getArguments().size())
-		{
-			if (msg.getArguments().at(1).find(',') != std::string::npos)
-			{
-				tmpArgs = splitBySeparator(msg.getArguments().at(1), ",");
-				msg.setArguments(tmpArgs);
-			}
-		}
-	}
-}
+/**************************************************************** TOPIC ****************************************************************/
 
 void    Server::handleTopicCmd(Message &msg, int senderFd)
 {
@@ -99,6 +81,7 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
     int             channelExist;
     std::string     cmd = msg.getCommand();
     int             isUserInChannel;
+    char			hostname[256];
 
     // check params
     if (msg.getArguments().size() == 0 || msg.getArguments()[0] == ":")
@@ -113,6 +96,7 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
     if (!channelExist)
         errorHandler(401, channelName);
     sender = findNickClientByFd(senderFd);
+    gethostname(hostname, sizeof(hostname));
     
     Channel         &tmpChnl  = findChannel(channelName);
     // check the mode 't' is set
@@ -129,7 +113,10 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
             {
                 topic = topic.substr(1, topic.size());
                 tmpChnl.setChannelTopic(topic);
-                cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
+                
+                std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + tmpChnl.getChannelTopic() + "\r\n";
+                sendReplay(senderFd, rpl);
+                // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
             }
             // set topic empty
             else if (topic.at(0) == ':' && topic.size() == 1)
@@ -138,9 +125,17 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
         else if (msg.getArguments().size() == 1)
         {
             if (tmpChnl.getChannelTopic().size() == 0)
-                cmd_Resp_Handler(senderFd, 331, channelName);
+            {
+                std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + "\r\n";
+                sendReplay(senderFd, rpl);
+                // cmd_Resp_Handler(senderFd, 331, channelName);
+            }
             else
-                cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
+            {
+                std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + tmpChnl.getChannelTopic() + "\r\n";
+                sendReplay(senderFd, rpl);
+            }
+                // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
         }
     }
     else
@@ -157,7 +152,9 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
                 {
                     topic = topic.substr(1, topic.size());
                     tmpChnl.setChannelTopic(topic);
-                    cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
+                    // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
+                    std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + " " + tmpChnl.getChannelTopic() + "\r\n";
+                    sendReplay(senderFd, rpl);
                 }
                 else if (topic.at(0) == ':' && topic.size() == 1)
                     tmpChnl.setChannelTopic("");
@@ -165,15 +162,25 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
             else if (msg.getArguments().size() == 1)
             {
                 if (tmpChnl.getChannelTopic().size() == 0)
-                    cmd_Resp_Handler(senderFd, 331, channelName);
+                {
+                    std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + "\r\n";
+                    sendReplay(senderFd, rpl);
+                }
+                    // cmd_Resp_Handler(senderFd, 331, channelName);
                 else
-                    cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
+                {
+                    std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + " " + tmpChnl.getChannelTopic() + "\r\n";
+                    sendReplay(senderFd, rpl);
+                }
+                    // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
             }
         }
         else
             errorHandler(442, sender);
     }
 }
+
+/**************************************************************** NAMES ****************************************************************/
 
 void    Server::handleNamesCmd(Message &msg, int senderFd)
 {
@@ -185,13 +192,14 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
     std::string     messageForm;
     std::string     ChannelClients = "";
 	std::string		creator;
+    char			hostname[256];
 
     // check if user is authenticated
     if (!_mapClients[senderFd]->getIsAuthValid())
 		errorHandler(451);
     
     sender = findNickClientByFd(senderFd);
-    
+    gethostname(hostname, sizeof(hostname)); 
     if (msg.getArguments().size() != 0)
         checkMultiArgs(msg);
     // if only Command NAMES typed , then it prints the list of channels and the users who are not in any channel and visible
@@ -207,13 +215,13 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
                     ChannelClients = "";
                     for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
                         ChannelClients = ChannelClients.append(" ") + tmpChnl.getChannelMembers().at(i);
-                    cmd_Resp_Handler1(senderFd, 353, _server_name, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
+                    cmd_Resp_Handler1(senderFd, 353, hostname, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
                 }
             }
         }
         ChannelClients = findClientWithNoChannel();
         if (ChannelClients.size() > 0)
-            cmd_Resp_Handler1(senderFd, 353, _server_name, sender, std::string("*") , ChannelClients, std::string(""));    
+            cmd_Resp_Handler1(senderFd, 353, hostname, sender, std::string("*") , ChannelClients, std::string(""));    
     }
     // list all channels and their users
     if (!msg.getMultiArgs().empty())
@@ -230,7 +238,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
                 {
                     for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
                         ChannelClients += tmpChnl.getChannelMembers().at(i);
-                    cmd_Resp_Handler1(senderFd, 353, _server_name, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
+                    cmd_Resp_Handler1(senderFd, 353, hostname, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
                 }
             }
         }
@@ -248,12 +256,14 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
             {
                 for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
                     ChannelClients += tmpChnl.getChannelMembers().at(i).append(" ");
-                cmd_Resp_Handler1(senderFd, 353, _server_name, sender, tmpChnl.getChannelName(), ChannelClients, "");
+                cmd_Resp_Handler1(senderFd, 353, hostname, sender, tmpChnl.getChannelName(), ChannelClients, "");
             }  
         }
     }
-    cmd_Resp_Handler1(senderFd, 366, _server_name, sender, std::string("*") , std::string("") , std::string(""));
+    cmd_Resp_Handler1(senderFd, 366, hostname, sender, std::string("*") , std::string("") , std::string(""));
 }
+
+/**************************************************************** LIST ****************************************************************/
 
 void    Server::handleListCmd(Message &msg, int senderFd)
 {
@@ -321,6 +331,7 @@ void    Server::handleListCmd(Message &msg, int senderFd)
     cmd_Resp_Handler1(senderFd, 323, _server_name, sender);
 }
 
+/**************************************************************** INVITE ****************************************************************/
 
 void    Server::handleInviteCmd(Message &msg, int senderFd)
 {
@@ -399,6 +410,8 @@ void    Server::handleInviteCmd(Message &msg, int senderFd)
         errorHandler(403, channelName);
 }
 
+/**************************************************************** KICK ****************************************************************/
+
 void    Server::handleKickCmd(Message &msg, int senderFd)
 {
     std::string     channelName = "";
@@ -425,34 +438,43 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
     std::vector<std::string> _users = splitBySeparator(msg.getArguments()[1], ",");
     gethostname(hostname, sizeof(hostname));
 
+    // only if the channel exists
     if (channelExist)
     {
         Channel &tmpChannel  = findChannel(channelName);
+        // check if the sender is operator to perform the KICK command 'only operators who can KICK clients from channels'
         if (findChannelOperator(sender, tmpChannel))
         {    
+            // if we have multiple cients separated by Comma then we'll execute the instructions on each one of them.
             for (size_t i = 0; i < _users.size(); i++)
             {
+                // if client exists
                 if (findFdClientByNick(_users.at(i)) != -1)
                 {
                     Client &target = findClient(_users.at(i));
+                    // check if client is memeber of the #Channel 
                     if (findUserInChannel(target.getNickName(), tmpChannel))
                     {
+                        // iterate over the #Channel member and if the target client is one of the #channel target member then he will be kicked from the #channel
                         std::vector<std::string>::iterator it = tmpChannel.getChannelMembers().begin();
                         for (; it != tmpChannel.getChannelMembers().end(); ++it)
                         {
                             if (*it == target.getNickName())
                             {
+                                // if there is a third argument is the command then it will be the reason of the kick
                                 if (msg.getArguments().size() == 3)
                                 {
                                     reason = msg.getArguments()[2];
                                     reason = reason.substr(1, reason.size());
                                 }              
+                                // reply for kick
                                 std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " KICK " + tmpChannel.getChannelName() + " " + target.getNickName() + " " + reason +"\r\n";
                                 for (size_t j = 0; j < tmpChannel.getChannelMembers().size() ; j++)
                                 {
                                     fd = findFdClientByNick(tmpChannel.getChannelMembers().at(j));
                                     sendReplay(fd, rpl);
                                 }
+                                // erase the client target from the #channel target members & also erase the #channel target from his joinedChannels 
                                 tmpChannel.getChannelMembers().erase(it);
                                 std::vector<std::string>::iterator it1 = std::find(target.getJoinedChannels().begin(), target.getJoinedChannels().end(), tmpChannel.getChannelName());
                                 target.getJoinedChannels().erase(it1);
@@ -472,9 +494,4 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
     }
     else
         errorHandler(403, channelName);
-    
-    // check if channel exists
-    // check if user exist
-    // check if user exists in that channel
-    // check if the kicker is operator on that channel  
 }
