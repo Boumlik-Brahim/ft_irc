@@ -18,8 +18,10 @@ Server::Server(std::string server_name, int port_number, std::string password) :
 {}
 Server::Server(int port_number, std::string password) : _password(password), _port_number(port_number)
 {}
-Server::Server(const Server &copy) : _password(copy._password), _port_number(copy._port_number)
-{}
+Server::Server(const Server &copy)
+{
+	*this = copy;
+}
 
 Server &Server::operator=(const Server &assign)
 {
@@ -80,13 +82,13 @@ void Server::create_socket()
 		std::cout << "ERROR OPENING SETSOCKETOPT" << std::endl;
 		exit(EXIT_FAILURE);
 	}
+}
+void Server::bind_socket()
+{
 	memset((char *)&_serv_addr, 0, sizeof(_serv_addr));
 	_serv_addr.sin_family = AF_INET;
 	_serv_addr.sin_addr.s_addr = INADDR_ANY;
 	_serv_addr.sin_port = htons(_port_number);
-}
-void Server::bind_socket()
-{
 	if (bind(_socket_fd, (struct sockaddr *)&_serv_addr, sizeof(_serv_addr)) < 0)
 	{
 		std::cout << "ERROR ON BINDING" << std::endl;
@@ -103,11 +105,11 @@ void Server::listen_socket()
 }
 void Server::accept_socket()
 {
-    int numfds;
-    int ret;
-    int sock;
-    int i;
-    int    client_lenght;
+    int	numfds;
+    int	ret;
+    int	sock;
+    int	i;
+    int	client_lenght;
 
     client_lenght = sizeof(_cli_addr);
     memset(_fds, 0, MAX_CONNECTIONS * sizeof(struct pollfd));
@@ -150,7 +152,6 @@ void Server::accept_socket()
         }
     }
 }
-
 void Server::read_write_socket(int newSocketFd, int *count)
 {
 	int		n;
@@ -182,12 +183,6 @@ void Server::read_write_socket(int newSocketFd, int *count)
 			backBone(tmp, newSocketFd);
 		}
 	}
-	// n = write(new_socket_fd, "I GOT YOUR MESSAGE.\n", 20);
-	// if (n < 0)
-	// {
-	// 	std::cout << "ERROR WRITNG ON SOCKET" << std::endl;
-	// 	exit(EXIT_FAILURE);
-	// }	
 }
 void Server::close_socket(int socket_fd)
 {
@@ -202,6 +197,5 @@ void Server::WelcomeMsg(int fd)
 	cmd_Resp_Handler1(fd, 3, _server_name, sender);
 }
 
-// Destructor
 Server::~Server()
 {}

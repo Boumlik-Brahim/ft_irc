@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:40 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/19 11:59:14 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/21 08:18:55 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,53 +39,29 @@ Client & Client::operator=(const Client &assign)
 	return *this;
 }
 
-void Client::setClientFd(int clientFd)
+std::string Client::getNickName(void)
 {
-	_clientFd = clientFd;
-}
-int Client::getClientFd()
-{
-	return (_clientFd);
+	return (_nickName);
 }
 void Client::setNickName(std::string nickName)
 {
 	_nickName = nickName;
 }
-std::string Client::getNickName(void)
+std::string Client::getUserName(void) const
 {
-	return (_nickName);
+	return (_userName);
 }
 void Client::setUserName(std::string userName)
 {
 	_userName = userName;
 }
-std::string Client::getUserName(void) const
-{
-	return (_userName);
-}
-void Client::setRealName(std::string realName)
-{
-	_realName = realName;
-}
 std::string Client::getRealName(void) const
 {
 	return (_realName);
 }
-bool Client::getIsAuthValid(void) const
+void Client::setRealName(std::string realName)
 {
-	return (_isAuthValid);
-}
-void Client::setAuthValid(bool isValid)
-{
-	_isAuthValid = isValid;
-}
-int	Client::getClientMaxnumOfChannels(void) const
-{
-	return (_clientMaxnumOfChannels);	
-}
-void Client::setClientMaxnumOfChannels(int clientMaxnumOfChannels)
-{
-	_clientMaxnumOfChannels = clientMaxnumOfChannels;	
+	_realName = realName;
 }
 std::vector<std::string>& Client::getJoinedChannels(void)
 {
@@ -102,6 +78,30 @@ std::vector<std::string>&	Client::getInvitedChannels(void)
 void Client::setInvitedChannels(std::string invitedChannel)
 {
 	this->_invitedChannels.push_back(invitedChannel);
+}
+int Client::getClientFd()
+{
+	return (_clientFd);
+}
+void Client::setClientFd(int clientFd)
+{
+	_clientFd = clientFd;
+}
+int	Client::getClientMaxnumOfChannels(void) const
+{
+	return (_clientMaxnumOfChannels);	
+}
+void Client::setClientMaxnumOfChannels(int clientMaxnumOfChannels)
+{
+	_clientMaxnumOfChannels = clientMaxnumOfChannels;	
+}
+bool Client::getIsAuthValid(void) const
+{
+	return (_isAuthValid);
+}
+void Client::setAuthValid(bool isValid)
+{
+	_isAuthValid = isValid;
 }
 
 Client::~Client()

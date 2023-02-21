@@ -296,7 +296,7 @@ void Server::backBone(std::string buffer, int newSocketFd)
 			else if (!msg.getCommand().compare("WHOIS"))
 				handleWhoIsCmd(msg, newSocketFd);
 			else if (!msg.getCommand().compare("PONG"))
-				return ;
+				return;
 			else
 				std::cout << "invalid command" << std::endl;		
 		}
