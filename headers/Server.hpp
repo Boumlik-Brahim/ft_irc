@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 19:02:38 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 11:24:26 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/21 15:03:30 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,19 +83,6 @@ class Server
     
 		/*Service Query function*/
 		void		handleWhoIsCmd(Message &msg, int newSocketFd);
-		void checkModes(Message &msg);
-		void checkIfClientExist(int newSocketFd, std::string nickName);
-		void executeModes(Message &msg, int newSocketFd);
-		void execMode(Message &msg, char mode, int newSocketFd, bool addOrRm);
-		void exec_o(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_k(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_l(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_i(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_s(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_p(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_t(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_n(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_b(Message &msg, int newSocketFd, bool addOrRm);
 
 		/*Channel operations functions*/
 		void		handleModeCmd(Message &msg, int newSocketFd);
@@ -111,7 +98,6 @@ class Server
 		void		exec_p(Message &msg, int newSocketFd, bool addOrRm);
 		void		exec_t(Message &msg, int newSocketFd, bool addOrRm);
 		void		exec_n(Message &msg, int newSocketFd, bool addOrRm);
-		void		exec_b(Message &msg, int newSocketFd, bool addOrRm);
 
 		int			findChannelByName(std::string channelName);
 		Channel&	findChannel(std::string channelName);
