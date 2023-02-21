@@ -6,7 +6,7 @@
 /*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:36:23 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/11 17:58:17 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/21 11:05:09 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int main(int argc, char const *argv[])
 {
 	(void)argc;
-	Server server1("irc",atoi(argv[1]), argv[2]);
+	Server server1("localhost",atoi(argv[1]), argv[2]);
 	server1.create_socket();
 	server1.bind_socket();
 	server1.listen_socket();
