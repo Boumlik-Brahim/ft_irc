@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 19:02:38 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 16:30:40 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/21 08:41:52 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define SERVER_HPP
 
 # include <iostream>
-#include <cstdlib>
+# include <cstdlib>
 # include <string>
 # include <unistd.h>
 # include <sys/types.h>
@@ -59,73 +59,74 @@ class Server
 		int			getNew_socket_fd(void) const;
 		void		setNew_socket_fd(int new_socket_fd);
 		
-		void create_socket();
-		void bind_socket();
-		void listen_socket();
-		void accept_socket();
-		void backBone(std::string buffer, int new_socket_fd);
-		void read_write_socket(int new_socket_fd, int *count);
-		void close_socket(int socket_fd);
+		void		create_socket();
+		void		bind_socket();
+		void		listen_socket();
+		void		accept_socket();
+		void		read_write_socket(int new_socket_fd, int *count);
+		void		backBone(std::string buffer, int new_socket_fd);
+		void		close_socket(int socket_fd);
 
+		/*Sending messages functions*/
 		std::string	findNickClientByFd(int sender);
 		int			findFdClientByNick(std::string receiver, int senderFd);
 		int			findFdClientByNick(std::string receiver);
 		void		handleNoticeCmd(Message &msg, int senderFd);
 		void		handlePrivmsgCmd(Message &msg, int senderFd);
 
-		void guestToClient(Guest *tmpGuest, int newSocketFd);
-		void handlePassCmd(Message &msg, int newSocketFd);
-		void handleNickCmd(Message &msg, int newSocketFd);
-		void handleUserCmd(Message &msg, int newSocketFd);
-		void handleWhoIsCmd(Message &msg, int newSocketFd);
-		void handleModeCmd(Message &msg, int newSocketFd);
-		void handleQuitCmd(int newSocketFd);
+		/*Connection Registration functions*/
+		void		guestToClient(Guest *tmpGuest, int newSocketFd);
+		void		handlePassCmd(Message &msg, int newSocketFd);
+		void		handleNickCmd(Message &msg, int newSocketFd);
+		void		handleUserCmd(Message &msg, int newSocketFd);
+		void		handleQuitCmd(int newSocketFd);		
 		
-		void checkModes(Message &msg, int newSocketFd);
-		void checkIfClientExist(int newSocketFd, std::string nickName);
-		void executeModes(Message &msg, int newSocketFd);
-		void execMode(Message &msg, char mode, int newSocketFd, bool addOrRm);
-		void exec_o(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_k(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_l(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_i(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_s(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_p(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_t(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_n(Message &msg, int newSocketFd, bool addOrRm);
-		void exec_b(Message &msg, int newSocketFd, bool addOrRm);
+		/*Service Query function*/
+		void		handleWhoIsCmd(Message &msg, int newSocketFd);
 
-		
-		int	findChannelByName(std::string channelName);
+		/*Channel operations functions*/
+		void		handleModeCmd(Message &msg, int newSocketFd);
+		void		checkModes(Message &msg);
+		void		checkIfClientExist(int newSocketFd, std::string nickName);
+		void		executeModes(Message &msg, int newSocketFd);
+		void		execMode(Message &msg, char mode, int newSocketFd, bool addOrRm);
+		void		exec_o(Message &msg, int newSocketFd, bool addOrRm);
+		void		exec_k(Message &msg, int newSocketFd, bool addOrRm);
+		void		exec_l(Message &msg, int newSocketFd, bool addOrRm);
+		void		exec_i(Message &msg, int newSocketFd, bool addOrRm);
+		void		exec_s(Message &msg, int newSocketFd, bool addOrRm);
+		void		exec_p(Message &msg, int newSocketFd, bool addOrRm);
+		void		exec_t(Message &msg, int newSocketFd, bool addOrRm);
+		void		exec_n(Message &msg, int newSocketFd, bool addOrRm);
+		void		exec_b(Message &msg, int newSocketFd, bool addOrRm);
 
-		Channel& findChannel(std::string channelName);
-		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
-		void joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
-		void setChannel(Channel &chnl, std::string channelName, std::string channelCreator);
-		void joinNewChannel(int senderFd, std::string channelName);
-		void joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator	&it);
-		void checkExistChannel(int senderFd, Message &msg, std::string channelName, int i);
-		void leaveAllChannels(int senderFd);
-		void handleJoinCmd(Message &msg, int senderFd);
+		int			findChannelByName(std::string channelName);
+		Channel&	findChannel(std::string channelName);
+		void		setChannel(Channel &chnl, std::string channelName, std::string channelCreator,  std::string channelkey);
+		void		joinNewChannelWithKey(int senderFd, std::string channelName, std::string channelkey);
+		void		setChannel(Channel &chnl, std::string channelName, std::string channelCreator);
+		void		joinNewChannel(int senderFd, std::string channelName);
+		void		joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator	&it);
+		void		checkExistChannel(int senderFd, Message &msg, std::string channelName, int i);
+		void		leaveAllChannels(int senderFd);
+		void		handleJoinCmd(Message &msg, int senderFd);
 
-		void partFromChannel(int senderFd, std::string channelName);
-		void handlePartCmd(Message &msg, int senderFd);
+		void		partFromChannel(int senderFd, std::string channelName);
+		void		handlePartCmd(Message &msg, int senderFd);
 
-		// Ishak
-		void			handleTopicCmd(Message &msg, int senderFd);
-		void    		handleNamesCmd(Message &msg, int senderFd);
-		void    		handleListCmd(Message &msg, int senderFd);
-		void    		handleInviteCmd(Message &msg, int senderFd);
-		void    		handleKickCmd(Message &msg, int senderFd);
-		bool			findChannelOperator(std::string sender, Channel chnl);
-		bool 			findUserInChannel(std::string sender, Channel &chnl);
-		bool 			checkIfClientIsMember(Channel &chnl, std::string clientName);
-		bool   			checkInvitedChannels(Client &client, std::string channelName);
-		std::string 	findClientWithNoChannel();
-		Client& 		findClient(std::string nickName);
-		void 	WelcomeMsg(int fd);
-
-		void	treatReplay(Message &msgCopy, int newSocketFd);
+		void		handleTopicCmd(Message &msg, int senderFd);
+		void		handleNamesCmd(Message &msg, int senderFd);
+		void		handleListCmd(Message &msg, int senderFd);
+		void		handleInviteCmd(Message &msg, int senderFd);
+		void		handleKickCmd(Message &msg, int senderFd);
+		bool		findChannelOperator(std::string sender, Channel chnl);
+		bool		findUserInChannel(std::string sender, Channel &chnl);
+		bool		checkIfClientIsMember(Channel &chnl, std::string clientName);
+		bool		checkInvitedChannels(Client &client, std::string channelName);
+		std::string	findClientWithNoChannel();
+		Client&		findClient(std::string nickName);
+		void		WelcomeMsg(int fd);
+		void		treatReplay(Message &msgCopy, int newSocketFd);
 
 		~Server();
 };
