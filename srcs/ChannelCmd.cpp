@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 11:37:55 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/21 15:12:26 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	Server::joinNewChannel(int senderFd, std::string channelName)
 	it->second->setJoinedChannels(channelName);
 	gethostname(hostname, sizeof(hostname));
 	rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " JOIN :" + channelName + "\r\n"
-		+ ":" + it->second->getNickName() + " MODE " + channelName + " +n\r\n"
+		+ ":" + it->second->getNickName() + " MODE " + channelName + " +sn\r\n"
 		+ ":irc" + " 353 " + it->second->getNickName() + " @ " + channelName + " :@" + it->second->getNickName() + "\r\n" 
 		+ ":irc" + " 366 " + it->second->getNickName() + " " + channelName + " :End of /NAMES list\r\n";
 	sendReplay(senderFd, rpl);
