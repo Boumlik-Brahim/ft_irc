@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:10:19 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/20 17:45:10 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/20 18:20:42 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../headers/Server.hpp"
 
@@ -22,9 +21,8 @@ void Server::checkIfClientExist(int newSocketFd, std::string nickName)
         errorHandler(401, nickName);
 }
 
-void splitModes(Message &msg, std::string modes, int newSocketFd)
+void splitModes(Message &msg, std::string modes)
 {
-    (void)newSocketFd;
     std::string modeList = "OovaimnqpsrtklbeI";
     
     if (modes.at(0) == '+')
@@ -56,7 +54,7 @@ void splitModes(Message &msg, std::string modes, int newSocketFd)
     }
 }
 
-void Server::checkModes(Message &msg, int newSocketFd)
+void Server::checkModes(Message &msg)
 {
     size_t argSize = msg.getArguments().size();
     
@@ -64,12 +62,12 @@ void Server::checkModes(Message &msg, int newSocketFd)
     {
         if (msg.getArguments().at(1).at(0) == '+' || msg.getArguments().at(1).at(0) == '-')
         {
-            splitModes(msg, msg.getArguments().at(1), newSocketFd);
+            splitModes(msg, msg.getArguments().at(1));
             msg.setIsAddOrRm(msg.getArguments().at(1).at(0) == '+' ? true : false);
             msg.getArguments().erase(msg.getArguments().begin() + 1);
             if (msg.getArguments().at(1).at(0) == '+' || msg.getArguments().at(1).at(0) == '-')
             {
-                splitModes(msg, msg.getArguments().at(1), newSocketFd);    
+                splitModes(msg, msg.getArguments().at(1));    
                 msg.getArguments().erase(msg.getArguments().begin() + 1);
             }
         }
@@ -80,7 +78,7 @@ void Server::checkModes(Message &msg, int newSocketFd)
     {
         if (msg.getArguments().at(1).at(0) != '+' || msg.getArguments().at(1).at(0) != '-'){
             msg.setIsAddOrRm(msg.getArguments().at(1).at(0) == '+' ? true : false);
-            splitModes(msg, msg.getArguments().at(1), newSocketFd);
+            splitModes(msg, msg.getArguments().at(1));
         }
         else
             errorHandler(472, std::string(1, msg.getArguments().at(1).at(0)));//Unkown Mode
@@ -90,7 +88,7 @@ void Server::checkModes(Message &msg, int newSocketFd)
     {
         if (msg.getArguments().at(1).at(0) != '+' || msg.getArguments().at(1).at(0) != '-'){
             msg.setIsAddOrRm(msg.getArguments().at(1).at(0) == '+' ? true : false);
-            splitModes(msg, msg.getArguments().at(1), newSocketFd);
+            splitModes(msg, msg.getArguments().at(1));
             msg.getArguments().erase(msg.getArguments().begin() + 1);
         }
         else
@@ -469,7 +467,7 @@ void Server::handleModeCmd(Message &msg, int newSocketFd)
     if (msg.getArguments().at(0).at(0) == '#')
     {
         if (findChannelByName(msg.getArguments().at(0))){
-            checkModes(msg, newSocketFd);
+            checkModes(msg);
             executeModes(msg, newSocketFd);
             treatReplay(msgCopy, newSocketFd);
         }
