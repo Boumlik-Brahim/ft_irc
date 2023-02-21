@@ -132,7 +132,7 @@ void Server::handleWhoIsCmd(Message &msg, int newSocketFd)
 			}
 		}	
 		else
-        	errorHandler(451);
+        	errorHandler(451); //You have not registred
 	}
                                                                                               
 }

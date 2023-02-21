@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:58:19 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 11:25:31 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/21 10:55:41 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void Server::accept_socket()
     int	sock;
     int	i;
     int	client_lenght;
-    int	count;
 
     client_lenght = sizeof(_cli_addr);
     memset(_fds, 0, MAX_CONNECTIONS * sizeof(struct pollfd));
@@ -125,7 +124,7 @@ void Server::accept_socket()
             std::cout << "ERROR ON POLL" << std::endl;
             exit(EXIT_FAILURE);
         }
-        for (i = 0; i < numfds; i++)
+        for (i = 0; i < numfds; i++ )
         {
             if (_fds[i].revents & POLLIN)
             {
@@ -140,14 +139,14 @@ void Server::accept_socket()
                     _fds[numfds].fd = _new_socket_fd;
                     _fds[numfds].events = POLLIN;
                     numfds++;
-                    count = numfds;
+					std::cout << "fds online => " << numfds << "\n";
                     _mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
-                    _mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client(_new_socket_fd)));
+					_mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client(_new_socket_fd)));					
                 }
                 else
                 {
                     sock = _fds[i].fd;
-                    read_write_socket(sock, &count);
+                    read_write_socket(sock, &numfds);
                 }
             }
         }
