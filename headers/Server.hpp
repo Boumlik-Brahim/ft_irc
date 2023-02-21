@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 19:02:38 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 16:30:40 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/21 11:24:26 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ class Server
 		void handleModeCmd(Message &msg, int newSocketFd);
 		void handleQuitCmd(int newSocketFd);
 		
-		void checkModes(Message &msg, int newSocketFd);
+		void checkModes(Message &msg);
 		void checkIfClientExist(int newSocketFd, std::string nickName);
 		void executeModes(Message &msg, int newSocketFd);
 		void execMode(Message &msg, char mode, int newSocketFd, bool addOrRm);
