@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 17:55:02 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 17:55:05 by bbrahim          ###   ########.fr       */
+/*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/21 11:37:55 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../headers/Server.hpp"
 
@@ -148,6 +149,7 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 		std::vector<std::string>::iterator	result = std::find(it->second->getInvitedChannels().begin() , it->second->getInvitedChannels().end(), chnl.getChannelName());
 		if (result == it->second->getInvitedChannels().end())
 			errorHandler(473, chnl.getChannelName());/*ERR_INVITEONLYCHAN*/
+ 		it->second->getInvitedChannels().erase(result);
 	}
 	if (chnl.getIsMode_b())
 	{
@@ -267,15 +269,15 @@ void Server::partFromChannel(int senderFd, std::string channelName)
 	it = _mapClients.find(senderFd);
 	Channel &chnl = findChannel(channelName);
 	gethostname(hostname, sizeof(hostname));
+	std::vector<std::string>::iterator	channelMember = std::find(chnl.getChannelMembers().begin(), chnl.getChannelMembers().end(), it->second->getNickName());
+	if (channelMember == chnl.getChannelMembers().end())
+		errorHandler(442, "channel"); /*ERR_NOTONCHANNEL*/
 	std::string rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " PART :" + chnl.getChannelName() + "\r\n";
 	for(size_t i = 0; i < chnl.getChannelMembers().size(); i++)
 	{
 		fd = findFdClientByNick(chnl.getChannelMembers().at(i));
 		sendReplay(fd, rpl);
 	}
-	std::vector<std::string>::iterator	channelMember = std::find(chnl.getChannelMembers().begin(), chnl.getChannelMembers().end(), it->second->getNickName());
-	if (channelMember == chnl.getChannelMembers().end())
-		errorHandler(442, "channel"); /*ERR_NOTONCHANNEL*/
 	chnl.getChannelMembers().erase(channelMember);
 	std::vector<std::string>::iterator	joinedChannel = std::find(it->second->getJoinedChannels().begin(), it->second->getJoinedChannels().end(), channelName);
 	it->second->getJoinedChannels().erase(joinedChannel);
