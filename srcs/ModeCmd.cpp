@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:10:19 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/21 11:23:55 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/21 14:21:55 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,18 +424,23 @@ void Server::handleModeCmd(Message &msg, int newSocketFd)
     
     if (msg.getArguments().empty())
         errorHandler(461, msg.getCommand());
-    if (msg.getArguments().at(0).at(0) == '#')
+    if (_mapClients[newSocketFd]->getIsAuthValid())
     {
-        if (findChannelByName(msg.getArguments().at(0))){
-            checkModes(msg);
-            executeModes(msg, newSocketFd);
-            treatReplay(msgCopy, newSocketFd);
+        if (msg.getArguments().at(0).at(0) == '#')
+        {
+            if (findChannelByName(msg.getArguments().at(0))){
+                checkModes(msg);
+                executeModes(msg, newSocketFd);
+                treatReplay(msgCopy, newSocketFd);
+            }
+            else
+                errorHandler(403, msg.getArguments().at(0)); //NO such channel
         }
-        else
+        else{
             errorHandler(403, msg.getArguments().at(0)); //NO such channel
+        }
     }
-    else{
-        errorHandler(403, msg.getArguments().at(0)); //NO such channel
-    }
+    else
+        errorHandler(451); //You have not registred
     
 }
