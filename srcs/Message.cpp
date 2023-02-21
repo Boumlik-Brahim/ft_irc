@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 13:35:14 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/15 09:06:25 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/21 08:26:07 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,21 @@
 
 Message::Message()
 {}
-Message::Message(const Message &copy) : _arguments(copy._arguments), _command(copy._command), _isValidCommad(copy._isValidCommad)
-{}
+Message::Message(const Message &copy)
+{
+	*this = copy;
+}
 
 Message & Message::operator=(const Message &assign)
 {
 	if (this != &assign)
 	{
 		_arguments = assign._arguments;
+		_multiArgs = assign._multiArgs;
 		_command = assign._command;
+		_vecAddMode = assign._vecAddMode;
+		_vecRmMode = assign._vecRmMode;
+		_isAddOrRm = assign._isAddOrRm;
 		_isValidCommad = assign._isValidCommad;
 	}
 	return *this;
@@ -60,12 +66,6 @@ void Message::setIsValidCommand(bool isValid)
 {
 	_isValidCommad = isValid;
 }
-
-void Message::erase(std::vector<std::string>::iterator it)
-{
-	_arguments.erase(it);
-}
-
 std::vector<char>& Message::getVecAddMode(void)
 {
 	return _vecAddMode;
@@ -82,15 +82,18 @@ void Message::setVecRmMode(char m)
 {
 	_vecRmMode.push_back(m);
 }
-
+bool Message::getIsAddOrRm(void) const
+{
+	return _isAddOrRm;
+}
 void Message::setIsAddOrRm(bool trueOrFalse)
 {
 	_isAddOrRm = trueOrFalse;
 }
 
-bool Message::getIsAddOrRm(void) const
+void Message::erase(std::vector<std::string>::iterator it)
 {
-	return _isAddOrRm;
+	_arguments.erase(it);
 }
 
 Message::~Message()

@@ -6,60 +6,13 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:50 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 16:13:33 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/20 18:47:25 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Server.hpp"
 
-void cmd_Resp_Handler(int sender_fd, int cmd_resp_code)
-{
-	std::string message;
-	switch (cmd_resp_code)
-	{
-        case 002 :
-            message = ":irc 002 Your host is irc , running version 1.0";
-            break;
-        case 305 :
-            message = "305 RPL_UNAWAY :You are no longer marked as being away";
-            break;
-        case 306 :
-            message = "306 RPL_NOWAWAY :You have been marked as being away";
-            break;
-        case 321 :
-            message = "321 RPL_LISTSTART Obsolete. Not used.";
-            break;
-        case 323 :
-            message = "323 RPL_LISTEND :End of LIST";
-            break;
-        case 374 :
-            message = "374 RPL_ENDOFINFO :End of INFO list";
-            break;
-        case 376 :
-            message = "376 RPL_ENDOFMOTD :End of MOTD command";
-            break;
-        case 381 :
-            message = "381 RPL_YOUREOPER :You are now an IRC operator";
-            break;
-        case 392 :
-            message = "392 RPL_USERSSTART :UserID Terminal  Host";
-            break;
-        case 394 :
-            message = "394 RPL_ENDOFUSERS :End of users";
-            break;
-        case 395 :
-            message = "395 RPL_NOUSERS :Nobody logged in";
-            break;
-        case 210 :
-            message = "210 RPL_TRACERECONNECT Unused.";
-            break;
-		default:
-			std::cout << "Invalid command response code " << cmd_resp_code <<  std::endl;
-	}
-	sendMessage(sender_fd, message);
-}
-
-void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg)
+void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg) /**/
 {
 	std::string message;
 	switch (cmd_resp_code)
@@ -162,7 +115,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 	sendMessage(sender_fd, message);
 }
 
-void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2)
+void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2) /**/
 {
 	std::string message;
 	switch (cmd_resp_code)
@@ -263,94 +216,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 	sendMessage(sender_fd, message);
 }
 
-void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg, std::string cmd_resp_arg2, std::string cmd_resp_arg3)
-{
-	std::string message;
-	switch (cmd_resp_code)
-	{
-		case 001 :
-	        message = "001 RPL_WELCOME Welcome to the Internet Relay Network <nick>" + cmd_resp_arg + "!<user>" + cmd_resp_arg2 + "@<host>" + cmd_resp_arg3;
-            break;
-        case 312 :
-            message = "312 RPL_WHOISSERVER <nick>" + cmd_resp_arg + " <server>" + cmd_resp_arg2 + " :<server info>" + cmd_resp_arg3;
-            break;
-        case 353 :
-            message = ":irc 353 " + cmd_resp_arg + " = " + cmd_resp_arg2 + " : " + cmd_resp_arg3;
-        case 322 :
-            message = "322 RPL_LIST <channel>" + cmd_resp_arg + " <# visible>" + cmd_resp_arg2 + " :<topic>" + cmd_resp_arg3;
-            break;
-        case 393 :
-            message = "393 RPL_USERS :<username>" + cmd_resp_arg + " <ttyline>" + cmd_resp_arg2 + " <hostname>" + cmd_resp_arg3;
-            break;
-        case 324 :
-            message = "324 RPL_CHANNELMODEIS <channel>" + cmd_resp_arg + " <mode>" + cmd_resp_arg2 + " <mode params>" + cmd_resp_arg3;
-            break;
-        case 311 :
-            message = "311 RPL_WHOISUSER " + cmd_resp_arg + " " + cmd_resp_arg2 + " @<host> * :" + cmd_resp_arg3;
-            break;
-        // case 353 :
-        //     message = "353 RPL_NAMREPLY ( " + cmd_resp_arg + " ) " + cmd_resp_arg2 + " :[ @ / + ] " + cmd_resp_arg3 +" *( " " [ @ / + ]" + cmd_resp_arg3 +" )";
-        //     break;
-        // case 004 :
-        //     message = "004 RPL_MYINFO <servername> <version> <available user modes><available channel modes>";
-        //     break;
-        // case 314 :
-        //     message = "314 RPL_WHOWASUSER <nick> <user> <host> * :<real name>";
-        //     break;
-        // case 351 :
-        //     message = "351 RPL_VERSION <version>.<debuglevel> <server> :<comments>";
-        //     break;
-        // case 352 :
-        //     message = "352 RPL_WHOREPLY <channel> <user> <host> <server> <nick> ( H / G > [*] [ ( @ / + ) ] :<hopcount> <real name>";
-        //     break;
-        // case 364 :
-        //     message = "364 RPL_LINKS <mask> <server> :<hopcount> <server info>";
-        //     break;
-        // case 200 :
-        //     message = "200 RPL_TRACELINK Link <version & debug level> <destination> <next server> V<protocol version> <link uptime in seconds> <backstream sendq> <upstream sendq>";
-        //     break;
-        // case 206 :
-        //     message = "206 RPL_TRACESERVER Serv <class> <int>S <int>C <server> <nick!user|*!*>@<host|server> V<protocol version>";
-        //     break;
-        // case 207 :
-        //     message = "207 RPL_TRACESERVICE Service <class> <name> <type> <active type>";
-        //     break;
-        // case 11  :
-        //     message = "11 RPL_STATSLINKINFO <linkname> <sendq> <sent messages> <sent Kbytes> <received messages> <received Kbytes> <time open>";
-        //     break;
-        // case 212 :
-        //     message = "212 RPL_STATSCOMMANDS <command> <count> <byte count> <remote count>";
-        //     break;
-        // case 242 :
-        //     message = "242 RPL_STATSUPTIME :Server Up %d days %d:%02d:%02d";
-        //     break;
-        // case 234 :
-        //     message = "234 RPL_SERVLIST <name> <server> <mask> <type> <hopcount> <info>";
-        //     break;
-        // case 251 :
-        //     message = "251 RPL_LUSERCLIENT :There are <integer> users and <integer>services on <integer> servers";
-        //     break;
-		default:
-			std::cout << "Invalid command response code " << cmd_resp_code <<  std::endl;
-	}
-	sendMessage(sender_fd, message);
-}
-
-void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg1, std::string cmd_resp_arg2, std::string cmd_resp_arg3, std::string cmd_resp_arg4)
-{
-	std::string message;
-	switch (cmd_resp_code)
-	{
-		case 322 :
-	        message = ":irc 322 " + cmd_resp_arg1 + " " + cmd_resp_arg2 + " " + cmd_resp_arg3 + " " + cmd_resp_arg4;
-            break;
-		default:
-			std::cout << "Invalid command response code" << std::endl;
-	}
-	sendMessage(sender_fd, message);
-}
-
-void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName)
+void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName) /**/
 {
 	std::string message;
 	switch (cmd_resp_code)
@@ -376,7 +242,7 @@ void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName,
 	sendMessage(sender_fd, message);
 }
 
-void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName, std::string channelName, std::string arg2, std::string arg3)
+void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName, std::string channelName, std::string arg2, std::string arg3) /**/
 {
 	std::string message;
 	switch (cmd_resp_code)

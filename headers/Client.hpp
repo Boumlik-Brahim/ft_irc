@@ -6,7 +6,7 @@
 /*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:56:38 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/19 11:56:55 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/21 08:13:15 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 class Client
 {
 	private:
-		// Message 					_msg;
 		std::string					_nickName;
 		std::string					_userName;
 		std::string					_realName;
