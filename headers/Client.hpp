@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:56:38 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 08:13:15 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/22 16:29:26 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class Client
 		std::string					_realName;
 		std::vector<std::string>	_joinedChannels;
 		std::vector<std::string>	_invitedChannels;
+		int 						_loginTime;	
 		int							_clientFd;
 		int							_clientMaxnumOfChannels;
 		bool						_isAuthValid;
@@ -54,6 +55,8 @@ class Client
 		void						setClientMaxnumOfChannels(int clientMaxnumOfChannels);
 		bool						getIsAuthValid(void) const;
 		void						setAuthValid(bool isValid);
+		int							getLoginTime(void);
+		void						setLoginTime(int LoginTime);
 
 		~Client();
 };
