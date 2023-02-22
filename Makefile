@@ -6,6 +6,7 @@
 #    By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/07 10:08:15 by bbrahim           #+#    #+#              #
+#    Updated: 2023/02/22 18:54:21 by iomayr           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +22,7 @@ MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))
 MAIN := main.cpp
 
 
-CLASSES = Bot Channel Server Client Message Command Errors_replies Command_responses Split Guest Authentication ChannelCmd ModeCmd ChannelCommands
+CLASSES = Bot Channel Server Client Message Command Errors_replies Command_responses Split Guest Authentication ChannelCmd ModeCmd ChannelCommands BotCmd
 
 SRC := $(addprefix srcs/, $(addsuffix .cpp, $(CLASSES)))
 
