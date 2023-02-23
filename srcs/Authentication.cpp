@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:54:27 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 17:54:29 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/22 18:52:15 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,13 @@ void Server::handleNickCmd(Message &msg, int newSocketFd)
 void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
 {
 	Client *tmpClient = _mapClients[newSocketFd];
+	time_t login_time = time(NULL);
 	
 	tmpClient->setNickName(tmpGuest->getGuestNick()); 
 	tmpClient->setUserName(tmpGuest->getGuestUser()); 
 	tmpClient->setRealName(tmpGuest->getGuestRealName()); 
   	tmpClient->setAuthValid(true);
+	tmpClient->setLoginTime(login_time);
   	WelcomeMsg(newSocketFd);
 
 }
