@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 19:02:38 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/23 10:35:11 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/23 16:08:41 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "../headers/Guest.hpp"
 # include "../headers/Channel.hpp"
 
-# define MAX_CONNECTIONS 15
+# define MAX_CONNECTIONS 5
 class Server
 {
 	private:
@@ -70,10 +70,11 @@ class Server
 		void		backBone(std::string buffer, int new_socket_fd);
 		void		close_socket(int socket_fd);
 
-		/*Sending messages functions*/
 		std::string	findNickClientByFd(int sender);
 		int			findFdClientByNick(std::string receiver, int senderFd);
 		int			findFdClientByNick(std::string receiver);
+		
+		/*Sending messages functions*/
 		void		handleNoticeCmd(Message &msg, int senderFd);
 		void		handlePrivmsgCmd(Message &msg, int senderFd);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:54:13 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 17:54:17 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/23 15:41:21 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ void                        checkMultiArgs(Message &msg);
 void                        checkChnlNames(std::vector<std::string> tmpArgs);
 std::vector<std::string>    splitBySeparator(std::string args, std::string sep);
 void                        sendReplay(int fd, std::string message);
+void                        parseMessageFormat(Message &msg, char **data);
 
 #endif
