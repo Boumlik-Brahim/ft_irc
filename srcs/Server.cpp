@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:58:19 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 10:55:41 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/21 16:35:29 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void Server::accept_socket()
         }
     }
 }
-void Server::read_write_socket(int newSocketFd, int *count)
+void Server::read_write_socket(int newSocketFd, int *numfds)
 {
 	int		n;
 	char	buffer[256];
@@ -168,7 +168,7 @@ void Server::read_write_socket(int newSocketFd, int *count)
 	if (n == 0)
 	{
 		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
-		(*count)--;
+		(*numfds)--;
 		handleQuitCmd(newSocketFd);
 		return ;
 	}
