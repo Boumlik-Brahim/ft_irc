@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 19:02:38 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 15:03:30 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/23 10:35:11 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <sstream>
+# include <ctime>
+# include <cmath>
 # include <poll.h>
 # include <map>
 # include "../headers/Client.hpp"
@@ -28,7 +31,7 @@
 # include "../headers/Guest.hpp"
 # include "../headers/Channel.hpp"
 
-# define MAX_CONNECTIONS 10
+# define MAX_CONNECTIONS 15
 class Server
 {
 	private:
@@ -79,7 +82,9 @@ class Server
 		void		handlePassCmd(Message &msg, int newSocketFd);
 		void		handleNickCmd(Message &msg, int newSocketFd);
 		void		handleUserCmd(Message &msg, int newSocketFd);
-		void		handleQuitCmd(int newSocketFd);		
+		void		handleLogTime(Message &msg, int newSocketFd);
+		void		handleQuitCmd(int newSocketFd);
+			
     
 		/*Service Query function*/
 		void		handleWhoIsCmd(Message &msg, int newSocketFd);
@@ -126,6 +131,8 @@ class Server
 		Client&		findClient(std::string nickName);
 		void		WelcomeMsg(int fd);
 		void		treatReplay(Message &msgCopy, int newSocketFd);
+
+		void		handleBotCmd(Message &msg, int senderFd);
 
 		~Server();
 };
