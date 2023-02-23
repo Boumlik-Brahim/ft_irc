@@ -158,9 +158,8 @@ void Server::read_write_socket(int newSocketFd, int *numfds)
 		std::cout << "ERROR READING FROM SOCKET" << std::endl;
 		exit(EXIT_FAILURE);
 	}
-	if (n == 0)
+	if (n == 0 || !strcmp(buffer, "QUIT Leaving...\r\n"))
 	{
-		std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 		(*numfds)--;
 		handleQuitCmd(newSocketFd);
 		return ;
