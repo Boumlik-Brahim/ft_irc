@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 09:39:29 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 15:12:26 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/23 10:59:46 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,29 +106,38 @@ void	Server::joinNewChannel(int senderFd, std::string channelName)
 	sendReplay(senderFd, rpl);
 }
 
-void	Server::joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator	&it)
+void    Server::joinExistChannel(Channel &chnl, std::map<int, Client *>::iterator    &it)
 {
-	std::string	rpl;
-	std::string	namreplyFlag;
-	int			fd;
-	char		hostname[256];
+    std::string    rpl;
+    std::string    namreplyFlag;
+    int            fd;
+    char        hostname[256];
+    std::string channelMembers = "";
 
-	chnl.setChannelMembers(it->second->getNickName());
-	it->second->setJoinedChannels(chnl.getChannelName());
-	gethostname(hostname, sizeof(hostname));
-	namreplyFlag = " = ";
-	if (chnl.getIsMode_s())
-		namreplyFlag = " @ ";
-	if (chnl.getIsMode_p())
-		namreplyFlag = " * ";
-	rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " JOIN :" + chnl.getChannelName() + "\r\n"
-		+ ":irc" + " 353 " + it->second->getNickName() + namreplyFlag + chnl.getChannelName() + " :" + it->second->getNickName() + " @" + chnl.getChannelCreator() + "\r\n"
-		+ ":irc" + " 366 " + it->second->getNickName() + " " + chnl.getChannelName() + " :End of /NAMES list\r\n";
-	for(size_t i = 0; i < chnl.getChannelMembers().size(); i++)
-	{
-		fd = findFdClientByNick(chnl.getChannelMembers().at(i));
-		sendReplay(fd, rpl);
-	}
+    chnl.setChannelMembers(it->second->getNickName());
+    it->second->setJoinedChannels(chnl.getChannelName());
+    
+    gethostname(hostname, sizeof(hostname));
+    namreplyFlag = " = ";
+    if (chnl.getIsMode_s())
+        namreplyFlag = " @ ";
+    if (chnl.getIsMode_p())
+        namreplyFlag = " * ";
+    for (size_t i = 0; i < chnl.getChannelMembers().size(); i++)
+    {
+        if (chnl.getChannelMembers().at(i) == chnl.getChannelCreator())
+            continue;
+        channelMembers = channelMembers.append(" ") + chnl.getChannelMembers().at(i);
+    }
+    rpl = ":" + it->second->getNickName() + "!~" + it->second->getUserName() + "@" + hostname + " JOIN :" + chnl.getChannelName() + "\r\n"
+        + ":" + _server_name + " 353 " + it->second->getNickName() + namreplyFlag + chnl.getChannelName() + " :" + " @" + chnl.getChannelCreator() + channelMembers + "\r\n"
+        + ":" + _server_name + " 366 " + it->second->getNickName() + " " + chnl.getChannelName() + " :End of /NAMES list\r\n";
+    for(size_t i = 0; i < chnl.getChannelMembers().size(); i++)
+    {
+        std::cout << "user ---" << chnl.getChannelMembers().at(i) << std::endl;
+        fd = findFdClientByNick(chnl.getChannelMembers().at(i));
+        sendReplay(fd, rpl);
+    }
 }
 
 void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelName, int i)
@@ -144,21 +153,6 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 	}
 	if (it->second->getJoinedChannels().size() >= (size_t)it->second->getClientMaxnumOfChannels() )/*ERR_TOOMANYCHANNELS*/
 		errorHandler(405, channelName);
-	if (chnl.getIsMode_i())
-	{
-		std::vector<std::string>::iterator	result = std::find(it->second->getInvitedChannels().begin() , it->second->getInvitedChannels().end(), chnl.getChannelName());
-		if (result == it->second->getInvitedChannels().end())
-			errorHandler(473, chnl.getChannelName());/*ERR_INVITEONLYCHAN*/
- 		it->second->getInvitedChannels().erase(result);
-	}
-	if (chnl.getIsMode_b())
-	{
-		for(size_t i = 0; i < chnl.getChannelBannedMembers().size(); i++)
-		{
-			if (chnl.getChannelBannedMembers().at(i) == it->second->getNickName())
-				errorHandler(474,  chnl.getChannelName());/*ERR_BANNEDFROMCHAN*/
-		}
-	}
 	if (chnl.getIsMode_l())
 	{
 		if (chnl.getChannelMembers().size() >= (size_t)chnl.getChannelLimit())/*ERR_CHANNELISFULL*/
@@ -168,11 +162,21 @@ void	Server::checkExistChannel(int senderFd, Message &msg, std::string channelNa
 	{
 		if ((!msg.getMultiArgs().empty() && !msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() > 1))
 		{
-			if (chnl.getChannelkey() != msg.getArguments().at(i))
-				errorHandler(475, chnl.getChannelName());/*ERR_BADCHANNELKEY*/
+			if ((size_t)i < msg.getArguments().size())
+			{
+				if (chnl.getChannelkey() != msg.getArguments().at(i))
+					errorHandler(475, chnl.getChannelName());/*ERR_BADCHANNELKEY*/
+			}
 		}
 		else if ((!msg.getMultiArgs().empty() && msg.getArguments().empty()) || (msg.getMultiArgs().empty() && msg.getArguments().size() == 1))
 			errorHandler(475, chnl.getChannelName());/*ERR_BADCHANNELKEY*/
+	}
+	if (chnl.getIsMode_i())
+	{
+		std::vector<std::string>::iterator	result = std::find(it->second->getInvitedChannels().begin() , it->second->getInvitedChannels().end(), chnl.getChannelName());
+		if (result == it->second->getInvitedChannels().end())
+			errorHandler(473, chnl.getChannelName());/*ERR_INVITEONLYCHAN*/
+ 		it->second->getInvitedChannels().erase(result);
 	}
 	joinExistChannel(chnl, it);
 }
