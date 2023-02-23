@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:40 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 08:18:55 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/22 16:31:28 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,15 @@ bool Client::getIsAuthValid(void) const
 void Client::setAuthValid(bool isValid)
 {
 	_isAuthValid = isValid;
+}
+
+int	Client::getLoginTime(void)
+{
+	return _loginTime;
+}
+void Client::setLoginTime(int loginTime)
+{
+	_loginTime = loginTime;
 }
 
 Client::~Client()
