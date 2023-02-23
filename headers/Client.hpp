@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 18:20:06 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 13:37:35 by bbrahim          ###   ########.fr       */
+/*   Created: 2023/02/17 18:56:38 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/22 16:29:26 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,31 +21,42 @@
 class Client
 {
 	private:
-		Message 					_msg;
 		std::string					_nickName;
 		std::string					_userName;
 		std::string					_realName;
-		int							_clientFd;
-		bool						_isAuthValid;
 		std::vector<std::string>	_joinedChannels;
+		std::vector<std::string>	_invitedChannels;
+		int 						_loginTime;	
+		int							_clientFd;
+		int							_clientMaxnumOfChannels;
+		bool						_isAuthValid;
 
 	public:
 		std::string	buf;
 
 		Client();
+		Client(int newSocketFd);
 		Client(const Client &copy);
 		Client & operator=(const Client &assign);
 
-		int			getClientFd();
-		void		setClientFd(int clientFd);
-		std::string	getNickName(void);
-		void		setNickName(std::string nickName);
-		std::string	getUserName(void) const;
-		void		setUserName(std::string userName);
-		std::string	getRealName(void) const;
-		void		setRealName(std::string realName);
-		bool		getIsAuthValid(void) const;
-		void		setAuthValid(bool isValid);
+		std::string					getNickName(void);
+		void						setNickName(std::string nickName);
+		std::string					getUserName(void) const;
+		void						setUserName(std::string userName);
+		std::string					getRealName(void) const;
+		void						setRealName(std::string realName);
+		std::vector<std::string>&	getJoinedChannels(void);
+        void						setJoinedChannels(std::string joinedChannel);
+		std::vector<std::string>&	getInvitedChannels(void);
+        void						setInvitedChannels(std::string invitedChannel);
+		int							getClientFd();
+		void						setClientFd(int clientFd);
+		int							getClientMaxnumOfChannels(void) const;
+		void						setClientMaxnumOfChannels(int clientMaxnumOfChannels);
+		bool						getIsAuthValid(void) const;
+		void						setAuthValid(bool isValid);
+		int							getLoginTime(void);
+		void						setLoginTime(int LoginTime);
 
 		~Client();
 };

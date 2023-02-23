@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/01 11:20:15 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/08 10:13:19 by izail            ###   ########.fr       */
+/*   Created: 2023/02/20 17:54:13 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/20 17:54:17 by bbrahim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 
 #include "Server.hpp"
 
-
-char	**ft_split(const char *s, char c);
-void    checkMultiArgs(Message &msg);
-void    checkChnlNames(std::vector<std::string> tmpArgs, int newSocketFd);
-
+char	                    **ft_split(char *s, char c);
+void                        checkMultiArgs(Message &msg);
+void                        checkChnlNames(std::vector<std::string> tmpArgs);
+std::vector<std::string>    splitBySeparator(std::string args, std::string sep);
+void                        sendReplay(int fd, std::string message);
 
 #endif

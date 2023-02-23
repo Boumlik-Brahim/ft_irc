@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Split.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/14 13:12:13 by bbrahim           #+#    #+#             */
+/*   Updated: 2023/02/20 16:15:09 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Utils.hpp"
 
-int ft_strlen(const char *str)
+int ft_strlen(char *str)
 {
     int i;
 
@@ -18,7 +22,7 @@ int ft_strlen(const char *str)
     return (i);
 }
 
-static int	find(const char *s, char c)
+static int	find(char *s, char c)
 {
 	int	p;
 	int	j;
@@ -41,7 +45,7 @@ static int	find(const char *s, char c)
 	return (p);
 }
 
-static char	*ft_print(const char *s, size_t start, size_t end)
+static char	*ft_print(char *s, size_t start, size_t end)
 {
 	char	*ptr;
 	int		i;
@@ -58,7 +62,7 @@ static char	*ft_print(const char *s, size_t start, size_t end)
 	return (ptr);
 }
 
-char	**ft_split(const char *s, char c)
+char	**ft_split(char *s, char c)
 {
 	char	**ptr;
 	int		p;
