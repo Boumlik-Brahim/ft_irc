@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command_responses.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrahim <bbrahim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:50 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/20 18:47:25 by bbrahim          ###   ########.fr       */
+/*   Updated: 2023/02/23 15:13:10 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
             message = "369 RPL_ENDOFWHOWAS <nick>" + cmd_resp_arg + " :End of WHOWAS";
             break;
         case 331 :
-            message = "331 RPL_NOTOPIC " + cmd_resp_arg + " :No topic is set\r\n";
+            message = "331 RPL_NOTOPIC " + cmd_resp_arg + " :No topic is set";
             break;
         case 342 :
             message = "342 RPL_SUMMONING <user>" + cmd_resp_arg + " :Summoning user to IRC";

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:58:19 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 16:35:29 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/23 11:48:11 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,12 +136,17 @@ void Server::accept_socket()
                         std::cout << "ERROR ON ACCEPT" << std::endl;
                         exit(EXIT_FAILURE);
                     }
-                    _fds[numfds].fd = _new_socket_fd;
-                    _fds[numfds].events = POLLIN;
-                    numfds++;
-					std::cout << "fds online => " << numfds << "\n";
-                    _mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
-					_mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client(_new_socket_fd)));					
+					if (numfds >= MAX_CONNECTIONS)
+						close(_new_socket_fd);
+					else
+					{
+                		_fds[numfds].fd = _new_socket_fd;
+						_fds[numfds].events = POLLIN;	
+						numfds++;
+						std::cout << "fds online => " << numfds << "\n";
+						_mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
+						_mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client(_new_socket_fd)));					
+					}
                 }
                 else
                 {

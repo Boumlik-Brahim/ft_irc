@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommands.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 15:30:30 by izail             #+#    #+#             */
-/*   Updated: 2023/02/21 20:36:48 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/23 12:00:40 by izail            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ std::string Server::findClientWithNoChannel()
     for (std::map<int, Client *>::iterator it = _mapClients.begin(); it != _mapClients.end() ; it++)
     {
         if (it->second->getJoinedChannels().size() == 0)
-            ChannelClients += it->second->getNickName().append(" ");
+            ChannelClients = ChannelClients.append(" ") + it->second->getNickName();
     }
     return ChannelClients;
 }
@@ -185,13 +185,13 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
                     ChannelClients = "";
                     for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
                         ChannelClients = ChannelClients.append(" ") + tmpChnl.getChannelMembers().at(i);
-                    cmd_Resp_Handler1(senderFd, 353, hostname, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
+                    cmd_Resp_Handler1(senderFd, 353, _server_name, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
                 }
             }
         }
         ChannelClients = findClientWithNoChannel();
         if (ChannelClients.size() > 0)
-            cmd_Resp_Handler1(senderFd, 353, hostname, sender, std::string("*") , ChannelClients, std::string(""));    
+            cmd_Resp_Handler1(senderFd, 353, _server_name, sender, std::string("*") , ChannelClients, std::string(""));    
     }
     // list all channels and their users
     if (!msg.getMultiArgs().empty())
@@ -230,7 +230,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
             }  
         }
     }
-    cmd_Resp_Handler1(senderFd, 366, hostname, sender, std::string("*") , std::string("") , std::string(""));
+    cmd_Resp_Handler1(senderFd, 366, _server_name, sender, std::string("*") , std::string("") , std::string(""));
 }
 
 /**************************************************************** LIST ****************************************************************/
