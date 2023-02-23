@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommands.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 15:30:30 by izail             #+#    #+#             */
-/*   Updated: 2023/02/21 13:00:44 by izail            ###   ########.fr       */
+/*   Updated: 2023/02/21 20:36:48 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,85 +99,55 @@ void    Server::handleTopicCmd(Message &msg, int senderFd)
     gethostname(hostname, sizeof(hostname));
     
     Channel         &tmpChnl  = findChannel(channelName);
-    // check the mode 't' is set
-    if (tmpChnl.getIsMode_t())
+    
+    isUserInChannel = findUserInChannel(sender, tmpChnl);
+    if (isUserInChannel)
     {
-        // if mode 't' is true then check if the user who wants to change topic is operator
-        if (!findChannelOperator(sender, tmpChnl))
-            errorHandler(482, sender);
         // check if channel has topic before
         if ((msg.getArguments().size() > 1))
         {
-            topic = msg.getArguments()[1];
-            if (topic.size() > 1 && topic.at(0) == ':')
+            if (tmpChnl.getIsMode_t())
             {
-                topic = topic.substr(1, topic.size());
-                tmpChnl.setChannelTopic(topic);
-                
-                std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + tmpChnl.getChannelTopic() + "\r\n";
-                sendReplay(senderFd, rpl);
-                // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
-            }
-            // set topic empty
-            else if (topic.at(0) == ':' && topic.size() == 1)
-                tmpChnl.setChannelTopic("");
-        }
-        else if (msg.getArguments().size() == 1)
-        {
-            if (tmpChnl.getChannelTopic().size() == 0)
-            {
-                std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + "\r\n";
-                sendReplay(senderFd, rpl);
-                // cmd_Resp_Handler(senderFd, 331, channelName);
+                if (findChannelOperator(sender, tmpChnl))
+                {
+                    topic = msg.getArguments()[1];
+                    if (topic.size() > 1 && topic.at(0) == ':')
+                    {
+                        topic = topic.substr(1, topic.size());
+                        tmpChnl.setChannelTopic(topic);
+                        cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
+                    }
+                    else if (topic.at(0) == ':' && topic.size() == 1)
+                        tmpChnl.setChannelTopic("");    
+                    }
+                else
+                    errorHandler(482, sender);
             }
             else
-            {
-                std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + tmpChnl.getChannelTopic() + "\r\n";
-                sendReplay(senderFd, rpl);
-            }
-                // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
-        }
-    }
-    else
-    {
-        // check if user in channel
-        isUserInChannel = findUserInChannel(sender, tmpChnl);
-        if (isUserInChannel)
-        {
-            // check if channel has topic before
-            if ((msg.getArguments().size() > 1))
             {
                 topic = msg.getArguments()[1];
                 if (topic.size() > 1 && topic.at(0) == ':')
                 {
                     topic = topic.substr(1, topic.size());
                     tmpChnl.setChannelTopic(topic);
-                    // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
-                    std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + " " + tmpChnl.getChannelTopic() + "\r\n";
-                    sendReplay(senderFd, rpl);
+                    cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());   
                 }
                 else if (topic.at(0) == ':' && topic.size() == 1)
-                    tmpChnl.setChannelTopic("");
-            }
-            else if (msg.getArguments().size() == 1)
-            {
-                if (tmpChnl.getChannelTopic().size() == 0)
-                {
-                    std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + "\r\n";
-                    sendReplay(senderFd, rpl);
-                }
-                    // cmd_Resp_Handler(senderFd, 331, channelName);
-                else
-                {
-                    std::string rpl = ":" + sender + "!~" + sender + "@" + hostname + " TOPIC " + tmpChnl.getChannelName() + " " + tmpChnl.getChannelTopic() + "\r\n";
-                    sendReplay(senderFd, rpl);
-                }
-                    // cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
+                    tmpChnl.setChannelTopic("");    
             }
         }
-        else
-            errorHandler(442, sender);
+        else if (msg.getArguments().size() == 1)
+        {
+            if (tmpChnl.getChannelTopic().size() == 0){
+                cmd_Resp_Handler(senderFd, 331, channelName);
+            }
+            else{
+                cmd_Resp_Handler(senderFd, 332, channelName, tmpChnl.getChannelTopic());
+            }
+        }
     }
+    else
+        errorHandler(442, sender);
 }
 
 /**************************************************************** NAMES ****************************************************************/
@@ -461,6 +431,11 @@ void    Server::handleKickCmd(Message &msg, int senderFd)
                         {
                             if (*it == target.getNickName())
                             {
+                                if (findChannelOperator(target.getNickName(), tmpChannel))
+                                {
+                                    std::cout << "cant kick operator" << std::endl;
+                                    return ;
+                                }
                                 // if there is a third argument is the command then it will be the reason of the kick
                                 if (msg.getArguments().size() == 3)
                                 {
