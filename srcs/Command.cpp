@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:57:58 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 14:12:19 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/23 10:34:01 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,8 @@ void Server::backBone(std::string buffer, int newSocketFd)
 				handleNoticeCmd(msg, newSocketFd);
 			else if (!msg.getCommand().compare("WHOIS"))
 				handleWhoIsCmd(msg, newSocketFd);
+			else if (!msg.getCommand().compare("BOT"))
+				handleBotCmd(msg, newSocketFd);
 			else if (!msg.getCommand().compare("PONG"))
 				return;
 			else
