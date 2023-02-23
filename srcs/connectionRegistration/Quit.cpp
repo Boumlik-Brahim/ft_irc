@@ -33,5 +33,6 @@ void Server::handleQuitCmd(int newSocketFd)
 		delete itClient->second;
 		_mapClients.erase(itClient);
 	}
+	std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 	close(newSocketFd);
 }
