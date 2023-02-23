@@ -6,7 +6,7 @@
 /*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:10:19 by iomayr            #+#    #+#             */
-/*   Updated: 2023/02/21 14:21:55 by iomayr           ###   ########.fr       */
+/*   Updated: 2023/02/22 18:55:34 by iomayr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ void Server::exec_o(Message &msg, int newSocketFd, bool addOrRm)
         if (itSender != tmpChannel.getChannelOperators().end()){
             if (itReceiver != tmpChannel.getChannelMembers().end()){
                 tmpChannel.getChannelOperators().push_back(msg.getArguments().at(1));
-                tmpChannel.getChannelMembers().erase(itReceiver);
                 msg.getArguments().erase(msg.getArguments().begin() + 1);
             }
             else{
@@ -132,7 +131,6 @@ void Server::exec_o(Message &msg, int newSocketFd, bool addOrRm)
         itReceiver = std::find(tmpChannel.getChannelOperators().begin(), tmpChannel.getChannelOperators().end(), msg.getArguments().at(1));
         if (itSender != tmpChannel.getChannelOperators().end()){
             if (itReceiver != tmpChannel.getChannelOperators().end()){
-                tmpChannel.getChannelMembers().push_back(msg.getArguments().at(1));
                 tmpChannel.getChannelOperators().erase(itReceiver);
                 msg.getArguments().erase(msg.getArguments().begin() + 1);
             }
@@ -309,7 +307,7 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
         std::string topic = msg.getArguments().at(1);
         if (tmpChannel.getIsMode_t()){
             if (itSenderOp != tmpChannel.getChannelOperators().end()){
-                std::cout << "Topic setted by Operator Successfully" << std::endl;
+                std::cout << "Topic setted by Operator Successfully" << topic << std::endl;
                 tmpChannel.setChannelTopic(topic);
                 tmpChannel.setIsMode_t(true);
             }
@@ -321,7 +319,7 @@ void Server::exec_t(Message &msg, int newSocketFd, bool addOrRm)
             if (itSenderMem != tmpChannel.getChannelMembers().end()){
                 tmpChannel.setChannelTopic(topic);
                 tmpChannel.setIsMode_t(true);
-                std::cout << "Topic setted by Member Successfully" << std::endl;
+                std::cout << "Topic setted by Member Successfully" << topic << std::endl;
             }
             else
                 errorHandler(441, msg.getArguments().at(1), msg.getArguments().at(0)); //User is Not in this channel  
@@ -402,6 +400,7 @@ void Server::executeModes(Message &msg, int newSocketFd)
 
 void Server::treatReplay(Message &msgCopy, int newSocketFd)
 {
+    int         fd;
     std::string rpl;
     std::string modes;
     char        hostname[256];
@@ -414,7 +413,11 @@ void Server::treatReplay(Message &msgCopy, int newSocketFd)
         modes += msgCopy.getArguments().at(i);
     }
     rpl = ":" + itClient->second->getNickName() + "!~" + itClient->second->getUserName() + "@" + hostname + " MODE " + tmpChannel.getChannelName() +  modes + "\r\n";
-	sendReplay(newSocketFd, rpl);
+    for(size_t i = 0; i < tmpChannel.getChannelMembers().size(); i++)
+	{
+		fd = findFdClientByNick(tmpChannel.getChannelMembers().at(i));
+		sendReplay(fd, rpl);
+	}
 }
 
 void Server::handleModeCmd(Message &msg, int newSocketFd)
@@ -441,6 +444,5 @@ void Server::handleModeCmd(Message &msg, int newSocketFd)
         }
     }
     else
-        errorHandler(451); //You have not registred
-    
+        errorHandler(451); //You have not registred 
 }
