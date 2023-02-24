@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/19 19:02:38 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/23 16:08:41 by izail            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
@@ -31,7 +20,7 @@
 # include "../headers/Guest.hpp"
 # include "../headers/Channel.hpp"
 
-# define MAX_CONNECTIONS 5
+# define MAX_CONNECTIONS 10
 class Server
 {
 	private:
