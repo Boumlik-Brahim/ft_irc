@@ -12,5 +12,4 @@ void Server::guestToClient(Guest *tmpGuest, int newSocketFd)
   	tmpClient->setAuthValid(true);
 	tmpClient->setLoginTime(login_time);
   	WelcomeMsg(newSocketFd);
-
 }
