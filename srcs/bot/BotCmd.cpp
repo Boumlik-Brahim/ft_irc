@@ -28,7 +28,7 @@ void Server::handleLogTime(Message &msg, int newSocketFd)
 			sHour << hours;
 			sMin << minutes;
 			sSec << seconds;
-			rpl += ":BOT NOTICE " + receiver + " :" + "ibra Logged " + sHour.str() + ":" + sMin.str() + ":" + sSec.str() + "\r\n";
+			rpl += ":BOT NOTICE " + receiver + " : " + receiver  + " Logged " + sHour.str() + ":" + sMin.str() + ":" + sSec.str() + "\r\n";
 			sendReplay(newSocketFd, rpl);
 		}
 		else{
@@ -55,6 +55,7 @@ void  Server::handleBotCmd(Message &msg, int senderFd)
 		message += ":BOT NOTICE " + receiver + " :" + "*     BOT: Used to interpret and execute commands given by users.           *\r\n";
 		message += ":BOT NOTICE " + receiver + " :" + "*     BOT <help>: Used to display information about available commands      *\r\n";
 		message += ":BOT NOTICE " + receiver + " :" + "*     BOT <logtime>: Used to track the amount of time spent on a server.    *\r\n";
+		message += ":BOT NOTICE " + receiver + " :" + "*     BOT <search> <nickname> : Used to get informations about a user.      *\r\n";
 		message += ":BOT NOTICE " + receiver + " :" + "*************************************BOT*************************************\r\n";
 		sendReplay(senderFd, message);
 	}
@@ -81,10 +82,11 @@ void  Server::handleBotCmd(Message &msg, int senderFd)
 			message += ":BOT NOTICE " + receiver + " :" + "*     BOT: Used to interpret and execute commands given by users.                                                    *\r\n";
 			message += ":BOT NOTICE " + receiver + " :" + "*     BOT <help>: Used to display information about available command                                                *\r\n";
 			message += ":BOT NOTICE " + receiver + " :" + "*     BOT <logtime>: Used to track the amount of time spent on a server.                                             *\r\n";
+			message += ":BOT NOTICE " + receiver + " :" + "*     BOT <search> <nickname> : Used to get informations about <nickname> user.                                      *\r\n";
 			message += ":BOT NOTICE " + receiver + " :" + "**********************************************************BOT*********************************************************\r\n";
 			sendReplay(senderFd, message);
 		}
-		else if (msg.getArguments().at(0) == "search" && msg.getArguments().size() > 1)
+		else if (msg.getArguments().at(0) == "search" && msg.getArguments().size() == 2)
 		{
 			std::map<int, Client *>::iterator    it;
 			std::string channels= "";
@@ -112,16 +114,16 @@ void  Server::handleBotCmd(Message &msg, int senderFd)
 			}
 			if (nbrPublicChannel == 0)
 				channels = "There is no Channel for this user";
-			message =  ":BOT NOTICE " + receiver + " :" + "************************** CLIENT INFORMATION **************************\r\n";
-			message += ":BOT NOTICE " + receiver + " :" + "*    NICK NAME : " + it->second->getNickName() + "                      \r\n";
-			message += ":BOT NOTICE " + receiver + " :" + "*    REAL NAME : " + it->second->getRealName() + "                      \r\n";
-			message += ":BOT NOTICE " + receiver + " :" + "*    USER NAME : " + it->second->getUserName() + "                      \r\n";
-			message += ":BOT NOTICE " + receiver + " :" + "************************************************************************\r\n";
-			message += ":BOT NOTICE " + receiver + " :" + " *************************** CLIENT CHANNELS ****************************\r\n";
-			message += ":BOT NOTICE " + receiver + " :" + " *    PRIVATE CHANNELS * : " + std::to_string(nbrPrivateChannel) + "     \r\n";
-			message += ":BOT NOTICE " + receiver + " :" + " *    SECRET  CHANNELS @ : " + std::to_string(nbrSecretChannel)+ "       \r\n";
-			message += ":BOT NOTICE " + receiver + " :" + " *    PUBLIC  CHANNELS = : " + channels + "                              \r\n";
-			message += ":BOT NOTICE " + receiver + " :" + " ************************************************************************\r\n";
+			message =  ":BOT NOTICE " + receiver + " :" + " **************************** CLIENT INFORMATION *****************************\r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " *    NICK NAME : " + it->second->getNickName() + "                            \r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " *    REAL NAME : " + it->second->getRealName() + "                            \r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " *    USER NAME : " + it->second->getUserName() + "                            \r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " *****************************************************************************\r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " ***************************** CLIENT CHANNELS *******************************\r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " *    PRIVATE CHANNELS * : " + std::to_string(nbrPrivateChannel) + "          \r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " *    SECRET  CHANNELS @ : " + std::to_string(nbrSecretChannel)+ "            \r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " *    PUBLIC  CHANNELS = : " + channels + "                                   \r\n";
+			message += ":BOT NOTICE " + receiver + " :" + " *****************************************************************************\r\n";
 			sendReplay(senderFd, message);
 		}
 		else if (msg.getArguments().at(0) == "logtime"){
@@ -133,6 +135,7 @@ void  Server::handleBotCmd(Message &msg, int senderFd)
 			message += ":BOT NOTICE " + receiver + " :" + "*     BOT: Used to interpret and execute commands given by users.           *\r\n";
 			message += ":BOT NOTICE " + receiver + " :" + "*     BOT <help>: Used to display information about available commands      *\r\n";
 			message += ":BOT NOTICE " + receiver + " :" + "*     BOT <logtime>: Used to track the amount of time spent on a server.    *\r\n";
+			message += ":BOT NOTICE " + receiver + " :" + "*     BOT <search> <nickname> : Used to get informations about a user.      *\r\n";
 			message += ":BOT NOTICE " + receiver + " :" + "*************************************BOT*************************************\r\n";
 			sendReplay(senderFd, message);
 		}
