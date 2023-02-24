@@ -4,6 +4,7 @@
 void Server::handleQuitCmd(int newSocketFd)
 {
 	std::map<int, Client*>::iterator	itClient = _mapClients.find(newSocketFd);
+	std::map<int, Guest*>::iterator	itGuest = _mapGuest.find(newSocketFd);
 	std::string 						clientNick = itClient->second->getNickName();
 	std::vector<std::string> 			chnlVec = itClient->second->getJoinedChannels();
 	
@@ -32,6 +33,10 @@ void Server::handleQuitCmd(int newSocketFd)
 	if (itClient != _mapClients.end()){
 		delete itClient->second;
 		_mapClients.erase(itClient);
+	}
+	if (itGuest != _mapGuest.end()){
+		delete itGuest->second;
+		_mapGuest.erase(itGuest);
 	}
 	std::cout << "CLIENT IS DISCONNECTED." << std::endl;
 	close(newSocketFd);
