@@ -55,7 +55,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
                 if (tmpChnl.getIsMode_p() == false && tmpChnl.getIsMode_s() == false)
                 {
                     for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
-                        ChannelClients += tmpChnl.getChannelMembers().at(i);
+                        ChannelClients = ChannelClients.append(" ") + tmpChnl.getChannelMembers().at(i);
                     cmd_Resp_Handler1(senderFd, 353, hostname, sender, tmpChnl.getChannelName(), ChannelClients , std::string(""));
                 }
             }
@@ -73,7 +73,7 @@ void    Server::handleNamesCmd(Message &msg, int senderFd)
             if (tmpChnl.getIsMode_p() == false && tmpChnl.getIsMode_s() == false)
             {
                 for (size_t i = 0; i < tmpChnl.getChannelMembers().size(); i++)
-                    ChannelClients += tmpChnl.getChannelMembers().at(i).append(" ");
+                    ChannelClients = ChannelClients.append(" ") + tmpChnl.getChannelMembers().at(i);
                 cmd_Resp_Handler1(senderFd, 353, hostname, sender, tmpChnl.getChannelName(), ChannelClients, "");
             }  
         }
