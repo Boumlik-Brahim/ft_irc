@@ -216,7 +216,7 @@ void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName,
 	        message = ":" + serverName + " 002 " + nickName + " Your Host is localhost, running version 1.0";
             break;
 		case 3 :
-	        message = ":" + serverName + " 003 " + nickName + " The server was created on 23/0/2023";
+	        message = ":" + serverName + " 003 " + nickName + " The server was created on 24/02/2023";
             break;
         case 321 :
             message = ":" + serverName + " 321 " + nickName + " Channel :Users Name";

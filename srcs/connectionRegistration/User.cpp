@@ -14,7 +14,7 @@ void Server::handleUserCmd(Message &msg, int newSocketFd)
 		if (!isalpha(msg.getArguments().at(0).at(0)) && !isnumber(msg.getArguments().at(0).at(0)))
 			errorHandler(432, msg.getArguments().at(0));
 		else{
-			if (!_mapClients[newSocketFd]->getUserName().compare("")){
+			if (!_mapClients[newSocketFd]->getUserName().compare("")){ //check if the user already exist
 				tmpGuest->setGuestUser(msg.getArguments().at(0));
 				tmpGuest->setGuestRealName(msg.getArguments().at(3));
 				tmpGuest->setUserValid(true);
