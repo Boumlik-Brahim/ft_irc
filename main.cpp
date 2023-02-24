@@ -23,18 +23,11 @@ int main(int argc, char const *argv[])
             return -1;
         }
     }
-	try
-	{
-		Server server1("localhost", atoi(argv[1]), argv[2]);
-		server1.create_socket();
-		server1.bind_socket();
-		server1.listen_socket();
-		server1.accept_socket();
-		server1.close_socket(server1.getSocket_fd());
-	}
-	catch(const std::exception& e) {
-		std::cerr << e.what() << std::endl;
-	}
-
+	Server server1("localhost", atoi(argv[1]), argv[2]);
+	server1.create_socket();
+	server1.bind_socket();
+	server1.listen_socket();
+	server1.accept_socket();
+	server1.close_socket(server1.getSocket_fd());
 	return (0);
 }

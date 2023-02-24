@@ -9,11 +9,6 @@ MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))
 
 MAIN := main.cpp
 
-
-# CLASSES = Bot Channel Server Client Message Command Errors_replies Command_responses Split Guest Authentication ChannelCmd ModeCmd ChannelCommands BotCmd
-
-# SRC := $(addprefix srcs/, $(addsuffix .cpp, $(CLASSES)))
-
 SRC := 	srcs/channelOperations/Invite.cpp srcs/channelOperations/Join.cpp srcs/channelOperations/Kick.cpp srcs/channelOperations/List.cpp \
 		srcs/channelOperations/Mode.cpp srcs/channelOperations/Names.cpp srcs/channelOperations/Part.cpp srcs/channelOperations/Topic.cpp \
 		srcs/classes/Channel.cpp srcs/classes/Server.cpp srcs/classes/Client.cpp srcs/classes/Message.cpp srcs/classes/Guest.cpp \
