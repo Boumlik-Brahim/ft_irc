@@ -148,11 +148,11 @@ void Server::accept_socket()
 void Server::read_write_socket(int newSocketFd, int *numfds)
 {
 	int		n;
-	char	buffer[256];
+	char	buffer[511];
 
-	bzero(buffer, 256);
+	bzero(buffer, 511);
 	Client *client = _mapClients[newSocketFd];
-	n = recv(newSocketFd, buffer, 255, 0);
+	n = recv(newSocketFd, buffer, 510, 0);
 	if (n < 0)
 	{
 		std::cout << "ERROR READING FROM SOCKET" << std::endl;
