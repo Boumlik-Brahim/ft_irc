@@ -1,23 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: izail <izail@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:36:23 by bbrahim           #+#    #+#             */
-/*   Updated: 2023/02/21 14:26:42 by izail            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "headers/Server.hpp"
 #include "headers/Channel.hpp"
 #include "headers/Client.hpp"
-#include "headers/Bot.hpp"
 
 int main(int argc, char const *argv[])
 {
-	// (void)argc;
 	if (argc != 3)
 		return (std::cout << "ERROR : number of args must be 3" << std::endl, -1);
 	for (size_t i = 0; i < strlen(argv[1]); i++) {

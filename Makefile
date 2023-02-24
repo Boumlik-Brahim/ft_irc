@@ -1,22 +1,10 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: izail <izail@student.42.fr>                +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/02/07 10:08:15 by bbrahim           #+#    #+#              #
-#    Updated: 2023/02/23 16:26:22 by izail            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = ircserv
 
 CXX = c++
 
-FLAGS =  -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+FLAGS =  -Wall -Wextra -Werror -std=c++98 
 
-HEADERS = server client channel bot Utils Guest Message
+HEADERS = server client channel Utils Guest Message
 MANDATORY_HEADERS := $(addprefix headers/, $(addsuffix .hpp, $(HEADERS)))
 
 MAIN := main.cpp
@@ -28,7 +16,7 @@ MAIN := main.cpp
 
 SRC := 	srcs/channelOperations/Invite.cpp srcs/channelOperations/Join.cpp srcs/channelOperations/Kick.cpp srcs/channelOperations/List.cpp \
 		srcs/channelOperations/Mode.cpp srcs/channelOperations/Names.cpp srcs/channelOperations/Part.cpp srcs/channelOperations/Topic.cpp \
-		srcs/classes/Bot.cpp srcs/classes/Channel.cpp srcs/classes/Server.cpp srcs/classes/Client.cpp srcs/classes/Message.cpp srcs/classes/Guest.cpp \
+		srcs/classes/Channel.cpp srcs/classes/Server.cpp srcs/classes/Client.cpp srcs/classes/Message.cpp srcs/classes/Guest.cpp \
 		srcs/connectionRegistration/GuestToClient.cpp srcs/connectionRegistration/Nick.cpp srcs/connectionRegistration/Pass.cpp \
 		srcs/connectionRegistration/User.cpp srcs/connectionRegistration/Quit.cpp \
 		srcs/sendingMessages/Notice.cpp srcs/sendingMessages/Privmsg.cpp \
