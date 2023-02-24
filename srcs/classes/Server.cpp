@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iomayr <iomayr@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/24 13:20:50 by iomayr            #+#    #+#             */
+/*   Updated: 2023/02/24 13:30:07 by iomayr           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/Server.hpp"
 
 Server::Server()
@@ -131,7 +143,6 @@ void Server::accept_socket()
                 		_fds[numfds].fd = _new_socket_fd;
 						_fds[numfds].events = POLLIN;	
 						numfds++;
-						std::cout << "fds online => " << numfds << "\n";
 						_mapGuest.insert(std::pair<int, Guest*>(_new_socket_fd, new Guest()));
 						_mapClients.insert(std::pair<int, Client*>(_new_socket_fd, new Client(_new_socket_fd)));					
 					}
