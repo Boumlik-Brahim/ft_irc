@@ -206,17 +206,26 @@ void cmd_Resp_Handler(int sender_fd, int cmd_resp_code, std::string cmd_resp_arg
 
 void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName) /**/
 {
-	std::string message;
-	switch (cmd_resp_code)
+	std::string     message;
+    char			hostname[256];
+    char time_str[11];  // buffer for formatted string
+    std::time_t     now = std::time(NULL);
+    // Convert time to local time struct
+    std::tm         *local_time = std::localtime(&now);
+    // Format output string using strftime()
+    std::strftime(time_str, sizeof(time_str), "%d/%m/%Y", local_time);
+    gethostname(hostname, sizeof(hostname));
+	
+    switch (cmd_resp_code)
 	{
 		case 1 :
 	        message = ":" + serverName + " 001 " + nickName + " Welcome to Internet Chat Relay";
             break;
 		case 2 :
-	        message = ":" + serverName + " 002 " + nickName + " Your Host is localhost, running version 1.0";
+	        message = ":" + serverName + " 002 " + nickName + " Your Host is " + hostname + ", running version 1.0";
             break;
 		case 3 :
-	        message = ":" + serverName + " 003 " + nickName + " The server was created on 24/02/2023";
+            message = ":" + serverName + " 003 " + nickName + " The server was created on " + time_str;
             break;
         case 321 :
             message = ":" + serverName + " 321 " + nickName + " Channel :Users Name";

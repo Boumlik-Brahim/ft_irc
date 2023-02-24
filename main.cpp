@@ -1,10 +1,10 @@
-
 #include "headers/Server.hpp"
 #include "headers/Channel.hpp"
 #include "headers/Client.hpp"
 
 int main(int argc, char const *argv[])
 {
+	// (void)argc;
 	if (argc != 3)
 		return (std::cerr << "ERROR : number of args must be 3", -1);
 	for (size_t i = 0; i < strlen(argv[1]); i++) {
